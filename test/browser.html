@@ -13,20 +13,20 @@
   <script src="./mocha.config.js"></script>
 
   <script>
-    $(function(){
 
-      require([
-        "test/specs/cerebral/mvc/View"
-      ], function() {
-        console.log(arguments);
+    require([
+      "test/specs/cerebral/mvc/View",
+      "test/specs/cerebral/mvc/ViewCollection"
+    ], function() {
+      $(function(){
         mocha.run()
       })
-
     })
+
   </script>
 </head>
 <body>
   <div id="mocha"></div>
-  <div></div>
+  <div id="app_test"></div>
 </body>
 </html>
