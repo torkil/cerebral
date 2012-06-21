@@ -1,10 +1,20 @@
 define([
-  "backbone"
+  "backbone",
+  "cerebral/mvc/ViewCollection"
 ], 
-function(Backbone){
-  
-  return Backbone.View.extend({
-    
+function(Backbone, ViewCollection){
+
+  var View = Backbone.View.extend({
+    constructor: function() {
+      this.subviews = new ViewCollection({
+        superview: this
+      })
+      if(typeof this.initialize === 'function')
+        this.initialize.apply(this, arguments)
+    }
   })
-  
+
+
+
+  return View
 })
