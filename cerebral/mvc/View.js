@@ -1,4 +1,5 @@
-define([
+define(
+"cerebral/mvc/View",[
   "backbone",
   "cerebral/mvc/ViewCollection"
 ], 
@@ -6,6 +7,7 @@ function(Backbone, ViewCollection){
 
   var View = Backbone.View.extend({
     constructor: function() {
+      Backbone.View.prototype.constructor.apply(this, arguments)
       this.subviews = new ViewCollection({
         superview: this
       })
@@ -13,8 +15,6 @@ function(Backbone, ViewCollection){
         this.initialize.apply(this, arguments)
     }
   })
-
-
-
+  window.View = View
   return View
 })
