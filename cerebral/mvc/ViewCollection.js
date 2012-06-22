@@ -10,13 +10,43 @@ function( EventEmitter, _, Backbone ) {
     _.extend( this, options )
     if( this.superview && !(this.superview instanceof Backbone.View) )
       throw new TypeError( 'ViewCollection received attribute superview not instance of Backbone.View' )
+    this.views = {}
+    this.length = 0
   }
 
   ViewCollection.prototype = new EventEmitter()
 
-  ViewCollection.prototype.views = {}
+  ViewCollection.underscoreMethods = [
+    "each",
+    "map",
+    "reduce",
+    "reduceRight",
+    "find",
+    "filter",
+    "reject",
+    "all",
+    "any",
+    "include",
+    "invoke",
+    "pluck",
+    "max",
+    "min",
+    "sortBy",
+    "groupBy",
+    "sortedIndex",
+    "shuffle",
+    "toArray",
+    "size"
+  ]
 
-  ViewCollection.prototype.length = 0
+  _.each(ViewCollection.underscoreMethods, function( methodName ) {
+    ViewCollection.prototype[ methodName ] = function() {
+      var args
+      args = Array.prototype.slice.call( arguments, 0 )
+      args.unshift ( this.views )
+      return _[ methodName ].apply( this, args )
+    }
+  })
 
   function attach( name, subview ) {
     if( typeof name !== 'string' )
