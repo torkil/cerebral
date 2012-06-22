@@ -22,26 +22,10 @@ function( EventEmitter, _, Backbone ) {
   ViewCollection.prototype = new EventEmitter()
 
   ViewCollection.underscoreMethods = [
-    "each",
-    "map",
-    "reduce",
-    "reduceRight",
-    "find",
-    "filter",
-    "reject",
-    "all",
-    "any",
-    "include",
-    "invoke",
-    "pluck",
-    "max",
-    "min",
-    "sortBy",
-    "groupBy",
-    "sortedIndex",
-    "shuffle",
-    "toArray",
-    "size"
+    "each","map","reduce","reduceRight","find",
+    "filter","reject","all","any","include",
+    "invoke","pluck","max","min","sortBy",
+    "groupBy","sortedIndex","shuffle","toArray","size"
   ]
 
   _.each(ViewCollection.underscoreMethods, function( methodName ) {
