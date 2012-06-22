@@ -1,12 +1,18 @@
-define([
+define(
+"cerebral/mvc/ViewCollection",[
+  "cerebral/lib/EventEmitter",
   "underscore",
-  "backbone"
+  "backbone",
 ], 
-function(underscore, Backbone) {
+function(EventEmitter, _, Backbone) {
   
   function ViewCollection(options) {
-    underscore.extend(this, options)
+    _.extend(this, options)
+    if(this.superview && !(this.superview instanceof Backbone.View))
+      throw new TypeError("ViewCollection received attribute superview not instance of Backbone.View")
   }
+
+  ViewCollection.prototype = new EventEmitter()
 
   ViewCollection.prototype.views = {}
 
@@ -19,6 +25,7 @@ function(underscore, Backbone) {
       subview.superview = this.superview
     }
     this.views[subview.cid] = subview
+    this.trigger('attach', subview)
     this.length++
   }
 
