@@ -14,6 +14,11 @@ function( EventEmitter, _, Backbone ) {
     this.length = 0
   }
 
+  ViewCollection.EVENTS = {
+    DETACH: 'detach',
+    ATTACH: 'attach'
+  }
+
   ViewCollection.prototype = new EventEmitter()
 
   ViewCollection.underscoreMethods = [
@@ -57,7 +62,7 @@ function( EventEmitter, _, Backbone ) {
       subview.superview = this.superview
     }
     this.views[ name ] = subview
-    this.trigger( 'attach', subview )
+    this.trigger( ViewCollection.EVENTS.ATTACH, subview )
     this.length++
   }
 
@@ -87,8 +92,7 @@ function( EventEmitter, _, Backbone ) {
       test = this.views[ i ]
       if( view === test ) {
         delete this.views[ i ]
-        this.length--
-        //TODO: emit detach 
+        return true
       }
     }
   }
@@ -96,19 +100,27 @@ function( EventEmitter, _, Backbone ) {
   function detachByCid( cid ) {
     if( this.views[cid] ) {
       delete this.views[ cid ]
-      this.length--
-      //TODO: emit detach
+      return true
     } 
   }
 
   ViewCollection.prototype.detach = function( cidOrView ) {
+    var detachedView
     if( typeof cidOrView === 'string' ) {
-      detachByCid.call( this, cidOrView )
+      detachedView = detachByCid.call( this, cidOrView )
+      if( detachedView ) {
+        this.length--
+        this.trigger( ViewCollection.EVENTS.DETACH, detachedView )
+      }
     }
     if( typeof cidOrView === 'object' ) {
       if( !(cidOrView instanceof Backbone.View) )
         throw new TypeError( 'subview parameter not instance of Backbone.View' )
-      detachByInstance.call( this, cidOrView )
+      detachedView = detachByInstance.call( this, cidOrView )
+      if( detachedView ) {
+        this.length--
+        this.trigger( ViewCollection.EVENTS.DETACH, detachedView )
+      }
     }
   }
 
