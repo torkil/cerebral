@@ -7,7 +7,8 @@ function(Backbone, View, ViewCollection) {
   describe("cerebral/mvc/View", function() {
     describe("constructor", function() {
       it("instances should inherit from Backbone.View", function() {
-        expect(new View()).to.be.a(Backbone.View)
+        expect( new View() ).to.be.a(Backbone.View)
+        expect( new View().cid ).to.be.ok()
       })
       it("should set attribute subviews of type ViewCollection on the created instance", function() {
         var vc = new View()
