@@ -89,5 +89,22 @@ function(Backbone, View, ViewCollection) {
         
       })
     })
+    describe("underscore collection methods", function() {
+      it("should be present on ViewCollection a array containing all methods", function() {
+        expect(ViewCollection.underscoreMethods).to.eql([
+          "each","map","reduce","reduceRight","find","filter",
+          "reject","all","any","include","invoke","pluck","max",
+          "min","sortBy","groupBy","sortedIndex","shuffle","toArray","size"
+        ])
+      })
+      it("should perform methods on the viewCollections views", function() {
+        var vc = new ViewCollection()
+        vc.attach([ new View(), new View() ])
+        expect(vc.size()).to.equal(2)
+        vc.each(function(view) {
+          expect(view).to.be.a(Backbone.View)
+        })
+      })
+    })
   })
 })
