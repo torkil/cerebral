@@ -2,7 +2,7 @@ define(
 'cerebral/mvc/ViewCollection',[
   'cerebral/lib/node/EventEmitter',
   'underscore',
-  'backbone',
+  'backbone'
 ], 
 function( EventEmitter, _, Backbone ) {
   
