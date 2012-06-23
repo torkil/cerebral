@@ -70,14 +70,27 @@ function(Backbone, View, ViewCollection) {
         expect(foundCids[subViewC.cid]).to.equal("found")
         expect(foundCids[subViewD.cid]).to.equal("found")
       })
-      it("should emit an attach event passing the view to the callback", function() {
+      it("should emit an attach event passing the [name, view] to the callback", function() {
         var vc = new ViewCollection(),
           subView = new View(),
-          attachedView = null
-        vc.on('attach', function(view) {
+          attachedView = null,
+          attachedViewName = null
+        vc.on('attach', function(name, view) {
           attachedView = view
+          attachedViewName = name
         })
         vc.attach([ subView ])
+        expect(attachedView).to.equal(subView)
+        expect(attachedViewName).to.equal(subView.cid)
+        var vc = new ViewCollection(),
+          subView = new View()
+        vc.on('attach', function(name, view) {
+          attachedView = view
+          attachedViewName = name
+        })
+        vc.attach({
+          'foo': subView
+        })
         expect(attachedView).to.equal(subView)
       })
     })
