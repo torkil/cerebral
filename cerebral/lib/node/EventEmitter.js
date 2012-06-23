@@ -20,7 +20,7 @@
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define(
-"cerebral/lib/EventEmitter",[
+"cerebral/lib/node/EventEmitter",[
 ], 
 function(){
   var isArray = Array.isArray;
