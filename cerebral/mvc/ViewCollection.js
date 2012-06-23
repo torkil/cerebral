@@ -1,6 +1,6 @@
 define(
 'cerebral/mvc/ViewCollection',[
-  'cerebral/lib/EventEmitter',
+  'cerebral/lib/node/EventEmitter',
   'underscore',
   'backbone',
 ], 
@@ -15,8 +15,12 @@ function( EventEmitter, _, Backbone ) {
   }
 
   ViewCollection.EVENTS = {
-    DETACH: 'detach',
-    ATTACH: 'attach'
+    DETACH: function( instance, name, view ) {
+      instance.emit('detach', name, view)
+    },
+    ATTACH: function( instance, name, view ) {
+      instance.emit( 'attach', name, view )
+    }
   }
 
   ViewCollection.prototype = new EventEmitter()
@@ -46,7 +50,7 @@ function( EventEmitter, _, Backbone ) {
       subview.superview = this.superview
     }
     this.views[ name ] = subview
-    this.trigger( ViewCollection.EVENTS.ATTACH, subview )
+    ViewCollection.EVENTS.ATTACH(this, name, subview)
     this.length++
   }
 
@@ -57,7 +61,7 @@ function( EventEmitter, _, Backbone ) {
   }
 
   function attachObject( obj ) {
-    _.each(obj, function( name, subview ) {
+    _.each(obj, function( subview, name ) {
       attach.call(this, name, subview)
     }, this)
   }
@@ -71,39 +75,42 @@ function( EventEmitter, _, Backbone ) {
   }
 
   function detachByInstance( view ) {
-    var i, test
-    for ( i = this.views.length - 1; i >= 0; i-- ) {
-      test = this.views[ i ]
+    var name, test
+    for ( name in this.views ) {
+      test = this.views[ name ]
       if( view === test ) {
-        delete this.views[ i ]
-        return true
+        delete this.views[ name ]
+        return {
+          name: name,
+          instance: test
+        }
       }
     }
   }
 
-  function detachByCid( cid ) {
+  function detachByName( cid ) {
     if( this.views[cid] ) {
       delete this.views[ cid ]
       return true
     } 
   }
 
-  ViewCollection.prototype.detach = function( cidOrView ) {
+  ViewCollection.prototype.detach = function( nameOrView ) {
     var detachedView
-    if( typeof cidOrView === 'string' ) {
-      detachedView = detachByCid.call( this, cidOrView )
+    if( typeof nameOrView === 'string' ) {
+      detachedView = detachByName.call( this, nameOrView )
       if( detachedView ) {
         this.length--
-        this.trigger( ViewCollection.EVENTS.DETACH, detachedView )
+        ViewCollection.EVENTS.DETACH( this, nameOrView, detachedView )
       }
     }
-    if( typeof cidOrView === 'object' ) {
-      if( !(cidOrView instanceof Backbone.View) )
+    if( typeof nameOrView === 'object' ) {
+      if( !(nameOrView instanceof Backbone.View) )
         throw new TypeError( 'subview parameter not instance of Backbone.View' )
-      detachedView = detachByInstance.call( this, cidOrView )
+      detachedView = detachByInstance.call( this, nameOrView )
       if( detachedView ) {
         this.length--
-        this.trigger( ViewCollection.EVENTS.DETACH, detachedView )
+        ViewCollection.EVENTS.DETACH( this, detachedView, detachedView.instance )
       }
     }
   }
