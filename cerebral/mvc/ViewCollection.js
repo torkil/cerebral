@@ -50,7 +50,7 @@ function( EventEmitter, _, Backbone ) {
       subview.superview = this.superview
     }
     this.views[ name ] = subview
-    ViewCollection.EVENTS.ATTACH(this, name, subview)
+    ViewCollection.EVENTS.ATTACH( this, name, subview )
     this.length++
   }
 
@@ -62,7 +62,7 @@ function( EventEmitter, _, Backbone ) {
 
   function attachObject( obj ) {
     _.each(obj, function( subview, name ) {
-      attach.call(this, name, subview)
+      attach.call( this, name, subview )
     }, this)
   }
 
