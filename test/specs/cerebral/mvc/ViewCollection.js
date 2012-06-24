@@ -161,6 +161,17 @@ function(Backbone, View, ViewCollection) {
         expect(cbsCalled).to.equal(2)
       })
     })
+    describe("ViewCollection.prototype.detachAll", function() {
+      it("should remove all attached views", function() {
+        var vc = new ViewCollection()
+        vc.attach([ new View(), new View(), new View(), new View() ])
+        expect(vc.length).to.equal(4)
+        vc.detachAll()
+        expect(vc.length).to.equal(0)
+        expect(vc.views).to.eql({})
+        expect(Object.keys(vc.views).length).to.equal(0)
+      })
+    })
     describe("underscore collection methods", function() {
       it("should be present on ViewCollection a array containing all methods", function() {
         expect(ViewCollection.underscoreMethods).to.eql([
