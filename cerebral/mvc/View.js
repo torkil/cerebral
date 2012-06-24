@@ -15,10 +15,10 @@ function(Backbone, ViewCollection){
     }
   })
 
-  View.prototype.bindTo = function( model, event, callback ) {
-    model.bind( event, callback, this )
+  View.prototype.bindTo = function( obj, event, callback ) {
+    obj.bind( event, callback, this )
     this.bindings.push({
-      model: model,
+      obj: obj,
       event: event,
       callback: callback
     })
@@ -26,7 +26,7 @@ function(Backbone, ViewCollection){
 
   View.prototype.unbindFromAll = function() {
     _.each(this.bindings, function( binding ) {
-      binding.model.unbind( binding.event, binding.callback )
+      binding.obj.unbind( binding.event, binding.callback )
     })
     this.bindings = []
   }
@@ -35,6 +35,7 @@ function(Backbone, ViewCollection){
     this.unbindFromAll()
     this.unbind()
     this.remove()
+    this.trigger('dispose')
   }
   
   return View
