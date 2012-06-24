@@ -7,9 +7,6 @@ define(
 function( EventEmitter, _, Backbone ) {
   
   function ViewCollection( options ) {
-    _.extend( this, options )
-    if( this.superview && !(this.superview instanceof Backbone.View) )
-      throw new TypeError( 'ViewCollection received attribute superview not instance of Backbone.View' )
     this.views = {}
     this.length = 0
   }
@@ -47,7 +44,7 @@ function( EventEmitter, _, Backbone ) {
     if( !(subview instanceof Backbone.View) )
       throw new TypeError( 'subview parameter not instance of Backbone.View' )
     if( this.superview ) {
-      subview.superview = this.superview
+      //subview.superview = this.superview
     }
     this.views[ name ] = subview
     ViewCollection.EVENTS.ATTACH( this, name, subview )
@@ -89,9 +86,14 @@ function( EventEmitter, _, Backbone ) {
   }
 
   function detachByName( cid ) {
+    var view
     if( this.views[cid] ) {
+      view = this.views[ cid ]
       delete this.views[ cid ]
-      return true
+      return {
+        name: cid,
+        instance: view
+      }
     } 
   }
 
@@ -101,7 +103,7 @@ function( EventEmitter, _, Backbone ) {
       detachedView = detachByName.call( this, nameOrView )
       if( detachedView ) {
         this.length--
-        ViewCollection.EVENTS.DETACH( this, nameOrView, detachedView )
+        ViewCollection.EVENTS.DETACH( this, detachedView.name, detachedView.instance )
       }
     }
     if( typeof nameOrView === 'object' ) {
@@ -110,7 +112,7 @@ function( EventEmitter, _, Backbone ) {
       detachedView = detachByInstance.call( this, nameOrView )
       if( detachedView ) {
         this.length--
-        ViewCollection.EVENTS.DETACH( this, detachedView, detachedView.instance )
+        ViewCollection.EVENTS.DETACH( this, detachedView.name, detachedView.instance )
       }
     }
   }
