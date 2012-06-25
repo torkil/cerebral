@@ -1,18 +1,18 @@
 define(
-'cerebral/mvc/ViewCollection',[
+'cerebral/mvc/SubviewCollection',[
   'underscore',
   'backbone'
 ], 
 function( _, Backbone ) {
   
-  function ViewCollection( options ) {
+  function SubviewCollection( options ) {
     this.views = {}
     this.length = 0
   }
 
-  ViewCollection.prototype = _.extend(ViewCollection.prototype, Backbone.Events)
-  
-  ViewCollection.EVENTS = {
+  SubviewCollection.prototype = _.extend(SubviewCollection.prototype, Backbone.Events)
+
+  SubviewCollection.EVENTS = {
     DETACH: function( instance, name, view ) {
       instance.trigger('detach', name, view)
     },
@@ -21,15 +21,15 @@ function( _, Backbone ) {
     }
   }
 
-  ViewCollection.underscoreMethods = [
+  SubviewCollection.underscoreMethods = [
     "each","map","reduce","reduceRight","find",
     "filter","reject","all","any","include",
     "invoke","pluck","max","min","sortBy",
     "groupBy","sortedIndex","shuffle","toArray","size"
   ]
 
-  _.each(ViewCollection.underscoreMethods, function( methodName ) {
-    ViewCollection.prototype[ methodName ] = function() {
+  _.each(SubviewCollection.underscoreMethods, function( methodName ) {
+    SubviewCollection.prototype[ methodName ] = function() {
       var args
       args = Array.prototype.slice.call( arguments, 0 )
       args.unshift ( this.views )
@@ -42,8 +42,10 @@ function( _, Backbone ) {
       throw new TypeError( 'parameter name not of type "string"' )
     if( !(subview instanceof Backbone.View) )
       throw new TypeError( 'subview parameter not instance of Backbone.View' )
+    if( this.views[name] )
+      throw new Error( 'subview with that name allready attached' )
     this.views[ name ] = subview
-    ViewCollection.EVENTS.ATTACH( this, name, subview )
+    SubviewCollection.EVENTS.ATTACH( this, name, subview )
     this.length++
   }
 
@@ -59,7 +61,7 @@ function( _, Backbone ) {
     }, this)
   }
 
-  ViewCollection.prototype.attach = function( subviews ) {
+  SubviewCollection.prototype.attach = function( subviews ) {
     if( _.isArray(subviews) )
       return attachArray.call( this, subviews )
     if( typeof subviews === 'object' )
@@ -67,16 +69,14 @@ function( _, Backbone ) {
     throw new TypeError( 'parameter subviews not of correct type. Accepted: object{name: subview}, subviews, array of subviews' )
   }
 
-  function detachByInstance( view ) {
-    var name, test
-    for ( name in this.views ) {
-      test = this.views[ name ]
-      if( view === test ) {
-        delete this.views[ name ]
-        return {
-          name: name,
-          instance: test
-        }
+  function detachByInstance( instance ) {
+    var view
+    if( this.views[instance.cid] ) {
+      view = this.views[ instance.cid ]
+      delete this.views[ instance.cid ]
+      return {
+        name: instance.cid,
+        instance: view
       }
     }
   }
@@ -90,10 +90,10 @@ function( _, Backbone ) {
         name: name,
         instance: view
       }
-    } 
+    }
   }
 
-  ViewCollection.prototype.detach = function( nameOrView, opts ) {
+  SubviewCollection.prototype.detach = function( nameOrView, opts ) {
     var options, detachedView
     options = _.extend({
       dispose: true
@@ -108,18 +108,19 @@ function( _, Backbone ) {
     }
     if( detachedView ) {
       this.length--
-      if(!options)
-      if(options.dispose)
+      if( detachedView.instance.subviews && detachedView.instance.subviews.length > 0 )
+        detachedView.instance.subviews.detachAll( options )
+      if( options.dispose )
         detachedView.instance.dispose()
-      ViewCollection.EVENTS.DETACH( this, detachedView.name, detachedView.instance )
+      SubviewCollection.EVENTS.DETACH( this, detachedView.name, detachedView.instance )
     }
   }
 
-  ViewCollection.prototype.detachAll = function( options ) {
+  SubviewCollection.prototype.detachAll = function( options ) {
     this.each(function( view, name ) {
       this.detach( name, options )
     }, this)
   }
 
-  return ViewCollection
+  return SubviewCollection
 })
