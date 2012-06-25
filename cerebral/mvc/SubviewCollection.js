@@ -7,9 +7,9 @@
 */
 
 define(
-'cerebral/mvc/SubviewCollection',[
-  'underscore',
-  'backbone'
+"cerebral/mvc/SubviewCollection",[
+  "underscore",
+  "backbone"
 ], 
 function( _, Backbone ) {
   

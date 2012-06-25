@@ -6,7 +6,8 @@
   @requires [underscore, Backbone, cerebral/mvc/SubviewCollection]
 */
 
-define("cerebral/mvc/View",[
+define(
+"cerebral/mvc/View",[
   "underscore",
   "backbone",
   "cerebral/mvc/SubviewCollection"
