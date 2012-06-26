@@ -51,6 +51,7 @@ function( _, Backbone ) {
   /**
     @private
     @type Function
+    @event #attach [name, view]
     @param {String} name The name of the view
     @param {Backbone.View|cerebral/mvc/View} name The view to attach
   */
@@ -147,6 +148,7 @@ function( _, Backbone ) {
     Detach view[s] from the collection, delegates to private functions depending on parameter type
     @public
     @type Function
+    @event #detach [name, view]
     @param {Backbone.View|cerebral/mvc/View} nameOrView The name or view instance to detach
     @param options options for the detachment
     @param options.dispose Should the view allso call dispose on itself
