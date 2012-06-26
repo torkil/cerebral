@@ -3,36 +3,34 @@
   @class The base view
   @exports cerebral/mvc/View
   @extends Backbone.View
-  @requires [underscore, Backbone, cerebral/mvc/SubviewCollection]
+  @requires [underscore, Backbone, cerebral/mvc/ViewCollection]
 */
 
 define(
 "cerebral/mvc/View",[
   "underscore",
   "backbone",
-  "cerebral/mvc/SubviewCollection"
+  "cerebral/mvc/ViewCollection"
 ], 
-function( _,Backbone, SubviewCollection ) {
+function( _,Backbone, ViewCollection ) {
   
   /**
     Creates a new View
     @public
     @constructor
     @property {Array} bindings Array of the listeners this view is listening to
-    @property {cerebral/mvc/SubviewCollection} subviews
+    @property {cerebral/mvc/ViewCollection} subviews
   */
   var View = Backbone.View.extend({
     constructor: function() {
-      Backbone.View.prototype.constructor.apply( this, arguments )
       this.bindings = []
-      this.subviews = new SubviewCollection()
-      if( typeof this.initialize === 'function' )
-        this.initialize.apply(this, arguments)
+      this.subviews = new ViewCollection()
+      Backbone.View.prototype.constructor.apply( this, arguments )
     }
   })
 
   /**
-    Binds a callback to when the given event emits on the given object
+    Binds a callback to be called when the given event fires on the given object
     @public
     @type Function
     @param {Object} obj The object to bind to
@@ -57,7 +55,7 @@ function( _,Backbone, SubviewCollection ) {
     @param {Object} obj The object to unbind from
     @param {String} event The event to unbind events from
     @param {Function} callback The callback to unbind
-    @returns {Array} bindings
+    @returns {Array} bindings The bindings that didnt match the test
   */
   function unbindSpecificCallback( obj, event, callback ) {
     return _.filter(this.bindings, function( binding, index ) {
@@ -75,7 +73,7 @@ function( _,Backbone, SubviewCollection ) {
     @type Function
     @param {Object} obj The object to unbind from
     @param {String} event The event to unbind events from
-    @returns {Array} bindings
+    @returns {Array} bindings The bindings that didnt match the test
   */
   function unbindSpecificEvent( obj, event ) {
     return _.filter(this.bindings, function( binding, index ) {
@@ -92,7 +90,7 @@ function( _,Backbone, SubviewCollection ) {
     @private
     @type Function
     @param {Object} obj The object to unbind from
-    @returns {Array} bindings
+    @returns {Array} bindings The bindings that didnt match the test
   */
   function unbindAllOnObject( obj ) {
     return _.filter(this.bindings, function( binding, index ) {
@@ -105,7 +103,7 @@ function( _,Backbone, SubviewCollection ) {
   }
   
   /**
-    Unbinds listeners, calls the appropriate private method based on parameters
+    Unbinds listeners, delegates to the the appropriate private method based on parameters
     @public
     @type Function
     @param {Object} obj The object to unbind from
@@ -141,10 +139,10 @@ function( _,Backbone, SubviewCollection ) {
     @type Function
   */
   View.prototype.dispose = function() {
+    this.trigger('dispose', this)
     this.unbindAll()
     this.unbind()
     this.remove()
-    this.trigger('dispose')
     return this
   }
   
