@@ -24,13 +24,14 @@ function( Backbone, ViewCollection ){
     
   }
 
-  Router.prototype.onAttachedDelegateView = function( view ) {
+  Router.prototype.onAttachedDelegateView = function( name, view ) {
     view.$el.delegate( "a", "click.router", _.bind(this.clickListener, this) )
     view.on( "setelement", this.onDelegateViewSetElement, this )
   }
 
-  Router.prototype.onDetachedDelegateView = function( view ) {
+  Router.prototype.onDetachedDelegateView = function( name, view ) {
     view.$el.undelegate( "a", "click.router" )
+    view.off( "setelement", this.onDelegateViewSetElement, this )
   }
 
   Router.prototype.onDelegateViewSetElement = function( view ) {
