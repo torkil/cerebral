@@ -5,7 +5,6 @@
   @extends Backbone.View
   @requires [underscore, Backbone, cerebral/mvc/ViewCollection]
 */
-
 define(
 "cerebral/mvc/View",[
   "underscore",
