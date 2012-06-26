@@ -5,7 +5,6 @@
   @extends Backbone.Events
   @requires [underscore, Backbone]
 */
-
 define(
 "cerebral/mvc/ViewCollection",[
   "underscore",
