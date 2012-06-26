@@ -30,6 +30,19 @@ function( _,Backbone, ViewCollection ) {
   })
 
   /**
+    Ref Backbone.View.prototype.setElement, augments to fire a #setelement event
+    @public
+    @type Function
+    @event #setelement [view]
+    @augments Backbone.View.prototype.setElement
+  */
+  View.prototype.setElement = function() {
+    Backbone.View.prototype.setElement.apply( this, arguments )
+    this.trigger( "setelement", this )
+    return this
+  }
+
+  /**
     Binds a callback to be called when the given event fires on the given object
     @public
     @type Function
@@ -136,6 +149,7 @@ function( _,Backbone, ViewCollection ) {
   /**
     Unbinds all listeners, all DOM event listeners, removes the view.$el from the DOM and triggers "dispose"
     @public
+    @event #dispose [view]
     @type Function
   */
   View.prototype.dispose = function() {
