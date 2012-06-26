@@ -15,9 +15,12 @@
   <script>
 
     require([
+      "backbone",
+      "test/specs/cerebral/Router",
       "test/specs/cerebral/mvc/View",
-      "test/specs/cerebral/mvc/SubviewCollection"
-    ], function() {
+      "test/specs/cerebral/mvc/ViewCollection"
+    ], function(Backbone) {
+      window.Backbone = Backbone
       $(function(){
         mocha.run()
       })
