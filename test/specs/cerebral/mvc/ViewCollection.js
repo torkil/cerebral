@@ -1,12 +1,11 @@
 require([
   "backbone",
   "cerebral/mvc/View",
-  "cerebral/mvc/SubviewCollection"
+  "cerebral/mvc/ViewCollection"
 ], 
-function(Backbone, View, SubviewCollection) {
-  describe("cerebral/mvc/SubviewCollection", function() {
-    window.SubviewCollection = SubviewCollection
-    window.View = View
+function(Backbone, View, ViewCollection) {
+  describe("cerebral/mvc/ViewCollection", function() {
+    
     var superView
 
     beforeEach(function() {
@@ -14,21 +13,21 @@ function(Backbone, View, SubviewCollection) {
     })
 
     describe("constructor", function() {
-      it("should create a new SubviewCollection with length 0", function() {
-        var vc = new SubviewCollection()
-        expect(vc).to.be.a(SubviewCollection)
+      it("should create a new ViewCollection with length 0", function() {
+        var vc = new ViewCollection()
+        expect(vc).to.be.a(ViewCollection)
         expect(vc.length).to.equal(0)
       })
     })
-    describe("SubviewCollection.prototype.attach", function() {
+    describe("ViewCollection.prototype.attach", function() {
       it("should increment the instances length attribute", function() {
-        var vc = new SubviewCollection()
+        var vc = new ViewCollection()
         vc.attach([ new Backbone.View() ])
         vc.attach([ new Backbone.View() ])
         expect(vc.length).to.equal(2)
       })
       it("should throw TypeError on receiving other than a Backbone.View", function() {
-        var vc = new SubviewCollection()
+        var vc = new ViewCollection()
         expect(function() {
           vc.attach("string")
         }).to.throwException(function(excpetion) {
@@ -36,7 +35,7 @@ function(Backbone, View, SubviewCollection) {
         })
       })
       it("if parameter is array should use the cid of the views for key", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           subViewA = new View(),
           subViewB = new View(),
           subViewC = new View(),
@@ -58,7 +57,7 @@ function(Backbone, View, SubviewCollection) {
           subView,
           attachedView,
           attachedViewName
-        vc = new SubviewCollection(),
+        vc = new ViewCollection(),
         subView = new View()
         attachedView = null
         attachedViewName = null
@@ -69,7 +68,7 @@ function(Backbone, View, SubviewCollection) {
         vc.attach([ subView ])
         expect(attachedView).to.equal(subView)
         expect(attachedViewName).to.equal(subView.cid)
-        vc = new SubviewCollection()
+        vc = new ViewCollection()
         subView = new View()
         vc.on('attach', function(name, view) {
           attachedView = view
@@ -82,9 +81,9 @@ function(Backbone, View, SubviewCollection) {
         expect(attachedViewName).to.equal('foo')
       })
     })
-    describe("SubviewCollection.prototype.detach", function() {
+    describe("ViewCollection.prototype.detach", function() {
       it("Should decrement the view collections length attribute", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           viewA = new View(),
           viewB = new View(),
           viewFoo = new View(),
@@ -105,7 +104,7 @@ function(Backbone, View, SubviewCollection) {
         expect(vc.length).to.equal(0)
       })
       it("should take a cid and remove the view with the cid from the collection", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           subViewA = new View(),
           subViewB = new View()
         vc.attach([ subViewA, subViewB ])
@@ -120,7 +119,7 @@ function(Backbone, View, SubviewCollection) {
         expect(vc.length).to.equal(0)
       })
       it("should take a view instance and remove that view", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           subViewA = new View(),
           subViewB = new View()
         vc.attach([ subViewA, subViewB ])
@@ -134,8 +133,22 @@ function(Backbone, View, SubviewCollection) {
         expect(vc.views[subViewA.cid]).to.not.be.ok()
         expect(vc.length).to.equal(0)
       })
+      it("should detach by instance even tough a name was specified and the cid wasnt used", function() {
+        var vc = new ViewCollection(),
+          foo = new View(),
+          bar = new View()
+        vc.attach({
+          "foo": foo,
+          "bar": bar
+        })
+        expect(vc.length).to.equal(2)
+        vc.detach(foo)
+        expect(vc.length).to.equal(1)
+        vc.detach(bar)
+        expect(vc.length).to.equal(0)
+      })
       it("should emit a detach event passing [name, view] to the callback", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           subViewA = new View(),
           subViewFoo = new View(),
           cbsCalled = 0,
@@ -161,9 +174,9 @@ function(Backbone, View, SubviewCollection) {
         expect(cbsCalled).to.equal(2)
       })
     })
-    describe("SubviewCollection.prototype.detachAll", function() {
+    describe("ViewCollection.prototype.detachAll", function() {
       it("should remove all attached views", function() {
-        var vc = new SubviewCollection()
+        var vc = new ViewCollection()
         vc.attach([ new View(), new View(), new View(), new View() ])
         expect(vc.length).to.equal(4)
         vc.detachAll()
@@ -172,16 +185,21 @@ function(Backbone, View, SubviewCollection) {
         expect(Object.keys(vc.views).length).to.equal(0)
       })
     })
-    describe("underscore collection methods", function() {
-      it("should be present on SubviewCollection a array containing all methods", function() {
-        expect(SubviewCollection.underscoreMethods).to.eql([
-          "each","map","reduce","reduceRight","find","filter",
-          "reject","all","any","include","invoke","pluck","max",
-          "min","sortBy","groupBy","sortedIndex","shuffle","toArray","size"
-        ])
+    describe("ViewCollection.prototype.subviewOnDispose", function() {
+      it("should detach the view when the a view emits the dispose event", function() {
+        var superView = new View(),
+          subView = new View()
+        superView.subviews.attach({ "subView": subView})
+        expect(superView.subviews.views["subView"]).to.equal(subView)
+        expect(superView.subviews.length).to.equal(1)
+        subView.dispose()
+        expect(superView.subviews.length).to.equal(0)
+        expect(superView.subviews.views["subView"]).to.not.be.ok()
       })
+    })
+    describe("underscore collection methods", function() {
       it("should perform methods on the viewCollections views", function() {
-        var vc = new SubviewCollection(),
+        var vc = new ViewCollection(),
           length,
           lastView
         vc.attach([ new View(), new View() ])
@@ -197,4 +215,5 @@ function(Backbone, View, SubviewCollection) {
       })
     })
   })
+
 })

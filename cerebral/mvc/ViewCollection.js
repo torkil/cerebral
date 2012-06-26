@@ -1,53 +1,45 @@
 
 /**
-    @class for managing subviews for a view
-    @exports cerebral/mvc/SubviewCollection
-    @extends Backbone.Events
-    @requires [underscore, Backbone]
+  @class for managing subviews for a view
+  @exports cerebral/mvc/ViewCollection
+  @extends Backbone.Events
+  @requires [underscore, Backbone]
 */
 
 define(
-"cerebral/mvc/SubviewCollection",[
+"cerebral/mvc/ViewCollection",[
   "underscore",
   "backbone"
 ], 
 function( _, Backbone ) {
   
   /**
-      Creates a new SubviewCollection
-      @public
-      @constructor
-      @property {Array} views Internal array of all the views attached
-      @property {Number} length The number of attached subviews
+    Creates a new ViewCollection
+    @public
+    @constructor
+    @property {Array} views Internal array of all the views attached
+    @property {Number} length The number of attached subviews
   */
-  function SubviewCollection( options ) {
+  function ViewCollection( options ) {
     this.views = {}
     this.length = 0
   }
 
-  SubviewCollection.prototype = _.extend(SubviewCollection.prototype, Backbone.Events)
+  _.extend(ViewCollection.prototype, Backbone.Events)
 
   /**
-      Methods borrowed from underscore
-      @public
-      @static
-      @type Object
+    Implement underscore collection methods on ViewCollection.prototype
+    @public
+    @type Function
+    @borrows underscore[methodname] as this[methodname]
   */
-  SubviewCollection.underscoreMethods = [
+  _.each([
     "each","map","reduce","reduceRight","find",
     "filter","reject","all","any","include",
     "invoke","pluck","max","min","sortBy",
     "groupBy","sortedIndex","shuffle","toArray","size"
-  ]
-
-  /**
-      Implement underscore methods on SubviewCollection.prototype
-      @public
-      @type Function
-      @borrows underscore[methodname] as this[methodname]
-  */
-  _.each(SubviewCollection.underscoreMethods, function( methodName ) {
-    SubviewCollection.prototype[ methodName ] = function() {
+  ], function( methodName ) {
+    ViewCollection.prototype[ methodName ] = function() {
       var args
       args = Array.prototype.slice.call( arguments, 0 )
       args.unshift ( this.views )
@@ -70,6 +62,7 @@ function( _, Backbone ) {
     if( this.views[name] )
       throw new Error( 'subview with that name allready attached' )
     this.views[ name ] = subview
+    subview.on( "dispose", this.subviewOnDispose, this )
     this.trigger( 'attach', name, subview )
     this.length++
   }
@@ -104,7 +97,7 @@ function( _, Backbone ) {
     @type Function
     @param {Array|Object} subview The subview[s] to attach
   */
-  SubviewCollection.prototype.attach = function( subviews ) {
+  ViewCollection.prototype.attach = function( subviews ) {
     if( _.isArray(subviews) )
       return attachArray.call( this, subviews )
     if( typeof subviews === 'object' )
@@ -119,13 +112,15 @@ function( _, Backbone ) {
     @param {Backbone.View|cerebral/mvc/View} instance The view to detach
   */
   function detachByInstance( instance ) {
-    var view
-    if( this.views[instance.cid] ) {
-      view = this.views[ instance.cid ]
-      delete this.views[ instance.cid ]
-      return {
-        name: instance.cid,
-        instance: view
+    var key, view
+    for( key in this.views ) {
+      view = this.views[ key ]
+      if( view === instance ) {
+        delete this.views[ key ]
+        return {
+          name: key,
+          instance: view
+        }   
       }
     }
   }
@@ -156,7 +151,7 @@ function( _, Backbone ) {
     @param options options for the detachment
     @param options.dispose Should the view allso call dispose on itself
   */
-  SubviewCollection.prototype.detach = function( nameOrView, opts ) {
+  ViewCollection.prototype.detach = function( nameOrView, opts ) {
     var options, detachedView
     options = _.extend({
       dispose: true
@@ -183,13 +178,23 @@ function( _, Backbone ) {
     Detach all view[s] from the collection
     @public
     @type Function
-    @param options options for the detachment, ref SubviewCollection.prototype.detach
+    @param options options for the detachment, ref ViewCollection.prototype.detach
   */
-  SubviewCollection.prototype.detachAll = function( options ) {
+  ViewCollection.prototype.detachAll = function( options ) {
     this.each(function( view, name ) {
       this.detach( name, options )
     }, this)
   }
 
-  return SubviewCollection
+  /**
+    Event handler for view#dispose
+    @public
+    @event
+    @param {Backbone.View|cerebral/mvc/View} view The view that called dispose
+  */
+  ViewCollection.prototype.subviewOnDispose = function( view ) {
+    this.detach( view, {dispose: false} )
+  }
+
+  return ViewCollection
 })
