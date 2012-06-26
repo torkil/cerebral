@@ -2,15 +2,15 @@
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link rel="stylesheet" href="./tools/mocha/mocha.css" />
-  <script src="../cerebral/lib/jquery.js"></script>
-  <script src="./tools/mocha/expect.js"></script>
+  <link rel="stylesheet" href="/test/tools/mocha/mocha.css" />
+  <script src="/cerebral/lib/jquery.js"></script>
+  <script src="/test/tools/mocha/expect.js"></script>
 
-  <script src="../cerebral/lib/require.js"></script>
-  <script src="./require.config.js"></script>
+  <script src="/cerebral/lib/require.js"></script>
+  <script src="/test/require.config.js"></script>
 
-  <script src="./tools/mocha/mocha.js"></script>
-  <script src="./mocha.config.js"></script>
+  <script src="/test/tools/mocha/mocha.js"></script>
+  <script src="/test/mocha.config.js"></script>
 
   <script>
 
@@ -19,11 +19,13 @@
       "test/specs/cerebral/Router",
       "test/specs/cerebral/mvc/View",
       "test/specs/cerebral/mvc/ViewCollection"
-    ], function(Backbone) {
-      window.Backbone = Backbone
+    ], 
+    function(Backbone) {
+      
       $(function(){
         mocha.run()
       })
+
     })
 
   </script>
