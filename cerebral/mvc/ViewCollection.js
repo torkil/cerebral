@@ -154,24 +154,23 @@ function( _, Backbone ) {
   */
   ViewCollection.prototype.detach = function( nameOrView, opts ) {
     var options, detachedView
-    options = _.extend({
-      dispose: true
-    }, opts)
     if( typeof nameOrView === 'string' ) {
       detachedView = detachByName.call( this, nameOrView )
     }
     if( typeof nameOrView === 'object' ) {
-      if( !(nameOrView instanceof Backbone.View) )
-        throw new TypeError( 'subview parameter not instance of Backbone.View' )
       detachedView = detachByInstance.call( this, nameOrView )
     }
     if( detachedView ) {
+      options = _.extend({
+        dispose: true
+      }, opts)
       this.length--
       if( detachedView.instance.subviews && detachedView.instance.subviews.length > 0 )
         detachedView.instance.subviews.detachAll( options )
       if( options.dispose )
         detachedView.instance.dispose()
-      this.trigger( 'detach', detachedView.name, detachedView.instance )
+      if( !options.silent )
+        this.trigger( 'detach', detachedView.name, detachedView.instance )
     }
   }
 
