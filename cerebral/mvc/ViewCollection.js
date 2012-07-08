@@ -38,12 +38,14 @@ function( _, Backbone ) {
     "invoke","pluck","max","min","sortBy",
     "groupBy","sortedIndex","shuffle","toArray","size"
   ], function( methodName ) {
+
     ViewCollection.prototype[ methodName ] = function() {
       var args
       args = Array.prototype.slice.call( arguments, 0 )
       args.unshift ( this.views )
       return _[ methodName ].apply( this, args )
     }
+    
   })
 
 
@@ -194,6 +196,19 @@ function( _, Backbone ) {
   */
   ViewCollection.prototype.subviewOnDispose = function( view ) {
     this.detach( view, {dispose: false} )
+  }
+
+  ViewCollection.prototype.querySelector = function( selector ) {
+    var matchingViews
+    matchingViews = []
+    this.each(function( view ) {
+      var matchedElements
+      matchedElements = view.$el.find( selector )
+      if( matchedElements && matchedElements.length ) {
+        matchingViews.push( view )
+      }
+    }, this)
+    return matchingViews
   }
 
   return ViewCollection
