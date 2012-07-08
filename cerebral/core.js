@@ -95,5 +95,5 @@ function( _ ){
   }
 
   
-  return core
+  return Object.create( core )
 })
