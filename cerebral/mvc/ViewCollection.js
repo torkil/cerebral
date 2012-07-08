@@ -198,6 +198,13 @@ function( _, Backbone ) {
     this.detach( view, {dispose: false} )
   }
 
+  /**
+    Find views where the selecor parameter is found within the views $el
+    @public
+    @type Function
+    @param {String} selector Selector for the dom node
+    @returns {cerebral/mvc/ViewCollection[]}
+  */
   ViewCollection.prototype.querySelector = function( selector ) {
     var matchingViews
     matchingViews = []
