@@ -24,7 +24,7 @@ function( _, Backbone ) {
     this.length = 0
   }
 
-  _.extend(ViewCollection.prototype, Backbone.Events)
+  _.extend( ViewCollection.prototype, Backbone.Events )
 
   /**
     Implement underscore collection methods on ViewCollection.prototype
@@ -45,7 +45,7 @@ function( _, Backbone ) {
       args.unshift ( this.views )
       return _[ methodName ].apply( this, args )
     }
-    
+
   })
 
 
