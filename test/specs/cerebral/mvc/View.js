@@ -4,8 +4,11 @@ define([
   "cerebral/mvc/ViewCollection"
 ], 
 function(Backbone, View, ViewCollection) {  
+
   describe("cerebral/mvc/View", function() {
+
     describe("constructor", function() {
+
       it("should call View.prototype.constructor and initialize once", function() {
         var ctorCalled = 0
         var ViewClass = View.extend({
@@ -16,15 +19,18 @@ function(Backbone, View, ViewCollection) {
         var vc = new ViewClass()
         expect(ctorCalled).to.equal(1)
       })
+
       it("instances should inherit from Backbone.View", function() {
         expect( new View() ).to.be.a(Backbone.View)
         expect( new View().cid ).to.be.ok()
       })
+
       it("should set attribute subviews of type ViewCollection on the created instance", function() {
         var vc = new View()
         expect(vc.subviews).to.be.ok()
         expect(vc.subviews).to.be.a(ViewCollection)
       })
+
       it('should call the supplied initialize function in the constructor', function() {
         var ViewClass = View.extend({
           initialize: function() { 
@@ -34,6 +40,7 @@ function(Backbone, View, ViewCollection) {
         var vc = new ViewClass()
         expect(vc.initializeed).to.equal(true)
       })
+
       it("should set subview even if initialize is overidden", function() {
         var ViewClass = View.extend({
           initialize: function() { 
@@ -44,8 +51,11 @@ function(Backbone, View, ViewCollection) {
         expect(vc.subviews).to.be.ok()
         expect(vc.subviews).to.be.a(ViewCollection)
       })
+
     })
+
     describe("View.prototype.bindTo", function() {
+
       it("should take [obj, eventname, callback] and fire the callback when the eventname fires on the given object", function() {
         var view = new View(),
           obj = new Backbone.Model(),
@@ -57,6 +67,7 @@ function(Backbone, View, ViewCollection) {
         obj.trigger("change")
         expect(fired).to.be.ok()
       })
+
       it("should bind the view as the this value of the callback", function() {
         var view = new View(),
           obj = new Backbone.Model(),
@@ -68,15 +79,20 @@ function(Backbone, View, ViewCollection) {
         obj.trigger("change")
         expect(thisVal).to.equal(view)
       })
+
     })
+
     describe("View.prototype.unbindFrom", function() {
+
       var view, objA, objB, triggered
+
       beforeEach(function() {
         triggered = 0
         view = new View()
         objA = new Backbone.Model()
         objB = new Backbone.Model()
       })
+
       it("should unbind all listeners on a given object if only [object] given", function() {
         view.bindTo(objA, "A", function() { triggered++ })
         view.bindTo(objA, "B", function() { triggered++ })
@@ -101,6 +117,7 @@ function(Backbone, View, ViewCollection) {
         objB.trigger("B")
         expect(triggered).to.equal(6)
       })
+
       it("should unbind all listeners with a given name on a given object if [object, event] is given", function() {
         view.bindTo(objA, "A", function() { triggered++ })
         view.bindTo(objA, "A", function() { triggered++ })
@@ -119,6 +136,7 @@ function(Backbone, View, ViewCollection) {
         objA.trigger("B")
         expect(triggered).to.equal(6)
       })
+
       it("should unbind only a singel listener if [object, event, callback] is given", function() {
         function incA() {
           triggered++ 
@@ -140,8 +158,11 @@ function(Backbone, View, ViewCollection) {
         objA.trigger("A")
         expect(triggered).to.equal(6)
       })
+
     })
+
     describe("View.prototype.unbindAll", function() {
+
       it("should remove all bound listeners", function() {
         var view = new View(),
           obj = new Backbone.Model(),
@@ -161,8 +182,11 @@ function(Backbone, View, ViewCollection) {
         expect(nrOfChangeFired).to.equal(1)
         expect(nrOfUpdateFired).to.equal(1)
       })
+
     })
+
     describe("View.prototype.dispose", function() {
+
       it("should emit a dispose event, passing the view itself as parameter", function() {
         var view = new View(),
           disposedView = null
@@ -173,6 +197,9 @@ function(Backbone, View, ViewCollection) {
         view.dispose()
         expect(disposedView).to.equal(view)
       })
+
     })
+
   })
+  
 })
