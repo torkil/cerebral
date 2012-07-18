@@ -50,8 +50,8 @@ function( _,Backbone, ViewCollection ) {
     @param {Function} callback The callback to fire when the event emits on the object
     @returns {cerebral/mvc/View} self
   */
-  View.prototype.bindTo = function( obj, event, callback ) {
-    obj.bind( event, callback, this )
+  View.prototype.bindTo = function( obj, event, callback, context ) {
+    obj.bind( event, callback, context || this )
     this.bindings.push({
       obj: obj,
       event: event,
