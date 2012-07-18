@@ -276,6 +276,26 @@ function(Backbone, View, ViewCollection) {
 
     })
 
+    describe("ViewCollection.prototype.get", function() {
+
+      it("should return the view stored on the given key passed as parameter", function() {
+
+        var viewCollection = new ViewCollection(),
+          viewA = new View(),
+          viewB = new View()
+
+        viewCollection.attach({
+          "viewA": viewA,
+          "viewB": viewB
+        })
+
+        expect( viewCollection.get("viewA") ).to.equal( viewA )
+        expect( viewCollection.get("viewB") ).to.equal( viewB )
+
+      })
+
+    })
+
     describe("ViewCollection.prototype.querySelector", function() {
       
       var ViewClass, viewCollection
