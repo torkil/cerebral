@@ -199,6 +199,16 @@ function( _, Backbone ) {
   }
 
   /**
+    Get a view stored on a given key
+    @public
+    @param {String} key The name given when attach was called or the cid of the view
+    @return {Backbone.View|cerebral/mvc/View}
+  */
+  ViewCollection.prototype.get = function( key ) {
+    return this.views[ key ]
+  }
+
+  /**
     Find views where the selecor parameter is found within the views $el
     @public
     @type Function
