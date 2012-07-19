@@ -2,7 +2,7 @@ require.config({
   baseUrl: "../",
   shim: {
     "backbone": {
-      deps: ["underscore", "cerebral/lib/jquery"],
+      deps: ["underscore", "cerebral/vendor/jquery"],
       exports: "Backbone"
     },
     "underscore": {
@@ -10,7 +10,7 @@ require.config({
     },
   },
   paths: {
-    "backbone": "cerebral/lib/Backbone",
-    "underscore": "cerebral/lib/underscore"
+    "backbone": "cerebral/vendor/Backbone",
+    "underscore": "cerebral/vendor/underscore"
   }
 })
