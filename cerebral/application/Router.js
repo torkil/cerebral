@@ -5,7 +5,7 @@
   @extends Backbone.Router
   @requires [underscore, Backbone, cerebral/mvc/ViewCollection]
 */
-define("cerebral/Router",[
+define("cerebral/application/Router",[
   "backbone",
   "cerebral/mvc/ViewCollection"
 ], 
