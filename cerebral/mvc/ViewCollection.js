@@ -8,7 +8,8 @@
 define(
 "cerebral/mvc/ViewCollection",[
   "underscore",
-  "backbone"
+  "backbone",
+  "cerebral/ext/BackboneEvents"
 ], 
 function( _, Backbone ) {
   
@@ -41,7 +42,7 @@ function( _, Backbone ) {
 
     ViewCollection.prototype[ methodName ] = function() {
       var args
-      args = Array.prototype.slice.call( arguments, 0 )
+      args = [].slice.call( arguments, 0 )
       args.unshift ( this.views )
       return _[ methodName ].apply( this, args )
     }

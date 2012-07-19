@@ -6,7 +6,8 @@
   @requires [Backbone]
 */
 define("cerebral/mvc/Model", [
-  "backbone"
+  "backbone",
+  "cerebral/ext/BackboneEvents"
 ],
 function( Backbone ) {
   
