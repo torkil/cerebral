@@ -20,7 +20,7 @@ function() {
     @type Function
   */
   Events.emit = function() {
-    this.emit.apply( this, arguments )
+    this.trigger.apply( this, arguments )
   }
 
   /**
