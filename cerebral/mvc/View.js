@@ -47,6 +47,7 @@ function( _,Backbone, ViewCollection ) {
   */
   View.prototype.dispose = function() {
     this.trigger('dispose', this)
+    this.subviews.invoke( 'dispose' )
     this.unbindAll()
     this.unbind()
     this.remove()
