@@ -22,8 +22,8 @@ function( _,Backbone, ViewCollection ) {
   */
   var View = Backbone.View.extend({
     constructor: function() {
-      this.subviews = new ViewCollection()
       Backbone.View.prototype.constructor.apply( this, arguments )
+      this.subviews = new ViewCollection()
     }
   })
 
