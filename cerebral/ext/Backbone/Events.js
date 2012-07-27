@@ -5,7 +5,7 @@
   @augments Backbone.Events
   @requires [Backbone]
 */
-define("cerebral/ext/BackboneEvents", [
+define("cerebral/ext/Backbone/Events", [
   "backbone"
 ],
 function( Backbone ) {
