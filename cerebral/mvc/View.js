@@ -17,7 +17,6 @@ function( _,Backbone, ViewCollection ) {
     Creates a new View
     @public
     @constructor
-    @property {Array} bindings Array of the listeners this view is listening to
     @property {cerebral/mvc/ViewCollection} subviews
   */
   var View = Backbone.View.extend({
