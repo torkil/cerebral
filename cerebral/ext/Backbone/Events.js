@@ -53,43 +53,6 @@ function( Backbone ) {
   }
 
   /**
-    Unbinds a specific callback to a specific event on a specific object
-    @private
-    @type Function
-    @param {Object} obj The object to unbind from
-    @param {String} event The event to unbind events from
-    @param {Function} callback The callback to unbind
-    @returns {Array} bindings The bindings that didnt match the test
-  */
-  function unbindSpecificCallback( obj, event, callback ) {
-    return _.filter(this.bindings, function( binding, index ) {
-      if( binding.obj === obj && binding.event === event && binding.callback === callback ) {
-        binding.obj.unbind( binding.event, binding.callback )
-      } else {
-        return true
-      }
-    }, this)
-  }
-
-  /**
-    Unbinds all callbacks to a specific event on a specific object
-    @private
-    @type Function
-    @param {Object} obj The object to unbind from
-    @param {String} event The event to unbind events from
-    @returns {Array} bindings The bindings that didnt match the test
-  */
-  function unbindSpecificEvent( obj, event ) {
-    return _.filter(this.bindings, function( binding, index ) {
-      if( binding.obj === obj && binding.event === event ) {
-        binding.obj.unbind( binding.event, binding.callback )
-      } else {
-        return true
-      }
-    }, this) 
-  }
-
-  /**
     Unbinds listeners, delegates to the the appropriate private method based on parameters
     @public
     @type Function
@@ -130,6 +93,43 @@ function( Backbone ) {
   function unbindAllOnObject( obj ) {
     return _.filter(this.bindings, function( binding, index ) {
       if( binding.obj === obj ) {
+        binding.obj.unbind( binding.event, binding.callback )
+      } else {
+        return true
+      }
+    }, this)
+  }
+
+  /**
+    Unbinds all callbacks to a specific event on a specific object
+    @private
+    @type Function
+    @param {Object} obj The object to unbind from
+    @param {String} event The event to unbind events from
+    @returns {Array} bindings The bindings that didnt match the test
+  */
+  function unbindSpecificEvent( obj, event ) {
+    return _.filter(this.bindings, function( binding, index ) {
+      if( binding.obj === obj && binding.event === event ) {
+        binding.obj.unbind( binding.event, binding.callback )
+      } else {
+        return true
+      }
+    }, this) 
+  }
+
+  /**
+    Unbinds a specific callback to a specific event on a specific object
+    @private
+    @type Function
+    @param {Object} obj The object to unbind from
+    @param {String} event The event to unbind events from
+    @param {Function} callback The callback to unbind
+    @returns {Array} bindings The bindings that didnt match the test
+  */
+  function unbindSpecificCallback( obj, event, callback ) {
+    return _.filter(this.bindings, function( binding, index ) {
+      if( binding.obj === obj && binding.event === event && binding.callback === callback ) {
         binding.obj.unbind( binding.event, binding.callback )
       } else {
         return true
