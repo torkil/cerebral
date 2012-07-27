@@ -16,17 +16,44 @@ function( Backbone, ViewCollection ){
     Creates a new Router
     @public
     @constructor
+    @property {Number} rid Unique number identifying the router instance
     @property {cerebral/mvc/ViewCollection} delegateViews ViewCollection containing delegateViews. Link clicks inside delegateWiews will trigger navigate
   */
   var Router = Backbone.Router.extend({
     constructor: function() {
-      Backbone.Router.prototype.constructor.apply( this, arguments )
-      this.oid = Router.generateRouterId()
+      this.rid = Router.generateRouterId()
       this.delegateViews = new ViewCollection()
+
+      _.extend( this, Router.defaults )
+
       this.bindTo( this.delegateViews, "attach", this.onAttachedDelegateView, this )
       this.bindTo( this.delegateViews, "detach", this.onDetachedDelegateView, this )
+
+      Backbone.Router.prototype.constructor.apply( this, arguments )
     }
   })
+
+  /**
+    Default settings
+    @public
+    @static
+    @type Object
+    @returns Number
+  */
+  Router.defaults = {
+    /*
+      Selector for the elements to register click events on
+      @type String
+      @default "a"
+    */
+    linkSelector: "a",
+    /*
+      Event type to listen for
+      @type String
+      @default "click"
+    */
+    eventType: "click"
+  }
 
   /*
     Internal incremented id to be assigned to new routers
@@ -92,7 +119,7 @@ function( Backbone, ViewCollection ){
     @param {Backbone.View|cerebral/mvc/view} viewDelegate
   */
   Router.prototype.onAttachedDelegateView = function( name, viewDelegate ) {
-    viewDelegate.$el.delegate( "a", this.generateClickEventName(), _.bind(this.clickListener, this) )
+    viewDelegate.$el.delegate( this.linkSelector, this.generateClickEventName(), _.bind(this.clickListener, this) )
     viewDelegate.on( "setelement", this.onDelegateViewSetElement, this )
   }
 
@@ -105,7 +132,7 @@ function( Backbone, ViewCollection ){
     @param {Backbone.View|cerebral/mvc/view} viewDelegate
   */
   Router.prototype.onDetachedDelegateView = function( name, viewDelegate ) {
-    viewDelegate.$el.undelegate( "a", this.generateClickEventName() )
+    viewDelegate.$el.undelegate( this.linkSelector, this.generateClickEventName() )
     viewDelegate.off( "setelement", this.onDelegateViewSetElement, this )
   }
 
@@ -117,7 +144,7 @@ function( Backbone, ViewCollection ){
     @param {Backbone.View|cerebral/mvc/view} viewDelegate
   */
   Router.prototype.onDelegateViewSetElement = function( viewDelegate ) {
-    viewDelegate.$el.delegate( "a", this.generateClickEventName(), _.bind(this.clickListener, this) )
+    viewDelegate.$el.delegate( this.linkSelector, this.generateClickEventName(), _.bind(this.clickListener, this) )
   }
 
   /**
@@ -127,7 +154,7 @@ function( Backbone, ViewCollection ){
     @returns String
   */
   Router.prototype.generateClickEventName = function() {
-    return "click.router#" + this.oid
+    return this.eventType + ".router#" + this.rid
   }
 
   return Router
