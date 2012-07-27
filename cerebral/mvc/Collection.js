@@ -5,7 +5,8 @@
   @extends Backbone.Collection
   @requires [Backbone]
 */
-define("cerebral/mvc/Collection", [
+define(
+"cerebral/mvc/Collection", [
   "cerebral/lib/Backbone"
 ],
 function( Backbone ) {

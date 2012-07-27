@@ -1,14 +1,12 @@
 
 /**
-  @class Extending the base Backbone.Events object
-  @exports Backbone.Events
-  @augments Backbone.Events
-  @requires [Backbone]
+  Mixin for extending Backbone.Events and Backbone.Model|Collection|View|Router.prototype
+  @exports cerebral/ext/Backbone/Events
 */
-define("cerebral/ext/Backbone/Events", [
-  "backbone"
+define(
+"cerebral/ext/Backbone/Events", [
 ],
-function( Backbone ) {
+function() {
   
   var Events
 

@@ -1,5 +1,5 @@
 define([
-  "backbone"
+  "cerebral/lib/Backbone"
 ], 
 function( Backbone ) {  
 

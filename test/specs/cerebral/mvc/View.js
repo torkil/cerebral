@@ -65,7 +65,7 @@ function( _, Backbone, View, ViewCollection) {
 
     })
 
-     describe("View.prototype.dispose", function() {
+    describe("View.prototype.dispose", function() {
 
       it("should emit a dispose event, passing the view itself as parameter", function() {
 

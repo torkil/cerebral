@@ -1,14 +1,30 @@
-define("cerebral/lib/Backbone",[
+
+/**
+  Extending Backbone
+  @exports cerebral/lib/Backbone
+  @augments Backbone.Router
+  @requires [underscore, cerebral/lib/Backbone, cerebral/ext/Backbone/Events]
+*/
+define(
+"cerebral/lib/Backbone",[
   "underscore",
   "backbone",
   "cerebral/ext/Backbone/Events"
-], function( _, Backbone, Events ){
+], function( _, Backbone, EventsExt ){
   
-  _.extend( Backbone.Events, Events )
-  _.extend( Backbone.Model.prototype, Events )
-  _.extend( Backbone.Collection.prototype, Events )
-  _.extend( Backbone.View.prototype, Events )
-  _.extend( Backbone.Router.prototype, Events )
+  /*
+    Extend the Backbone.Events object with the Events extension
+  */
+  _.extend( Backbone.Events, EventsExt )
+
+  /*
+    Because Backbone.Events isnt the direct prototype object of Backbone.Model|Collection|View|Router
+    we have to extend their prototypes directly with the Events extension
+  */
+  _.extend( Backbone.Model.prototype, EventsExt )
+  _.extend( Backbone.Collection.prototype, EventsExt )
+  _.extend( Backbone.View.prototype, EventsExt )
+  _.extend( Backbone.Router.prototype, EventsExt )
 
   return Backbone
 })

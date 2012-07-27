@@ -3,9 +3,10 @@
   @class Base Model class, for data models
   @exports cerebral/mvc/Model
   @extends Backbone.Model
-  @requires [Backbone]
+  @requires [cerebral/lib/Backbone]
 */
-define("cerebral/mvc/Model", [
+define(
+"cerebral/mvc/Model", [
   "cerebral/lib/Backbone"
 ],
 function( Backbone ) {
