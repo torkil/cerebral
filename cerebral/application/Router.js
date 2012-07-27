@@ -53,9 +53,9 @@ function( Backbone, ViewCollection ){
     @static
     @type Function
     @param {Object|window.location} location The location object to check
-    @param location.protocol
-    @param location.port
-    @param location.hostname
+    @param {String}location.protocol
+    @param {Number}location.port
+    @param {String}location.hostname
     @param {String} test The url to check
     @returns Boolean
   */
