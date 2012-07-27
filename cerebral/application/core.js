@@ -10,7 +10,9 @@ define(
 ], 
 function( _ ){
   
-  var channels, core
+  var core, channels
+
+  core = {}
 
   /**
     Holds the callback listeners bound to fire when published to that specific channel 
@@ -18,8 +20,6 @@ function( _ ){
     @type Object
   */
   channels = {}
-
-  core = {}
   
   /**
     Binds a callback to be called when published to the channel given
