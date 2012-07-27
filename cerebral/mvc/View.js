@@ -8,7 +8,7 @@
 define(
 "cerebral/mvc/View",[
   "underscore",
-  "backbone",
+  "cerebral/lib/Backbone",
   "cerebral/mvc/ViewCollection"
 ], 
 function( _,Backbone, ViewCollection ) {

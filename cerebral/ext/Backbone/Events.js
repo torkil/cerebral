@@ -12,28 +12,36 @@ function( Backbone ) {
   
   var Events
 
-  Events = Backbone.Events
+  Events = {}
+
+  Events.bindings = []
 
   /**
     Alias trigger as emit
     @public
     @type Function
   */
-  Events.emit = Events.trigger
+  Events.emit = function() {
+    this.emit.apply( this, arguments )
+  }
 
   /**
     Alias on as addEventListener
     @public
     @type Function
   */
-  Events.addEventListener = Events.on
+  Events.addEventListener = function() {
+    this.on.apply( this, arguments )
+  }
 
   /**
     Alias off as removeEventListener
     @public
     @type Function
   */
-  Events.removeEventListener = Events.off
+  Events.removeEventListener = function() {
+    this.off.apply( this, arguments )
+  }
 
   /**
     Register a event handler and unbind it on the first time it fires

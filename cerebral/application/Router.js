@@ -6,7 +6,7 @@
   @requires [underscore, Backbone, cerebral/mvc/ViewCollection]
 */
 define("cerebral/application/Router",[
-  "backbone",
+  "cerebral/lib/Backbone",
   "cerebral/mvc/ViewCollection"
 ], 
 function( Backbone, ViewCollection ){
@@ -19,10 +19,10 @@ function( Backbone, ViewCollection ){
   */
   var Router = Backbone.Router.extend({
     constructor: function() {
-      this.delegateViews = new ViewCollection()
-      this.delegateViews.on( "attach", this.onAttachedDelegateView, this )
-      this.delegateViews.on( "detach", this.onDetachedDelegateView, this )
       Backbone.Router.prototype.constructor.apply( this, arguments )
+      this.delegateViews = new ViewCollection()
+      this.bindTo( this.delegateViews, "attach", this.onAttachedDelegateView, this )
+      this.bindTo( this.delegateViews, "detach", this.onDetachedDelegateView, this )
     }
   })
   

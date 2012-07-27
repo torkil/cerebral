@@ -6,7 +6,7 @@
   @requires [Backbone]
 */
 define("cerebral/mvc/Collection", [
-  "backbone"
+  "cerebral/lib/Backbone"
 ],
 function( Backbone ) {
   
