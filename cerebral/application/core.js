@@ -4,7 +4,8 @@
   @exports cerebral/core
   @requires [underscore]
 */
-define("cerebral/application/core",[
+define(
+"cerebral/application/core",[
   "underscore"
 ], 
 function( _ ){
