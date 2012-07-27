@@ -21,7 +21,7 @@ function( Backbone, ViewCollection ){
   var Router = Backbone.Router.extend({
     constructor: function() {
       Backbone.Router.prototype.constructor.apply( this, arguments )
-      this.oid = Router.generateObjectId()
+      this.oid = Router.generateRouterId()
       this.delegateViews = new ViewCollection()
       this.bindTo( this.delegateViews, "attach", this.onAttachedDelegateView, this )
       this.bindTo( this.delegateViews, "detach", this.onDetachedDelegateView, this )
@@ -33,7 +33,7 @@ function( Backbone, ViewCollection ){
     @private
     @type Number
   */
-  var _oid = 0
+  var rid = 0
 
   /**
     Returnes a unique number to be used as object id for new routers
@@ -42,9 +42,9 @@ function( Backbone, ViewCollection ){
     @type Function
     @returns Number
   */
-  Router.generateObjectId = function() {
-    _oid = _oid + 1
-    return _oid
+  Router.generateRouterId = function() {
+    rid = rid + 1
+    return rid
   }
   
   /**
