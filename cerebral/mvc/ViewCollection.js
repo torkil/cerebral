@@ -27,7 +27,7 @@ function( _, Backbone ) {
   _.extend( ViewCollection.prototype, Backbone.Events )
 
   /**
-    Implement underscore collection methods on ViewCollection.prototype, using subvies as list parameter
+    Implement underscore collection methods on ViewCollection.prototype, using subviews as list parameter
     and the rest(splat) as arguments to the method call.
     @public
     @type Function
