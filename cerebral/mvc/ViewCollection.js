@@ -41,8 +41,7 @@ function( _, Backbone ) {
 
     ViewCollection.prototype[ methodName ] = function() {
       var args
-      args = [].slice.call( arguments, 0 )
-      args.unshift ( this.views )
+      args = [ this.views ].concat( [].slice.call(arguments, 0) )
       return _[ methodName ].apply( this, args )
     }
 
