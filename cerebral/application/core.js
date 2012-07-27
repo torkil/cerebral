@@ -61,7 +61,7 @@ function( _ ){
       throw new TypeError( 'channel must be string' ) 
     }
     listeners = channels[ channel ]
-    if( !listeners ) {
+    if( !listeners || !listeners.length ) {
       return null
     }
     for( index = 0; index < listeners.length; index++ ) {
