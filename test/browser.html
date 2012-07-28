@@ -29,9 +29,12 @@
       window.TESTSTATS.error = e
     }
 
-
+    require.onError = function( e ) {
+      console.log( e.originalError.srcElement.src )
+      window.TESTSTATS.error = e
+    }
     require([
-      "js/backbone",
+      "backbone",
       "test/specs/cerebral/ext/Backbone/Events",
       "test/specs/cerebral/application/core",
       "test/specs/cerebral/application/Router",

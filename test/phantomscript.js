@@ -37,7 +37,9 @@ page.open(phantom.args[0], function(status){
     }, function( data ) {
 
       if( data.error ) {
-        console.log(data.error)
+        if(data.error.originalError && data.error.originalError.srcElement ) {
+          console.log('requirejs error, could not find: ' + data.error.originalError.srcElement.src )
+        }
         phantom.exit( 1 )
       }
 
