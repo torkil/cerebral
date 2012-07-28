@@ -33,6 +33,6 @@ app.get('/', function(req, res) {
   })
 });
 
-var port = process.argv[2] || 3000
+var port = process.argv[2] || 80
 
 app.listen(port);

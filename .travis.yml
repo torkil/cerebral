@@ -2,7 +2,9 @@ language: node_js
 node_js:
   - 0.6
 before_script:
+  - "export DISPLAY=:99.0 " 
+  - "sh -e /etc/init.d/xvfb start "
   - cd ./test/server && npm install express && cd ../../ && 
-  - node ./test/server/app.js 80 && 
+  - node ./test/server/app.js && 
   - sleep 5
 script: phantomjs test/phantomscript.js "http://localhost:80"
