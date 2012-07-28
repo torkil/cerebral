@@ -3,6 +3,7 @@
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="/test/tools/mocha/mocha.css" />
+
   <script src="/cerebral/vendor/jquery.js"></script>
   <script src="/test/tools/mocha/expect.js"></script>
 
@@ -13,6 +14,14 @@
   <script src="/test/mocha.config.js"></script>
 
   <script>
+
+    window.TESTSTATS = {
+      data: {
+        passes: [],
+        failures: []
+      },
+      finnished: false
+    }
 
     require([
       "backbone",
@@ -25,7 +34,30 @@
     function(Backbone) {
       
       $(function(){
-        mocha.run()
+        var runner = mocha
+                      .run()
+                      .globals(['TESTSTATS'])
+
+
+        runner.on('pass', function(test){
+          TESTSTATS.data.passes.push({
+            title: test.fullTitle()
+          })
+          console.log('PASSED: ', test.fullTitle());
+        });
+
+        runner.on('fail', function(test, err){
+          TESTSTATS.data.failures.push({
+            title: test.fullTitle(),
+            err: err.message
+          })
+          console.log('FAILED: ', test.fullTitle());
+        });
+
+        runner.on('end', function(){
+          TESTSTATS.finnished = true
+        })
+
       })
 
     })
