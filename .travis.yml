@@ -7,4 +7,4 @@ before_script:
   - cd ./test/server && npm install express && cd ../../ && 
   - sudo node ./test/server/app.js & 
   - sleep 5
-script: phantomjs test/phantomscript.js "http://localhost:80"
+script: phantomjs test/phantomscript.js "http://localhost"
