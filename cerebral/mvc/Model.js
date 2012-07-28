@@ -27,35 +27,6 @@ function( _, Backbone ) {
   })
 
   /**
-    Defines a getter on the model instance. Wont be inherited
-    @public
-    @type Function
-    @param {String} key The attribute to fetch
-    @param {Function} Mutator The mutating function to apply to the value on get before returning
-  */
-  Model.prototype.defineGetter = function( key, mutator ) {
-    if( typeof key !== 'string' || typeof mutator !== 'function' ) {
-      throw new TypeError( 'Invalid params, key must be string and mutator function' )
-    }
-    this[ 'get:' + key ] = mutator
-  }
-
-  /**
-    Defines a setter on the model instance. Wont be inherited
-    @public
-    @type Function
-    @param {String} key The attribute to set
-    @param {Function} mutator The mutating function to apply to the value before setting it
-  */
-  Model.prototype.defineSetter = function( key, mutator ) {
-    if( typeof key !== 'string' || typeof mutator !== 'function' ) {
-      throw new TypeError( 'Invalid params, key must be string and mutator function' )
-    }
-    this[ 'set:' + key ] = mutator
-  }
-
-
-  /**
     Get a value on the object. Applies getter if there is one.
     @public
     @type Function
