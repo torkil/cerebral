@@ -1,6 +1,6 @@
 cerebral.js [![Build Status](https://secure.travis-ci.org/gorillatron/cerebral.png?branch=master)](http://travis-ci.org/gorillatron/cerebral)
 ===========
-***PREVIEW! under heavy development***    
+***PREVIEW! many features not implemented***    
 
 Bringing consciousness down the backbone.  
   
