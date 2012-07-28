@@ -29,6 +29,9 @@ app.configure('production', function(){
 
 app.get('/', function(req, res) {
   fs.readFile(__dirname + "/../browser.html", "utf8", function(err, data) {
+    if(err) {
+      return console.log(err)
+    }
     res.send(data)
   })
 });
