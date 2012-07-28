@@ -24,8 +24,12 @@
       finnished: false
     }
 
+    require.onError = function(e){ 
+      console.log(e) 
+    }
+
     require([
-      "backbone",
+      "js/backbone",
       "test/specs/cerebral/ext/Backbone/Events",
       "test/specs/cerebral/application/core",
       "test/specs/cerebral/application/Router",
