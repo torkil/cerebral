@@ -36,3 +36,4 @@ app.get('/', function(req, res) {
 var port = process.argv[2] || 80
 
 app.listen(port);
+console.log('test server listening on port: ' + port);
