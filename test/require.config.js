@@ -1,5 +1,5 @@
 require.config({
-  baseUrl: "../",
+  baseUrl: "./",
   shim: {
     "backbone": {
       deps: ["underscore", "cerebral/vendor/jquery"],
