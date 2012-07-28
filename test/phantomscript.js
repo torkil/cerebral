@@ -27,12 +27,19 @@ page.open(phantom.args[0], function(status){
     waitFor(function() {
       return page.evaluate(function(){
         var stats = window.TESTSTATS
+        if( stats && stats.error )
+          return { error: stats.error }
         if( stats && stats.finnished )
           return stats.data
         else
           return null
       });
     }, function( data ) {
+
+      if( data.error ) {
+        console.log(data.error)
+        phantom.exit( 1 )
+      }
 
       console.log('\n\n');
       console.log('passes: ', data.passes.length);

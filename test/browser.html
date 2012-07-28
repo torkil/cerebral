@@ -21,13 +21,14 @@
         passes: [],
         failures: []
       },
-      finnished: false
+      finnished: false,
+      e: null
     }
 
-    require.onError = function(e){ 
-      console.log(e) 
+    window.onerror = function(e){ 
+      window.TESTSTATS.error = e
     }
-    
+
 
     require([
       "js/backbone",
