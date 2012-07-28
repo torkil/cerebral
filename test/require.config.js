@@ -10,7 +10,7 @@ require.config({
     },
   },
   paths: {
-    "backbone": "cerebral/vendor/Backbone",
+    "backbone": "cerebral/vendor/backbone",
     "underscore": "cerebral/vendor/underscore"
   }
 })
