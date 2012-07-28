@@ -25,6 +25,12 @@ function( _, Backbone, Model ) {
         expect( model.get('addOne') ).to.equal( 1 )
         expect( model.get('addTwo') ).to.equal( 2 )
 
+        model.set('addOne', 1)
+        model.set('addTwo', 2)
+
+        expect( model.get('addOne') ).to.equal( 2 )
+        expect( model.get('addTwo') ).to.equal( 4 )
+
       })
 
       it("should properly inherit all getters and setters", function() {
@@ -63,52 +69,22 @@ function( _, Backbone, Model ) {
 
     })
 
-    describe("Model.prototype.defineGetter", function() {
-
-      it("should sett a mutator function in __getters on the key passes", function() {
-
-        var model = new Model()
-
-        model.defineGetter('lol', function() {})
-
-        expect( model['get:lol'] ).to.be.a( 'function' )
-
-      })
-
-      it("should throw a error if key is not string or mutator is not function", function() {})
-
-    })
-
-    describe("Model.prototype.defineSetter", function() {
-
-      it("should sett a mutator function in __setters on the key passes", function() {
-
-        var model = new Model()
-
-        model.defineSetter('lol', function() {})
-
-        expect( model['set:lol'] ).to.be.a( 'function' )
-
-      })
-
-      it("should throw a error if key is not string or mutator is not function", function() {})
-
-    })
-
     describe("Model.prototype.get", function() {
 
-      it("should apply mutator found on the argument key in __getters to the returned value", function() {
+      it("should apply getter if there is one", function() {
 
-        var model = new Model()
-
-        model.defineGetter('name', function( name ) {
-          return 'name:' + name
-        })
+        var model = new (Model.extend({
+          'get:name': function( name ) {
+            return 'name:' + name
+          }
+        }))
 
         model.set( 'name', 'Laverton' )
+        model.set( 'unmutated', 'original' )
 
         expect( model.attributes['name'] ).to.equal( 'Laverton' )
         expect( model.get('name') ).to.equal( 'name:Laverton' )
+        expect( model.get('unmutated') ).to.equal( 'original' )
 
       })
 
@@ -116,16 +92,16 @@ function( _, Backbone, Model ) {
 
     describe("Model.prototype.set", function() {
 
-      it("should apply mutator found on the argument key in __setters to the value before setting", function() {
+      it("should apply setter if there is one", function() {
 
-        var model = new Model()
-
-        model.defineSetter('name', function( name ) {
-          return 'name:' + name
-        })
-        model.defineSetter('number', function( number ) {
-          return '+47 ' + number
-        })
+        var model = new (Model.extend({
+          'set:name': function( name ) {
+            return 'name:' + name
+          },
+          'set:number': function( number ) {
+            return '+47 ' + number
+          }
+        }))
 
         model.set( 'name', 'Laverton' )
 
@@ -136,8 +112,11 @@ function( _, Backbone, Model ) {
           number: '951 88 149'
         })
 
+        model.set( 'unmutated', 'original' )
+
         expect( model.get('name') ).to.equal( 'name:Christian Laverton' )
         expect( model.get('number') ).to.equal( '+47 951 88 149' )
+        expect( model.get('unmutated') ).to.equal( 'original' )
 
       })
 
