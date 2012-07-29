@@ -125,11 +125,34 @@ function( _, sandboxfactory ){
     @param {Function} callback The continuation to call when either an error os produced or the module is found.
     @returns {cerebral/core} self
   */
-  core.loadModule = function( modulename, callback ) {
-    var moduleRoot, mainPath
+  core.loadModule = function( options, callback ) {
+    var modulename, moduleRoot, mainPath, sandbox, sandboxNamespace, requireConfig
+
+    modulename = options.modulename
+
     moduleRoot = this.configuration.moduleRoot + modulename
-    mainPath = moduleRoot + '/main' 
-    require([ mainPath ], 
+    mainPath = moduleRoot + '/main'
+
+    sandbox = sandboxfactory.create({
+      el: options.el
+    })
+    sandboxNamespace = moduleRoot + '/sandbox'
+
+    if( !require.defined(sandboxNamespace) ) {
+      define(
+        sandboxNamespace,[
+        ],
+        sandbox
+      )
+    }
+
+    requireConfig = { map: {} }
+
+    requireConfig.map[ moduleRoot ] = {
+      'sandbox': sandboxNamespace
+    }
+    
+    require(requireConfig, [ mainPath ], 
       function( main ) {
         if( typeof main !== 'function' ) {
           core.unloadModule( modulename )
@@ -153,8 +176,17 @@ function( _, sandboxfactory ){
     @returns {cerebral/core} self
   */
   core.unloadModule = function( modulename ) {
-    var definedModules, name
+    
+    var definedModules, moduleRoot, sandboxNamespace, name
+
     definedModules = require.s.contexts._.defined
+    moduleRoot = this.configuration.moduleRoot + modulename
+    sandboxNamespace = moduleRoot + '/sandbox'
+
+    if( require.defined(sandboxNamespace) ) {
+      require.undef( sandboxNamespace )
+    }
+
     for( name in definedModules ) {
       if( definedModules.hasOwnProperty(name) && name.indexOf(modulename) !== -1 ) {
         require.undef( name )
@@ -163,19 +195,43 @@ function( _, sandboxfactory ){
     return this
   }
 
+  core.moduleIsStarted = function( modulename ) {
+    var moduleRoot, mainPath
+
+    moduleRoot = this.configuration.moduleRoot + modulename
+    mainPath = moduleRoot + '/main'
+
+    return require.defined( mainPath )
+  }
+
+  /**
+    Load and start a module by running the returned main function with a new sandbox object.
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @param {Object} options Options for the module and sandbox
+    @param options.element The element to restrict dom access to
+    @returns {cerebral/core} self
+  */
   core.start = function( modulename, options ) {
-    var sandbox
-    core.loadModule(modulename, function( err, main ) {
+
+    if( core.moduleIsStarted(modulename) )
+      return this
+
+    core.loadModule({
+      modulename: modulename
+    }, 
+    function( err, main ) {
       if( err ) {
         throw err
       }
       try {
-        sandbox = sandboxfactory.create( options )
-        main( sandbox )
+        main()
       } catch( e ) {
         console.log( 'core.start: ' + modulename + ' threw exception: ', e)
       }
     })
+    return this
   }
   
   return core
