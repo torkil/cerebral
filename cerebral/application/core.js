@@ -12,25 +12,38 @@ function( _ ){
   
   var core, channels
 
-  core = {
-    moduleRoot: '/'
-  }
+  core = { }
 
   /**
-    Holds the callback listeners bound to fire when published to that specific channel 
+    Holds the callback listeners bound to fire when published to that specific channel.
     @private
     @type Object
   */
   channels = {}
 
-  core.configuration = {}
+  /**
+    The configuration of the core.
+    @public
+    @type Object
+  */
+  core.configuration = {
+    moduleRoot: '/'
+  }
 
+  /**
+    Configure the core,
+    @public
+    @type Function
+    @param {Object} configuration The configuration object to extend the cores configuration with
+    @returns {cerebral/core} self
+  */
   core.configure = function( configuration ) {
     _.extend( this.configuration, configuration )
+    return this
   }
   
   /**
-    Binds a callback to be called when published to the channel given
+    Binds a callback to be called when published to the channel given.
     @public
     @type Function
     @param {String} channel The name of the channel to bind the callback to
@@ -56,7 +69,7 @@ function( _ ){
   }
 
   /**
-    Unbind the callback from firing when published to the given channel
+    Unbind the callback from firing when published to the given channel.
     @public
     @type Function
     @param {String} channel The name of the channel to unbind the callback from
@@ -82,7 +95,7 @@ function( _ ){
   }
 
   /**
-    Publish to a channel, passing the arguments after channel to the callback
+    Publish to a channel, passing the arguments after channel to the callback.
     @public
     @type Function
     @param {String} channel The name of the channel to unbind the callback from
@@ -103,6 +116,14 @@ function( _ ){
     return this
   }
 
+  /**
+    Require a module from the moduleRoot namespace, will automagicaly look for the main.js within the modulename folder.
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @param {Function} callback The continuation to call when either an error os produced or the module is found.
+    @returns {cerebral/core} self
+  */
   core.loadModule = function( modulename, callback ) {
     var moduleRoot, mainPath
     moduleRoot = this.configuration.moduleRoot + modulename
@@ -120,8 +141,16 @@ function( _ ){
         core.unloadModule( modulename )
         callback( error )
       })
+    return this
   }
 
+  /**
+    Unload a module, undefining it in the amd loader and propegating down to all dependecies within the same moduleroot namespace.
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @returns {cerebral/core} self
+  */
   core.unloadModule = function( modulename ) {
     var definedModules, name
     definedModules = require.s.contexts._.defined
@@ -130,6 +159,7 @@ function( _ ){
         require.undef( name )
       }
     }
+    return this
   }
   
   return core
