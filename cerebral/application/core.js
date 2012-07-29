@@ -12,7 +12,9 @@ function( _ ){
   
   var core, channels
 
-  core = {}
+  core = {
+    moduleRoot: '/'
+  }
 
   /**
     Holds the callback listeners bound to fire when published to that specific channel 
@@ -20,6 +22,12 @@ function( _ ){
     @type Object
   */
   channels = {}
+
+  core.configuration = {}
+
+  core.configure = function( configuration ) {
+    _.extend( this.configuration, configuration )
+  }
   
   /**
     Binds a callback to be called when published to the channel given
@@ -95,6 +103,34 @@ function( _ ){
     return this
   }
 
+  core.loadModule = function( modulename, callback ) {
+    var moduleRoot, mainPath
+    moduleRoot = this.configuration.moduleRoot + modulename
+    mainPath = moduleRoot + '/main' 
+    require([ mainPath ], 
+      function( module ) {
+        if( typeof module !== 'function' ) {
+          core.unloadModule( modulename )
+          callback( TypeError('Module returned value not of type function') )
+        } else {
+          callback( null, module )
+        }
+      },
+      function( error ) {
+        core.unloadModule( modulename )
+        callback( error )
+      })
+  }
+
+  core.unloadModule = function( modulename ) {
+    var definedModules, name
+    definedModules = require.s.contexts._.defined
+    for( name in definedModules ) {
+      if( definedModules.hasOwnProperty(name) && name.indexOf(modulename) !== -1 ) {
+        require.undef( name )
+      }
+    }
+  }
   
-  return Object.create( core )
+  return core
 })
