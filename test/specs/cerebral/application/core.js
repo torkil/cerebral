@@ -100,6 +100,15 @@ require([
 
       })
 
+      it("should pass a Error if the module doesnt exist", function( done ) {
+
+        core.loadModule('nonexisting', function( err ) {
+          expect( err ).to.be.a( Error )
+          done()
+        })
+
+      })
+
     })
 
     describe("core.unloadModule", function() {
@@ -112,16 +121,28 @@ require([
           expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
           expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
           expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
+          expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
 
           core.unloadModule('calculatordisplay')
 
           expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
           expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
           expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
+          expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
 
           done()
         })
 
+      })
+
+    })
+
+    describe("core.start", function() {
+
+      core.start({
+        module: 'calculatordisplay',
+        type: 'widget',
+        el: '#calculatordisplay'
       })
 
     })
