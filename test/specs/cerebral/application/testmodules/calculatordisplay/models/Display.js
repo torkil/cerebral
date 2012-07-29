@@ -1,9 +1,14 @@
 define([
+  'sandbox',
   'cerebral/mvc/Model'
 ], 
-function( Model ) {
+function( sandbox, Model ) {
   
-  var DisplayModel = Model.extend({})
+  var DisplayModel = Model.extend({
+    getSandbox: function() {
+      return sandbox
+    }
+  })
 
   return DisplayModel
 })

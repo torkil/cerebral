@@ -4,7 +4,9 @@ define([
   './views/Button'
 ], 
 function( InputModel, InputView, ButtonView ) {
-  return function(){
+
+  return function main() {
 
   }
+
 })
