@@ -123,7 +123,7 @@ function( _, sandboxfactory ){
       listener = listeners[ index ] 
       listener.callback.apply( listener.context, args )
     }
-    
+
     return this
   }
 
@@ -205,6 +205,13 @@ function( _, sandboxfactory ){
     return this
   }
 
+  /**
+    Check if a module is loaded and started
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @returns Boolean
+  */
   core.moduleIsStarted = function( modulename ) {
     var moduleRoot, mainPath
 
@@ -240,6 +247,22 @@ function( _, sandboxfactory ){
         console.log( 'core.start: ' + modulename + ' threw exception: ', e)
       }
     })
+
+    return this
+  }
+
+  /**
+    Stops a running module.
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @returns {cerebral/core} self
+  */
+  core.stop = function( modulename ) {
+    if( !core.moduleIsStarted(modulename) )
+      return this
+
+    core.unloadModule( modulename )
 
     return this
   }
