@@ -58,7 +58,7 @@ function( _, Backbone ) {
       attrs[ key ] = value
     }
     for( attr in attrs ) {
-      setter = this[ 'set:' + attr ]
+      setter = this[ 'set:' + attr ] || 0
       if( setter ) {
         attrs[ attr ] = setter.call( this, attrs[attr] )
       }
