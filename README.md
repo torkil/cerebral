@@ -5,7 +5,7 @@ cerebral.js [![Build Status](https://secure.travis-ci.org/gorillatron/cerebral.p
 Bringing consciousness down the backbone.  
   
 The cerebral framework/library is meant to extend the base functionality of Backbone.js and provide 
-robust patterns of modularity, module loading, unloading and inter-module communication.    
+robust patterns of modularity, module loading, unloading and loosely coupled module communication through a pub-sub application core.    
 
 It is loosely based on the concepts discussed in [Scalable Application Architecture](http://www.slideshare.net/nzakas/scalable-javascript-application-architecture by Nicholas Zakas) by Nicholas Zakas. and the [backbone-aura](https://github.com/addyosmani/backbone-aura) framework. Tip of the hat to [Addy Osmani](http://addyosmani.com/blog/).
 
