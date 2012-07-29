@@ -18,6 +18,10 @@ For more details se the (not yet created) *link to docs*
 * Loading and unloading modules
 * Methods for publishing and subscribing to events. Used for inter module communication.
 
+### Sandbox
+
+Modules are started with their own sandbox objects that restrict jquery DOM acces to the element their given.
+
 ### Backbone extensions
 
 Many of the Backbone classes are extended with features and functionality the programmers often have to write themselves or use plugins to use.
