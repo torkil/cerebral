@@ -2,8 +2,8 @@
 /**
   Extending Backbone
   @exports cerebral/lib/Backbone
-  @augments Backbone.Router
-  @requires [underscore, cerebral/lib/Backbone, cerebral/ext/Backbone/Events]
+  @augments Backbone
+  @requires [underscore, cerebral/vendor/Backbone, cerebral/ext/Backbone/Events]
 */
 define(
 "cerebral/lib/Backbone",[
