@@ -1,5 +1,7 @@
 define([], function(){
-  return function() {
+
+  return function main() {
     return 'main'
   }
+  
 })
