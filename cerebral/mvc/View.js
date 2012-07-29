@@ -36,6 +36,7 @@ function( _,Backbone, ViewCollection ) {
   View.prototype.setElement = function() {
     Backbone.View.prototype.setElement.apply( this, arguments )
     this.trigger( "setelement", this )
+    
     return this
   }
 
@@ -51,6 +52,7 @@ function( _,Backbone, ViewCollection ) {
     this.unbindAll()
     this.unbind()
     this.remove()
+
     return this
   }
   

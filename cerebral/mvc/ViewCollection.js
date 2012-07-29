@@ -42,6 +42,7 @@ function( _, Backbone ) {
 
     ViewCollection.prototype[ methodName ] = function() {
       var args
+
       args = [ this.views ].concat( [].slice.call(arguments, 0) )
       return _[ methodName ].apply( this, args )
     }
@@ -63,9 +64,11 @@ function( _, Backbone ) {
       throw new TypeError( 'subview parameter not instance of Backbone.View' )
     if( this.views[name] )
       throw new Error( 'subview with that name allready attached' )
+
     this.views[ name ] = subview
     subview.on( "dispose", this.subviewOnDispose, this )
     this.trigger( 'attach', name, subview )
+
     this.length++
   }
 
@@ -104,6 +107,7 @@ function( _, Backbone ) {
       return attachArray.call( this, subviews )
     if( typeof subviews === 'object' )
       return attachObject.call( this, subviews )
+
     throw new TypeError( 'parameter subviews not of correct type. Accepted: object{name: subview}, subviews, array of subviews' )
   }
 
@@ -115,8 +119,10 @@ function( _, Backbone ) {
   */
   function detachByInstance( instance ) {
     var key, view
+
     for( key in this.views ) {
       view = this.views[ key ]
+
       if( view === instance ) {
         delete this.views[ key ]
         return {
@@ -135,8 +141,10 @@ function( _, Backbone ) {
   */
   function detachByName( name ) {
     var view
+
     if( this.views[name] ) {
       view = this.views[ name ]
+
       delete this.views[ name ]
       return {
         name: name,
@@ -156,12 +164,14 @@ function( _, Backbone ) {
   */
   ViewCollection.prototype.detach = function( nameOrView, opts ) {
     var options, detachedView
+
     if( typeof nameOrView === 'string' ) {
       detachedView = detachByName.call( this, nameOrView )
     }
     if( typeof nameOrView === 'object' ) {
       detachedView = detachByInstance.call( this, nameOrView )
     }
+
     if( detachedView ) {
       options = _.extend({
         dispose: true
@@ -217,7 +227,9 @@ function( _, Backbone ) {
   */
   ViewCollection.prototype.querySelector = function( selector ) {
     var matchingViews
+
     matchingViews = []
+
     this.each(function( view ) {
       var matchedElements
       matchedElements = view.$el.find( selector )
@@ -225,6 +237,7 @@ function( _, Backbone ) {
         matchingViews.push( view )
       }
     }, this)
+    
     return matchingViews
   }
 

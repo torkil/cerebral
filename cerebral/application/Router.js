@@ -88,8 +88,10 @@ function( Backbone, ViewCollection ){
   */
   Router.sameOrigin = function( location, test ) {
     var port, origin
+
     port = location.port && location.port != '80' ? ':' + location.port : ''
     origin = location.protocol + '//' + location.hostname + port
+
     return test.match( origin ) ? true : false
   }
 
@@ -102,10 +104,13 @@ function( Backbone, ViewCollection ){
   */
   Router.prototype.clickListener = function( event ) {
     var url, path
+
     url = event.currentTarget.href
     if( !Router.sameOrigin(window.location, url) )
       return null
+
     event.preventDefault()
+    
     path = event.currentTarget.pathname + event.currentTarget.search 
     this.navigate(path, {trigger: true})
   }

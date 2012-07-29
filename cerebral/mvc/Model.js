@@ -34,11 +34,14 @@ function( _, Backbone ) {
   */
   Model.prototype.get = function( attr ) {
     var value, getter
+
     value = this.attributes[ attr ]
     getter = this[ 'get:' + attr ] || 0
+
     if( getter ) {
       return getter.call( this, value )
     }
+
     return value
   }
 
@@ -50,6 +53,7 @@ function( _, Backbone ) {
   */
   Model.prototype.set = function( key, value, options ) {
     var attrs, attr, setter
+
     if( _.isObject(key) ) {
       attrs = key
       options = value
@@ -57,12 +61,14 @@ function( _, Backbone ) {
       attrs = {}
       attrs[ key ] = value
     }
+
     for( attr in attrs ) {
       setter = this[ 'set:' + attr ] || 0
       if( setter ) {
         attrs[ attr ] = setter.call( this, attrs[attr] )
       }
     }
+    
     Backbone.Model.prototype.set.call( this, attrs, options )
   }
 
