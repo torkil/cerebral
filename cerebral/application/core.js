@@ -129,12 +129,12 @@ function( _ ){
     moduleRoot = this.configuration.moduleRoot + modulename
     mainPath = moduleRoot + '/main' 
     require([ mainPath ], 
-      function( module ) {
-        if( typeof module !== 'function' ) {
+      function( main ) {
+        if( typeof main !== 'function' ) {
           core.unloadModule( modulename )
           callback( TypeError('Module returned value not of type function') )
         } else {
-          callback( null, module )
+          callback( null, main )
         }
       },
       function( error ) {
@@ -145,7 +145,7 @@ function( _ ){
   }
 
   /**
-    Unload a module, undefining it in the amd loader and propegating down to all dependecies within the same moduleroot namespace.
+    Unload a module, undefining it in the amd loader and propegating down to all dependecies within the same module namespace.
     @public
     @type Function
     @param {String} modulename The name of the namespace/folder that contains the module
