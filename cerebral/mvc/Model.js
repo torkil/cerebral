@@ -21,7 +21,7 @@ function( _, Backbone ) {
     constructor: function() {
       Backbone.Model.prototype.constructor.apply( this, arguments )
 
-      // Make sure defaults are not overwritte. Feels like a hack, plx fix.
+      // Make sure defaults are not overwritten by setters. Feels like a hack, plx fix.
       _.extend(this.attributes, this.defaults )
     }
   })
