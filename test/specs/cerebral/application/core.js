@@ -2,6 +2,12 @@ require([
   "cerebral/application/core"
 ], function( core ) {
   
+  var moduleRoot = 'test/specs/cerebral/application/testmodules/'
+
+  core.configure({
+    moduleRoot: moduleRoot
+  })
+
   describe("cerebral/application/core", function() {
     
     describe("core.publish", function() {
@@ -68,6 +74,53 @@ require([
         core.publish( "increment" )
 
         expect( i ).to.equal( 2 )
+
+      })
+
+    })
+
+    describe("core.loadModule", function() {
+
+      it("should use amd loading to load a module from the desired namespace", function( done ) {
+
+        core.loadModule('mainreporter', function( err, mainreporter ) {
+          expect( mainreporter ).to.be.ok()
+          expect( mainreporter() ).to.equal( 'main' )
+          done()
+        })
+
+      })
+
+      it("should pass a TypeError if the module definition is of other type than function", function( done ) {
+
+        core.loadModule('faultyreturn', function( err ) {
+          expect( err ).to.be.a( TypeError )
+          done()
+        })
+
+      })
+
+    })
+
+    describe("core.unloadModule", function() {
+
+      it("should unload all modules that are within the namespace of the module and defined by the amd loader", function( done ) {
+
+        core.loadModule('calculatordisplay', function( err, display ) {
+
+          expect( display ).to.be.a( 'function' )
+          expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
+          expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
+          expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
+
+          core.unloadModule('calculatordisplay')
+
+          expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
+          expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
+          expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
+
+          done()
+        })
 
       })
 
