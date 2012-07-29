@@ -25,6 +25,8 @@
       e: null
     }
 
+    window.TESTDATA = {}
+
     window.onerror = function(e){ 
       window.TESTSTATS.error = e
     }
@@ -42,12 +44,12 @@
       "test/specs/cerebral/mvc/View",
       "test/specs/cerebral/mvc/ViewCollection"
     ], 
-    function(Backbone) {
+    function( Backbone, core ) {
       
       $(function(){
         var runner = mocha
                       .run()
-                      .globals(['TESTSTATS'])
+                      .globals(['TESTSTATS', 'TESTDATA'])
 
 
         runner.on('pass', function(test){
@@ -79,8 +81,14 @@
   <div id="mocha"></div>
   <div id="app_test">
 
-    <div id="calculatordisplay"></div>
-    <div id="calculatorinput"></div>
+    <div id="unreachable"></div>
+
+    <div id="calculatordisplay">
+      <div id="inside-calculatordisplay"></div>
+    </div>
+    <div id="calculatorinput">
+      <div id="inside-calculatorinput"></div>
+    </div>
 
   </div>
 </body>
