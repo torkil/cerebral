@@ -2,12 +2,21 @@ require([
   "cerebral/application/core"
 ], function( core ) {
   
+  window._core = core
+
   var moduleRoot = 'test/specs/cerebral/application/testmodules/'
 
   core.configure({
     moduleRoot: moduleRoot
   })
 
+  function unloadAll() {
+    core.unloadModule('calculatordisplay')
+    core.unloadModule('calculatorinput')
+    core.unloadModule('faultyreturn')
+    core.unloadModule('mainreporter')
+  }
+  
   describe("cerebral/application/core", function() {
     
     describe("core.publish", function() {
@@ -81,9 +90,14 @@ require([
 
     describe("core.loadModule", function() {
 
+      beforeEach( unloadAll )
+
       it("should use amd loading to load a module from the desired namespace", function( done ) {
 
-        core.loadModule('mainreporter', function( err, mainreporter ) {
+        core.loadModule({
+          modulename: 'mainreporter'
+        }, 
+        function( err, mainreporter ) {
           expect( mainreporter ).to.be.ok()
           expect( mainreporter() ).to.equal( 'main' )
           done()
@@ -93,7 +107,10 @@ require([
 
       it("should pass a TypeError if the module definition is of other type than function", function( done ) {
 
-        core.loadModule('faultyreturn', function( err ) {
+        core.loadModule({
+          modulename: 'faultyreturn'
+        }, 
+        function( err ) {
           expect( err ).to.be.a( TypeError )
           done()
         })
@@ -102,7 +119,10 @@ require([
 
       it("should pass a Error if the module doesnt exist", function( done ) {
 
-        core.loadModule('nonexisting', function( err ) {
+        core.loadModule({
+          modulename: 'nonexisting'
+        }, 
+        function( err ) {
           expect( err ).to.be.a( Error )
           done()
         })
@@ -113,9 +133,14 @@ require([
 
     describe("core.unloadModule", function() {
 
+      beforeEach( unloadAll )
+
       it("should unload all modules that are within the namespace of the module and defined by the amd loader", function( done ) {
 
-        core.loadModule('calculatordisplay', function( err, display ) {
+        core.loadModule({ 
+          modulename: 'calculatordisplay'
+        }, 
+        function( err, display ) {
 
           expect( display ).to.be.a( 'function' )
           expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
@@ -139,6 +164,8 @@ require([
 
     describe("core.start", function() {
 
+      beforeEach( unloadAll )
+
       it("should invoke the main function of the module", function( done ) {
 
         var timeout
@@ -160,41 +187,51 @@ require([
 
       })
 
-      it("should invoke the main function with a sandbox object as parameter", function( done ) {
+      it("should not invoke the main method if the module is allready started", function( done ) {
 
-        var timeout
+        var incrementer, continuation
+
+        incrementer = 0
 
         TESTDATA.calculatordisplay = {
-          'reportArguments': function( args ) {
-            clearTimeout( timeout )
+          'onMain': function() {
+            incrementer++
 
-            expect( args.sandbox ).to.be.a( 'object' )
-
-            done()
+            if(continuation) continuation()
           }
         }
-
-        timeout = setTimeout(function() {
-          done( new Error('core.start timeout') )
-        }, 500)
 
         core.start('calculatordisplay', {
           el: '#calculatordisplay'
         })
 
+        continuation = function() {
+          expect( incrementer ).to.equal( 1 )
+          
+          continuation = function() {
+            expect( incrementer ).to.equal( 1 )
+            done()
+          }
+
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+          setTimeout(continuation, 120)
+
+        }
+
       })
 
-      it("should have a restricted $ on the sandbox that can only acces the dom within the module element", function( done ) {
+      it("should have access to a sandbox object under 'sandbox' namespace under the moduleroot namespace", function( done ) {
 
         var timeout
 
         TESTDATA.calculatordisplay = {
-          'domAccess': function( sandbox ) {
+          'compareSandboxes': function( sandboxes ) {
             clearTimeout( timeout )
-            
-            expect( sandbox.$('body').length ).to.equal( 0 )
-            expect( sandbox.$('#inside-calculatorinput').length ).to.equal( 0 )
-            expect( sandbox.$('#inside-calculatordisplay').length ).to.equal( 1 )
+
+            expect( sandboxes.mainSandbox === sandboxes.subSandbox ).to.equal( true )
 
             done()
           }
@@ -205,7 +242,7 @@ require([
         }, 500)
 
         core.start('calculatordisplay', {
-          el: '#calculatordisplay'
+          el: '#calculatorinput'
         })
 
       })
