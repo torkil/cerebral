@@ -139,10 +139,75 @@ require([
 
     describe("core.start", function() {
 
-      core.start({
-        module: 'calculatordisplay',
-        type: 'widget',
-        el: '#calculatordisplay'
+      it("should invoke the main function of the module", function( done ) {
+
+        var timeout
+
+        TESTDATA.calculatordisplay = {
+          'onMain': function() {
+            clearTimeout( timeout )
+            done()
+          }
+        }
+
+        timeout = setTimeout(function() {
+          done( new Error('core.start timeout') )
+        }, 500)
+
+        core.start('calculatordisplay', {
+          el: '#calculatordisplay'
+        })
+
+      })
+
+      it("should invoke the main function with a sandbox object as parameter", function( done ) {
+
+        var timeout
+
+        TESTDATA.calculatordisplay = {
+          'reportArguments': function( args ) {
+            clearTimeout( timeout )
+
+            expect( args.sandbox ).to.be.a( 'object' )
+
+            done()
+          }
+        }
+
+        timeout = setTimeout(function() {
+          done( new Error('core.start timeout') )
+        }, 500)
+
+        core.start('calculatordisplay', {
+          el: '#calculatordisplay'
+        })
+
+      })
+
+      it("should have a restricted $ on the sandbox that can only acces the dom within the module element", function( done ) {
+
+        var timeout
+
+        TESTDATA.calculatordisplay = {
+          'domAccess': function( sandbox ) {
+            clearTimeout( timeout )
+            
+            expect( sandbox.$('body').length ).to.equal( 0 )
+            expect( sandbox.$('#inside-calculatorinput').length ).to.equal( 0 )
+            expect( sandbox.$('#inside-calculatordisplay').length ).to.equal( 1 )
+
+            done()
+          }
+        }
+
+        timeout = setTimeout(function() {
+          done( new Error('core.start timeout') )
+        }, 500)
+
+        core.start('calculatordisplay', {
+          el: '#calculatordisplay'
+        })
+
       })
 
     })
