@@ -52,6 +52,7 @@ function( _, Backbone ) {
     var attrs, attr, setter
     if( _.isObject(key) ) {
       attrs = key
+      options = value
     } else {
       attrs = {}
       attrs[ key ] = value
