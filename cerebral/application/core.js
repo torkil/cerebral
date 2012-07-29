@@ -6,9 +6,10 @@
 */
 define(
 "cerebral/application/core",[
-  "underscore"
+  "underscore",
+  "cerebral/application/sandboxfactory"
 ], 
-function( _ ){
+function( _, sandboxfactory ){
   
   var core, channels
 
@@ -160,6 +161,21 @@ function( _ ){
       }
     }
     return this
+  }
+
+  core.start = function( modulename, options ) {
+    var sandbox
+    core.loadModule(modulename, function( err, main ) {
+      if( err ) {
+        throw err
+      }
+      try {
+        sandbox = sandboxfactory.create( options )
+        main( sandbox )
+      } catch( e ) {
+        console.log( 'core.start: ' + modulename + ' threw exception: ', e)
+      }
+    })
   }
   
   return core
