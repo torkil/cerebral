@@ -88,161 +88,210 @@ require([
 
     })
 
-    describe("core.loadModule", function() {
+    describe("modules", function() {
 
-      beforeEach( unloadAll )
+      describe("core.loadModule", function() {
 
-      it("should use amd loading to load a module from the desired namespace", function( done ) {
+        beforeEach( unloadAll )
 
-        core.loadModule({
-          modulename: 'mainreporter'
-        }, 
-        function( err, mainreporter ) {
-          expect( mainreporter ).to.be.ok()
-          expect( mainreporter() ).to.equal( 'main' )
-          done()
-        })
+        it("should use amd loading to load a module from the desired namespace", function( done ) {
 
-      })
-
-      it("should pass a TypeError if the module definition is of other type than function", function( done ) {
-
-        core.loadModule({
-          modulename: 'faultyreturn'
-        }, 
-        function( err ) {
-          expect( err ).to.be.a( TypeError )
-          done()
-        })
-
-      })
-
-      it("should pass a Error if the module doesnt exist", function( done ) {
-
-        core.loadModule({
-          modulename: 'nonexisting'
-        }, 
-        function( err ) {
-          expect( err ).to.be.a( Error )
-          done()
-        })
-
-      })
-
-    })
-
-    describe("core.unloadModule", function() {
-
-      beforeEach( unloadAll )
-
-      it("should unload all modules that are within the namespace of the module and defined by the amd loader", function( done ) {
-
-        core.loadModule({ 
-          modulename: 'calculatordisplay'
-        }, 
-        function( err, display ) {
-
-          expect( display ).to.be.a( 'function' )
-          expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
-          expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
-          expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
-          expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
-
-          core.unloadModule('calculatordisplay')
-
-          expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
-          expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
-          expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
-          expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
-
-          done()
-        })
-
-      })
-
-    })
-
-    describe("core.start", function() {
-
-      beforeEach( unloadAll )
-
-      it("should invoke the main function of the module", function( done ) {
-
-        var timeout
-
-        TESTDATA.calculatordisplay = {
-          'onMain': function() {
-            clearTimeout( timeout )
+          core.loadModule({
+            modulename: 'mainreporter'
+          }, 
+          function( err, mainreporter ) {
+            expect( mainreporter ).to.be.ok()
+            expect( mainreporter() ).to.equal( 'main' )
             done()
-          }
-        }
+          })
 
-        timeout = setTimeout(function() {
-          done( new Error('core.start timeout') )
-        }, 500)
+        })
 
-        core.start('calculatordisplay', {
-          el: '#calculatordisplay'
+        it("should pass a TypeError if the module definition is of other type than function", function( done ) {
+
+          core.loadModule({
+            modulename: 'faultyreturn'
+          }, 
+          function( err ) {
+            expect( err ).to.be.a( TypeError )
+            done()
+          })
+
+        })
+
+        it("should pass a Error if the module doesnt exist", function( done ) {
+
+          core.loadModule({
+            modulename: 'nonexisting'
+          }, 
+          function( err ) {
+            expect( err ).to.be.a( Error )
+            done()
+          })
+
         })
 
       })
 
-      it("should not invoke the main method if the module is allready started", function( done ) {
+      describe("core.unloadModule", function() {
 
-        var incrementer, continuation
+        beforeEach( unloadAll )
 
-        incrementer = 0
+        it("should unload all modules that are within the namespace of the module and defined by the amd loader", function( done ) {
 
-        TESTDATA.calculatordisplay = {
-          'onMain': function() {
-            incrementer++
+          core.loadModule({ 
+            modulename: 'calculatordisplay'
+          }, 
+          function( err, display ) {
 
-            if(continuation) continuation()
-          }
-        }
+            expect( display ).to.be.a( 'function' )
+            expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
+            expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
+            expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
+            expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
 
-        core.start('calculatordisplay', {
-          el: '#calculatordisplay'
+            core.unloadModule('calculatordisplay')
+
+            expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
+            expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
+            expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
+            expect( require.defined('cerebral/mvc/Model') ).to.equal( true )
+
+            done()
+          })
+
         })
 
-        continuation = function() {
-          expect( incrementer ).to.equal( 1 )
-          
-          continuation = function() {
-            expect( incrementer ).to.equal( 1 )
-            done()
+      })
+
+      describe("core.start", function() {
+
+        beforeEach( unloadAll )
+
+        it("should invoke the main function of the module", function( done ) {
+
+          var timeout
+
+          TESTDATA.calculatordisplay = {
+            'onMain': function() {
+              clearTimeout( timeout )
+              done()
+            }
+          }
+
+          timeout = setTimeout(function() {
+            done( new Error('core.start timeout') )
+          }, 500)
+
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+        })
+
+        it("should not invoke the main method if the module is allready started", function( done ) {
+
+          var incrementer, continuation
+
+          incrementer = 0
+
+          TESTDATA.calculatordisplay = {
+            'onMain': function() {
+              incrementer++
+
+              if(continuation) continuation()
+            }
           }
 
           core.start('calculatordisplay', {
             el: '#calculatordisplay'
           })
 
-          setTimeout(continuation, 120)
+          continuation = function() {
+            expect( incrementer ).to.equal( 1 )
+            
+            continuation = function() {
+              expect( incrementer ).to.equal( 1 )
+              done()
+            }
 
-        }
+            core.start('calculatordisplay', {
+              el: '#calculatordisplay'
+            })
+
+            setTimeout(continuation, 120)
+
+          }
+
+        })
 
       })
 
-      it("should have access to a sandbox object under 'sandbox' namespace under the moduleroot namespace", function( done ) {
+      describe("sandbox", function() {
 
-        var timeout
+        beforeEach( unloadAll )
+        
+        it("should expose a shared sandbox object on namespace 'sandbox' to the module and all submodules", function( done ) {
 
-        TESTDATA.calculatordisplay = {
-          'compareSandboxes': function( sandboxes ) {
-            clearTimeout( timeout )
+          var timeout
 
-            expect( sandboxes.mainSandbox === sandboxes.subSandbox ).to.equal( true )
+          TESTDATA.calculatordisplay = {
+            'compareSandboxes': function( sandboxes ) {
+              clearTimeout( timeout )
 
-            done()
+              expect( sandboxes.mainSandbox === sandboxes.subSandbox ).to.equal( true )
+
+              done()
+            }
           }
-        }
 
-        timeout = setTimeout(function() {
-          done( new Error('core.start timeout') )
-        }, 500)
+          timeout = setTimeout(function() {
+            done( new Error('core.start timeout') )
+          }, 500)
 
-        core.start('calculatordisplay', {
-          el: '#calculatorinput'
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+        })
+
+        it("should create individual sandboxes for all 'sandbox' namespaces under each moduleroot namespace", function( done ) {
+
+          var sandboxA, sandboxB
+
+          function check( sandbox ) {
+            if( !sandboxA ) {
+              sandboxA = sandbox
+            }
+            else if( !sandboxB ) {
+              sandboxB = sandbox
+            }
+            if( sandboxA && sandboxB ) {
+              expect( sandboxA !== sandboxB ).to.equal( true )
+              done()
+            }
+          }
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              check( sandbox )
+            }
+          }
+
+          TESTDATA.calculatorinput = {
+            'reportSandbox': function( sandbox ) {
+              check( sandbox )
+            }
+          }
+
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+          core.start('calculatorinput', {
+            el: '#calculatorinput'
+          })
+
         })
 
       })
