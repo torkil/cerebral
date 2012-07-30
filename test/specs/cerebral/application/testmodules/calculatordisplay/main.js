@@ -4,7 +4,7 @@ define([
   './views/Display'
 ], 
 function( sandbox, DisplayModel, DisplayView ) {
-
+  
   return function main( ) {
     
     if( TESTDATA.calculatordisplay.onMain ) {
@@ -27,6 +27,10 @@ function( sandbox, DisplayModel, DisplayView ) {
 
     if( TESTDATA.calculatordisplay.domAccess ) {
       TESTDATA.calculatordisplay.domAccess( sandbox )
+    }
+
+    if( TESTDATA.calculatordisplay.reportSandbox ) {
+      TESTDATA.calculatordisplay.reportSandbox( sandbox )
     }
       
   }
