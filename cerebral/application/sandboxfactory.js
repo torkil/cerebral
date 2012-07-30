@@ -1,3 +1,6 @@
+/*
+  Sandboxfactory
+*/
 define(
 "cerebral/application/sandboxfactory",[
   "underscore",
