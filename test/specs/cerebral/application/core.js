@@ -227,10 +227,47 @@ require([
 
       })
 
+      describe("core.stop", function() {
+
+        beforeEach( unloadAll )
+
+        it("should unload the module definition and all definitions down the hierarchy of the moduleroot namespace", function( done ) {
+
+          TESTDATA.calculatordisplay = {
+            'onMain': function() {
+              
+              expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
+              expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
+              expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
+              expect( require.defined(moduleRoot + 'calculatordisplay/sandbox') ).to.equal( true )
+
+              core.stop('calculatordisplay')
+
+              setTimeout(function() {
+
+                expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
+                expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
+                expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
+                expect( require.defined(moduleRoot + 'calculatordisplay/sandbox') ).to.equal( false )
+
+                done()
+              }, 200)
+
+            }
+          }
+
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+        })
+
+      })
+
       describe("sandbox", function() {
 
         beforeEach( unloadAll )
-        
+
         it("should expose a shared sandbox object on namespace 'sandbox' to the module and all submodules", function( done ) {
 
           var timeout
@@ -267,7 +304,9 @@ require([
               sandboxB = sandbox
             }
             if( sandboxA && sandboxB ) {
+
               expect( sandboxA !== sandboxB ).to.equal( true )
+
               done()
             }
           }
