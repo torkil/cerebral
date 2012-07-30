@@ -38,7 +38,6 @@ function( Backbone, ViewCollection ){
     @public
     @static
     @type Object
-    @returns Number
   */
   Router.defaults = {
     /*
