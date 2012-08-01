@@ -275,7 +275,7 @@ require([
           TESTDATA.calculatordisplay = {
             'compareSandboxes': function( sandboxes ) {
               clearTimeout( timeout )
-              
+
               expect( sandboxes.mainSandbox === sandboxes.subSandbox ).to.equal( true )
 
               done()
@@ -384,6 +384,44 @@ require([
 
           core.start('calculatorinput', {
             element: '#calculatorinput'
+          })
+
+        })
+
+        it("should not have access to the core itself through the sandbox", function( done ) {
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              
+              var possibleCores = []
+
+              possibleCores.push( sandbox.subscribe('accesstest', function() { return this }) )
+              possibleCores.push( sandbox.publish('accesstest') )
+              possibleCores.push( sandbox.subscribe('accesstest', function() {
+                var self = this
+
+                possibleCores.push( self )
+
+                expect( possibleCores.length ).to.equal( 4 )
+
+                _.forEach(possibleCores, function( possiblecore ) {
+                  if( possiblecore === core ) {
+                    done( new Error('the sandbox has access to core') )
+                  }
+                  if( possiblecore === core.api.public ) {
+                    done( new Error('the sandbox has acces to core.api.public') )
+                  }
+                })
+
+                done()
+              }))
+              possibleCores.push( sandbox.publish('accesstest') )
+              
+            }
+          }
+
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
           })
 
         })
