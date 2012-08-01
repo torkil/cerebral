@@ -68,14 +68,37 @@ function( underscore, $ ){
   }
 
   /**
+    Delegate the core to the factory so we can facade core methods for publishing and subscribing to the sandbox properties.
+    @public
+    @type Function
+    @param {cerebral/application/core} core The application core
+    @returns {cerebral/application/sandboxfactory} self
+  */
+  sandboxfactory.delegateCore = function( core ) {
+    if( !core ) {
+      throw new TypeError( 'No core delegated' )
+    }
+
+    sandboxfactory.defineProperty("publish",
+      function() { core.publish.apply( this, arguments ) })
+    sandboxfactory.defineProperty("subscribe",
+      function() { core.subscribe.apply( this, arguments ) })
+    sandboxfactory.defineProperty("unsubscribe",
+      function() { core.unsubscribe.apply( this, arguments ) })
+
+    return this
+  }
+
+  /**
     Create a new sandbox object with the properties on the properties object attached to its prototype
     @public
     @type Function
+    @param {cerebral/application/core} core The application core
     @param {Options} options The options for the sandbox
     @param options.element The DOM element the sandbox has access to
     @returns {Object} sandbox
   */
-  sandboxfactory.create = function( options ) {
+  sandboxfactory.create = function(options ) {
     var proto, sandbox, element
 
     proto = _.clone( properties )
