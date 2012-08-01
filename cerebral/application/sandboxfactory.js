@@ -81,8 +81,10 @@ function( underscore, $ ){
 
     sandboxfactory.defineProperty("publish",
       function() { core.publish.apply( this, arguments ) })
+
     sandboxfactory.defineProperty("subscribe",
       function() { core.subscribe.apply( this, arguments ) })
+    
     sandboxfactory.defineProperty("unsubscribe",
       function() { core.unsubscribe.apply( this, arguments ) })
 

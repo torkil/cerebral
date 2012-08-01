@@ -38,11 +38,11 @@ function( _, sandboxfactory ){
     @public
     @type Function
     @param {Object} configuration The configuration object to extend the cores configuration with
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.configure = function( configuration ) {
     _.extend( this.configuration, configuration )
-    return this
+    return core
   }
   
   /**
@@ -52,7 +52,7 @@ function( _, sandboxfactory ){
     @param {String} channel The name of the channel to bind the callback to
     @param {Function} callback The callback to fire
     @param {Object} context The context of the callback. The callback will have this paramter as its this value
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.subscribe = function( channel, callback, context ) {
     if( typeof channel !== 'string' ) {
@@ -71,7 +71,7 @@ function( _, sandboxfactory ){
       context: context || {}
     })
 
-    return this
+    return core
   }
 
   /**
@@ -80,7 +80,7 @@ function( _, sandboxfactory ){
     @type Function
     @param {String} channel The name of the channel to unbind the callback from
     @param {Function} callback The callback to unbind
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.unsubscribe = function( channel, callback ) {
     var listeners, index, listener
@@ -101,7 +101,7 @@ function( _, sandboxfactory ){
       }
     }
 
-    return this
+    return core
   }
 
   /**
@@ -110,7 +110,7 @@ function( _, sandboxfactory ){
     @type Function
     @param {String} channel The name of the channel to unbind the callback from
     @param {Mixed[]} args The arguments after channel to be passed to callback
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.publish = function( channel ) {
     var listeners, args, index, listener
@@ -126,7 +126,7 @@ function( _, sandboxfactory ){
       listener.callback.apply( listener.context, args )
     }
 
-    return this
+    return core
   }
 
   /**
@@ -135,7 +135,7 @@ function( _, sandboxfactory ){
     @type Function
     @param {String} modulename The name of the namespace/folder that contains the module
     @param {Function} callback The continuation to call when either an error os produced or the module is found.
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.loadModule = function( options, callback ) {
     var modulename, moduleRoot, mainPath, sandbox, sandboxNamespace, requireConfig
@@ -180,7 +180,7 @@ function( _, sandboxfactory ){
         core.unloadModule( modulename )
         callback( error )
       })
-    return this
+    return core
   }
 
   /**
@@ -188,7 +188,7 @@ function( _, sandboxfactory ){
     @public
     @type Function
     @param {String} modulename The name of the namespace/folder that contains the module
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.unloadModule = function( modulename ) {
     var definedModules, moduleRoot, sandboxNamespace, name
@@ -206,7 +206,7 @@ function( _, sandboxfactory ){
         require.undef( name )
       }
     }
-    return this
+    return core
   }
 
   /**
@@ -232,11 +232,11 @@ function( _, sandboxfactory ){
     @param {String} modulename The name of the namespace/folder that contains the module
     @param {Object} options Options for the module and sandbox
     @param options.element The element to restrict dom access to
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.start = function( modulename, options ) {
     if( core.moduleIsStarted(modulename) )
-      return this
+      return core
 
     core.loadModule({
       modulename: modulename,
@@ -253,7 +253,7 @@ function( _, sandboxfactory ){
       }
     })
 
-    return this
+    return core
   }
 
   /**
@@ -261,15 +261,15 @@ function( _, sandboxfactory ){
     @public
     @type Function
     @param {String} modulename The name of the namespace/folder that contains the module
-    @returns {cerebral/core} self
+    @returns {cerebral/core} core
   */
   core.stop = function( modulename ) {
     if( !core.moduleIsStarted(modulename) )
-      return this
+      return core
 
     core.unloadModule( modulename )
 
-    return this
+    return core
   }
   
   return core
