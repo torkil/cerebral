@@ -9,17 +9,17 @@ define(
 function( underscore, $ ){
   
   function createSandbox( options ) {
-    var sandbox, element, jquery
+    var sandbox, element, DOMlib
 
     sandbox = {}
 
     element = $( options.el )
-    jquery = function( selector ) {
-      return $( selector, $(options.el) )
+    DOMlib = function( selector ) {
+      return $( selector, element )
     }
     
     sandbox.element = element
-    sandbox.$ = jquery
+    sandbox.$ = DOMlib
 
     return sandbox
   }
