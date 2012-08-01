@@ -1,5 +1,8 @@
-/*
-  Sandboxfactory
+
+/**
+  Sandboxfactory. Responsible for creating new sanbox objects made available to application modules through the amd module loader.
+  @exports sandboxfactory
+  @requires [underscore, jquery]
 */
 define(
 "cerebral/application/sandboxfactory",[
@@ -8,25 +11,44 @@ define(
 ], 
 function( underscore, $ ){
   
-  function createSandbox( options ) {
-    var sandbox, element, DOMlib
+  var sandboxfactory, properties
 
-    sandbox = {}
 
-    element = $( options.el )
-    DOMlib = function( selector ) {
-      return $( selector, element )
+  sandboxfactory = {}
+
+  properties = {
+    $: function( selector ) {
+      return $( selector, this.element )
+    },
+    element: '#sandbox'
+  }
+
+  sandboxfactory.defineProperty = function( name, value ) {
+    if( typeof name !== 'string' ) {
+      throw new TypeError( 'Name of property must be name' )
     }
-    
-    sandbox.element = element
-    sandbox.$ = DOMlib
+
+    properties[ name ] = value
+    return this
+  }
+
+  sandboxfactory.removeProperty = function( name ) {
+    delete properties[ name ]
+    return this
+  }
+
+  sandboxfactory.create = function( options ) {
+    var sandbox, element
+
+    sandbox = Object.create( properties )
+
+    element = options.element
+    if( element ) {
+      sandbox.element = $( options.element )
+    }
 
     return sandbox
   }
 
-  return {
-    create: function( options ) {
-      return createSandbox( options )
-    }
-  }
+  return sandboxfactory
 })
