@@ -275,7 +275,7 @@ require([
           TESTDATA.calculatordisplay = {
             'compareSandboxes': function( sandboxes ) {
               clearTimeout( timeout )
-
+              
               expect( sandboxes.mainSandbox === sandboxes.subSandbox ).to.equal( true )
 
               done()
