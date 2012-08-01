@@ -15,7 +15,20 @@ function( _, sandboxfactory ){
   
   var core, channels
 
-  core = { }
+  core = {
+    /*
+      The api object of the core. Used for describing what could be exposed through facades and delegation. 
+      Only and abstraction and holds no real protection value.
+      @type Object
+    */
+    api: {
+      /*
+        Public api for all modules to use.
+        @type Object
+      */
+      public: {}
+    }
+  }
 
   /**
     Holds the callback listeners bound to fire when published to that specific channel.
@@ -122,7 +135,7 @@ function( _, sandboxfactory ){
 
     args = [].splice.call( arguments, 1 )
     for( index = 0; index < listeners.length; index++ ) {
-      listener = listeners[ index ] 
+      listener = listeners[ index ]
       listener.callback.apply( listener.context, args )
     }
 
@@ -145,12 +158,12 @@ function( _, sandboxfactory ){
     moduleRoot = this.configuration.moduleRoot + modulename
     mainPath = moduleRoot + '/main'
 
-    sandboxfactory.delegateCore( core )
+    sandboxfactory.delegateCoreApi( core.api.public )
 
     sandbox = sandboxfactory.create({
       element: options.element
     })
-    
+
     sandboxNamespace = moduleRoot + '/sandbox'
 
     if( !require.defined(sandboxNamespace) ) {
@@ -272,5 +285,20 @@ function( _, sandboxfactory ){
     return core
   }
   
+  core.api.public.publish = function() {
+    core.publish.apply( self, arguments )
+    return core.api.public
+  }
+
+  core.api.public.subscribe = function() {
+    core.subscribe.apply( self, arguments )
+    return core.api.public
+  }
+
+  core.api.public.unsubscribe = function() {
+    core.unsubscribe.apply( self, arguments )
+    return core.api.public
+  }
+
   return core
 })
