@@ -145,9 +145,12 @@ function( _, sandboxfactory ){
     moduleRoot = this.configuration.moduleRoot + modulename
     mainPath = moduleRoot + '/main'
 
+    sandboxfactory.delegateCore( core )
+
     sandbox = sandboxfactory.create({
       element: options.element
     })
+    
     sandboxNamespace = moduleRoot + '/sandbox'
 
     if( !require.defined(sandboxNamespace) ) {
