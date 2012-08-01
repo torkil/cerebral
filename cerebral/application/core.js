@@ -285,16 +285,31 @@ function( _, sandboxfactory ){
     return core
   }
   
+  /**
+    @public
+    @type Function
+    @see core.publish
+  */
   core.api.public.publish = function() {
     core.publish.apply( self, arguments )
     return core.api.public
   }
 
+  /**
+    @public
+    @type Function
+    @see core.subscribe
+  */
   core.api.public.subscribe = function() {
     core.subscribe.apply( self, arguments )
     return core.api.public
   }
 
+  /**
+    @public
+    @type Function
+    @see core.unsubscribe
+  */
   core.api.public.unsubscribe = function() {
     core.unsubscribe.apply( self, arguments )
     return core.api.public
