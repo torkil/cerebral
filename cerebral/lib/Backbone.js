@@ -1,9 +1,9 @@
 
 /**
   Extending Backbone
-  @exports cerebral/lib/Backbone
   @augments Backbone
   @requires [underscore, cerebral/vendor/Backbone, cerebral/ext/Backbone/Events]
+  @exports Backbone
 */
 define(
 "cerebral/lib/Backbone",[
