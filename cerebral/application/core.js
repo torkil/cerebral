@@ -1,6 +1,8 @@
 
 /**
-  The core module, responsible for mediating between modules using the publish-subscribe pattern
+  The core module, responsible for mediating between modules using the publish-subscribe pattern.
+  This should not be directly exposed to the submodules of the application, rather expose methods like publish and
+  subscribe through a facade. Google facade pattern.
   @exports cerebral/core
   @requires [underscore]
 */
@@ -186,7 +188,6 @@ function( _, sandboxfactory ){
     @returns {cerebral/core} self
   */
   core.unloadModule = function( modulename ) {
-    
     var definedModules, moduleRoot, sandboxNamespace, name
 
     definedModules = require.s.contexts._.defined
@@ -235,7 +236,8 @@ function( _, sandboxfactory ){
       return this
 
     core.loadModule({
-      modulename: modulename
+      modulename: modulename,
+      el: options.el
     }, 
     function( err, main ) {
       if( err ) {
