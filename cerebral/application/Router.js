@@ -1,9 +1,9 @@
 
 /**
   @class The base router class
-  @exports cerebral/Router
   @extends Backbone.Router
   @requires [underscore, cerebral/lib/Backbone, cerebral/mvc/ViewCollection]
+  @exports Router
 */
 define(
 "cerebral/application/Router", [

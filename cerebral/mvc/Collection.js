@@ -1,9 +1,9 @@
 
 /**
   @class Base Collection class, for collections of models
-  @exports cerebral/mvc/Collection
   @extends Backbone.Collection
   @requires [Backbone]
+  @exports Collection
 */
 define(
 "cerebral/mvc/Collection", [

@@ -1,9 +1,9 @@
 
 /**
   @class The base view
-  @exports cerebral/mvc/View
   @extends Backbone.View
   @requires [underscore, cerebral/lib/Backbone, cerebral/mvc/ViewCollection]
+  @exports View
 */
 define(
 "cerebral/mvc/View", [

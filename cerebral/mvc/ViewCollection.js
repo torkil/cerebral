@@ -1,9 +1,9 @@
 
 /**
   @class for managing subviews for a view
-  @exports cerebral/mvc/ViewCollection
   @extends Backbone.Events
   @requires [underscore, cerebral/lib/Backbone]
+  @exports ViewCollection
 */
 define(
 "cerebral/mvc/ViewCollection",[

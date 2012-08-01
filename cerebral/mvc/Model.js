@@ -1,9 +1,9 @@
 
 /**
   @class Base Model class, for data models
-  @exports cerebral/mvc/Model
   @extends Backbone.Model
   @requires [cerebral/lib/Backbone]
+  @exports Model
 */
 define(
 "cerebral/mvc/Model", [

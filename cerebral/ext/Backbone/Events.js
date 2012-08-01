@@ -1,7 +1,7 @@
 
 /**
   Mixin for extending Backbone.Events and Backbone.Model|Collection|View|Router.prototype
-  @exports cerebral/ext/Backbone/Events
+  @exports Events
 */
 define(
 "cerebral/ext/Backbone/Events", [

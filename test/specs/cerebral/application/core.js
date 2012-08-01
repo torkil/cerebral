@@ -184,7 +184,7 @@ require([
           }, 500)
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
         })
@@ -204,7 +204,7 @@ require([
           }
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
           continuation = function() {
@@ -216,7 +216,7 @@ require([
             }
 
             core.start('calculatordisplay', {
-              el: '#calculatordisplay'
+              element: '#calculatordisplay'
             })
 
             setTimeout(continuation, 120)
@@ -257,7 +257,7 @@ require([
           }
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
         })
@@ -287,7 +287,7 @@ require([
           }, 500)
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
         })
@@ -324,11 +324,11 @@ require([
           }
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
           core.start('calculatorinput', {
-            el: '#calculatorinput'
+            element: '#calculatorinput'
           })
 
         })
@@ -379,11 +379,11 @@ require([
           }
 
           core.start('calculatordisplay', {
-            el: '#calculatordisplay'
+            element: '#calculatordisplay'
           })
 
           core.start('calculatorinput', {
-            el: '#calculatorinput'
+            element: '#calculatorinput'
           })
 
         })
