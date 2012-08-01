@@ -22,9 +22,19 @@ function( underscore, $ ){
     @type Object
   */
   properties = {
+    /*
+      Scoped DOM manipulation function, proxy for jquery/zepto/ender/etc.. Only has acces to elements within
+      its own element
+      @type Function
+    */
     $: function( selector ) {
       return $( selector, this.element )
     },
+    /*
+      The element the sandbox has access to.
+      @type Function|jQueryObject
+      @default "#sandbox"
+    */
     element: '#sandbox'
   }
 
