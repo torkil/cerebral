@@ -59,6 +59,36 @@ function( _, sandboxfactory ){
   }
   
   /**
+    @public
+    @type Function
+    @see core.publish
+  */
+  core.api.public.publish = function() {
+    core.publish.apply( core, arguments )
+    return core.api.public
+  }
+
+  /**
+    @public
+    @type Function
+    @see core.subscribe
+  */
+  core.api.public.subscribe = function() {
+    core.subscribe.apply( core, arguments )
+    return core.api.public
+  }
+
+  /**
+    @public
+    @type Function
+    @see core.unsubscribe
+  */
+  core.api.public.unsubscribe = function() {
+    core.unsubscribe.apply( core, arguments )
+    return core.api.public
+  }
+
+  /**
     Binds a callback to be called when published to the channel given.
     @public
     @type Function
@@ -283,36 +313,6 @@ function( _, sandboxfactory ){
     core.unloadModule( modulename )
 
     return core
-  }
-  
-  /**
-    @public
-    @type Function
-    @see core.publish
-  */
-  core.api.public.publish = function() {
-    core.publish.apply( self, arguments )
-    return core.api.public
-  }
-
-  /**
-    @public
-    @type Function
-    @see core.subscribe
-  */
-  core.api.public.subscribe = function() {
-    core.subscribe.apply( self, arguments )
-    return core.api.public
-  }
-
-  /**
-    @public
-    @type Function
-    @see core.unsubscribe
-  */
-  core.api.public.unsubscribe = function() {
-    core.unsubscribe.apply( self, arguments )
-    return core.api.public
   }
 
   return core
