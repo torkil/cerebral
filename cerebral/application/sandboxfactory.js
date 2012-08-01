@@ -71,22 +71,20 @@ function( underscore, $ ){
     Delegate the core to the factory so we can facade core methods for publishing and subscribing to the sandbox properties.
     @public
     @type Function
-    @param {cerebral/application/core} core The application core
+    @param {cerebral/application/core.api} coreapi The application core api
     @returns {cerebral/application/sandboxfactory} self
   */
-  sandboxfactory.delegateCore = function( core ) {
-    if( !core ) {
-      throw new TypeError( 'No core delegated' )
+  sandboxfactory.delegateCoreApi = function( coreapi ) {
+    if( typeof coreapi !== 'object' ) {
+      throw new TypeError( 'No api delegated' )
     }
 
-    sandboxfactory.defineProperty("publish",
-      function() { core.publish.apply( this, arguments ) })
-
-    sandboxfactory.defineProperty("subscribe",
-      function() { core.subscribe.apply( this, arguments ) })
-    
-    sandboxfactory.defineProperty("unsubscribe",
-      function() { core.unsubscribe.apply( this, arguments ) })
+    _.forEach(coreapi, function( propertyvalue, propertyname ) {
+      
+      sandboxfactory.defineProperty(propertyname, function() {
+        coreapi[ propertyname ].apply( {}, arguments )
+      })
+    })
 
     return this
   }
