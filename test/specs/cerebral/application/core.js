@@ -333,34 +333,39 @@ require([
 
         })
 
-        it("should have a property $ which acts as a jquery/zepto etx library proxy that sandboxes all selectors to the modules element", function( done ) {
+        it("should have a property $ which acts as a jquery/zepto/ender or similar library proxy that sandboxes all selectors to the modules element", function( done ) {
 
-          var displaySB, inputSB
+          var displaySB, inputSB, nrOfReports
+
+          nrOfReports = 0
 
           function check() {
-            if( displaySB && inputSB ) {
+            if(nrOfReports === 2) {
+              if( displaySB && inputSB ) {
 
-              expect( displaySB !== inputSB ).to.equal( true )
-              expect( displaySB.$ && inputSB.$ ).to.be.ok()
+                expect( displaySB !== inputSB ).to.equal( true )
+                expect( displaySB.$ && inputSB.$ ).to.be.ok()
 
-              expect( displaySB.$('#inside-calculatordisplay').length ).to.equal( 1 )
-              expect( inputSB.$('#inside-calculatorinput').length ).to.equal( 1 )
+                expect( displaySB.$('#inside-calculatordisplay').length ).to.equal( 1 )
+                expect( inputSB.$('#inside-calculatorinput').length ).to.equal( 1 )
 
-              expect( inputSB.$('#inside-calculatordisplay').length ).to.equal( 0 )
-              expect( displaySB.$('#inside-calculatorinput').length ).to.equal( 0 )
+                expect( inputSB.$('#inside-calculatordisplay').length ).to.equal( 0 )
+                expect( displaySB.$('#inside-calculatorinput').length ).to.equal( 0 )
 
-              expect( inputSB.$('body').length ).to.equal( 0 )
-              expect( displaySB.$('body').length ).to.equal( 0 )
+                expect( inputSB.$('body').length ).to.equal( 0 )
+                expect( displaySB.$('body').length ).to.equal( 0 )
 
-              done()
-            } else {
-              throw new Error('Could not fetch sandboxes, something wrong with the tests')
+                done()
+              } else {
+                done(new Error('Could not fetch sandboxes, something wrong with the tests'))
+              }
             }
           }
 
           TESTDATA.calculatordisplay = {
             'reportSandbox': function( sandbox ) {
               displaySB = sandbox
+              nrOfReports++
               check()
             }
           }
@@ -368,6 +373,7 @@ require([
           TESTDATA.calculatorinput = {
             'reportSandbox': function( sandbox ) {
               inputSB = sandbox
+              nrOfReports++
               check()
             }
           }
