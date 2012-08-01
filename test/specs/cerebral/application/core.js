@@ -294,18 +294,18 @@ require([
 
         it("should create individual sandboxes for all 'sandbox' namespaces under each moduleroot namespace", function( done ) {
 
-          var sandboxA, sandboxB
+          var displaySB, inputSB
 
           function check( sandbox ) {
-            if( !sandboxA ) {
-              sandboxA = sandbox
+            if( !inputSB ) {
+              inputSB = sandbox
             }
-            else if( !sandboxB ) {
-              sandboxB = sandbox
+            else if( !displaySB ) {
+              displaySB = sandbox
             }
-            if( sandboxA && sandboxB ) {
+            if( displaySB && inputSB ) {
 
-              expect( sandboxA !== sandboxB ).to.equal( true )
+              expect( displaySB !== inputSB ).to.equal( true )
 
               done()
             }
@@ -320,6 +320,55 @@ require([
           TESTDATA.calculatorinput = {
             'reportSandbox': function( sandbox ) {
               check( sandbox )
+            }
+          }
+
+          core.start('calculatordisplay', {
+            el: '#calculatordisplay'
+          })
+
+          core.start('calculatorinput', {
+            el: '#calculatorinput'
+          })
+
+        })
+
+        it("should have a property $ which acts as a jquery/zepto etx library proxy that sandboxes all selectors to the modules element", function( done ) {
+
+          var displaySB, inputSB
+
+          function check() {
+            if( displaySB && inputSB ) {
+
+              expect( displaySB !== inputSB ).to.equal( true )
+              expect( displaySB.$ && inputSB.$ ).to.be.ok()
+
+              expect( displaySB.$('#inside-calculatordisplay').length ).to.equal( 1 )
+              expect( inputSB.$('#inside-calculatorinput').length ).to.equal( 1 )
+
+              expect( inputSB.$('#inside-calculatordisplay').length ).to.equal( 0 )
+              expect( displaySB.$('#inside-calculatorinput').length ).to.equal( 0 )
+
+              expect( inputSB.$('body').length ).to.equal( 0 )
+              expect( displaySB.$('body').length ).to.equal( 0 )
+
+              done()
+            } else {
+              throw new Error('Could not fetch sandboxes, something wrong with the tests')
+            }
+          }
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              displaySB = sandbox
+              check()
+            }
+          }
+
+          TESTDATA.calculatorinput = {
+            'reportSandbox': function( sandbox ) {
+              inputSB = sandbox
+              check()
             }
           }
 
