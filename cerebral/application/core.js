@@ -18,7 +18,7 @@ function( _, sandboxfactory ){
   core = {
     /*
       The api object of the core. Used for describing what could be exposed through facades and delegation. 
-      Only and abstraction and holds no real protection value.
+      Only an abstraction and holds no real protection value.
       @type Object
     */
     api: {
