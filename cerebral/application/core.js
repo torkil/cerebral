@@ -3,7 +3,7 @@
   The core module, responsible for mediating between modules using the publish-subscribe pattern.
   This should not be directly exposed to the submodules of the application, rather expose methods like publish and
   subscribe through a facade. Google facade pattern.
-  @exports cerebral/core
+  @exports core
   @requires [underscore]
 */
 define(
@@ -146,7 +146,7 @@ function( _, sandboxfactory ){
     mainPath = moduleRoot + '/main'
 
     sandbox = sandboxfactory.create({
-      el: options.el
+      element: options.element
     })
     sandboxNamespace = moduleRoot + '/sandbox'
 
@@ -237,7 +237,7 @@ function( _, sandboxfactory ){
 
     core.loadModule({
       modulename: modulename,
-      el: options.el
+      element: options.element
     }, 
     function( err, main ) {
       if( err ) {
