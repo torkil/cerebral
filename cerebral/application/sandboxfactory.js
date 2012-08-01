@@ -68,7 +68,7 @@ function( underscore, $ ){
   }
 
   /**
-    Delegate the core to the factory so we can facade core methods for publishing and subscribing to the sandbox properties.
+    Delegate the core public api to the factory so we can facade core methods for publishing and subscribing as sandbox properties.
     @public
     @type Function
     @param {cerebral/application/core.api} coreapi The application core api
