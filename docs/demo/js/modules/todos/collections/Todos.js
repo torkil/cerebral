@@ -16,6 +16,7 @@ function( sandbox, Collection, Todo ){
 
       this.bindTo( this, "add", this.onAdd, this )
       this.bindTo( this, "remove", this.onRemove, this )
+      this.bindTo( this, "change", this.modelChange, this )
 
     },
 
@@ -25,6 +26,10 @@ function( sandbox, Collection, Todo ){
 
     onRemove: function( todo ) {
       sandbox.publish( 'todos.remove', todo )
+    },
+
+    modelChange: function( model, changes ) {
+      sandbox.publish( 'todos.modelChange', model, changes )
     }
 
   })

@@ -31,6 +31,11 @@ function( sandbox, Achievements, AchievementsView ){
       sandbox.unsubscribe("todos.remove")
     })
 
+    sandbox.subscribe("todos.modelChange", function( model, changes ) {
+      if( model.get('completed') )
+        achievements.complete({ tag: "firstcomplete" })
+    })
+
     var moduleView = new AchievementsView({
       el: sandbox.element,
       collection: achievements
