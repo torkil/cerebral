@@ -36,6 +36,37 @@ function( Backbone ) {
 
     })
 
+    describe("Backbone.Events.bindToOnce", function() {
+
+      var binder, target
+
+      beforeEach(function() {
+        binder = Object.create( Backbone.Events )
+        target = Object.create( Backbone.Events )
+      })
+
+      it("should bind the event to fire on first firing then unbind it", function() {
+
+        var fired = 0
+
+        binder.bindToOnce(target, "change", function() {
+          fired++
+        })
+        
+        expect(fired).to.equal(0)
+
+        target.trigger("change")
+
+        expect(fired).to.equal(1)
+
+        target.trigger("change")
+        target.trigger("change")
+        
+        expect(fired).to.equal(1)        
+      })
+
+    })
+
     describe("Backbone.Events.unbindFrom", function() {
 
       var binder, objA, objB, triggered
