@@ -9,9 +9,10 @@
 define(
 "cerebral/application/core",[
   "underscore",
+  "jquery",
   "cerebral/application/sandboxfactory"
 ], 
-function( _, sandboxfactory ){
+function( _, $, sandboxfactory ){
   
   var core, channels
 
@@ -289,13 +290,9 @@ function( _, sandboxfactory ){
       if( err ) {
         throw err
       }
-      try {
-        main()
-      } catch( e ) {
-        console.log( 'core.start: ' + modulename + ' threw exception: ', e)
-      }
-    })
-
+      main()
+    })  
+  
     return core
   }
 
