@@ -1,0 +1,146 @@
+<html>
+<head>
+
+  <title></title>
+
+  <link rel="stylesheet" type="text/css" href="style/main.css">
+
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <li class="end">API Reference</li>
+        <li class="active">Guide</li>
+        <li> <a href="./index.html">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="content" class="guide">
+
+    <h1>Lets make an app!</h1>
+
+    <p>
+      The app will consist of two simple modules. A todo module, but of course, and an achievments module for tracking and
+      showing achievments the user earn while learning the very complex todo app.
+    </p>
+
+    <h3>require.js and backbone.js</h3>
+
+    <p>
+      Both modules will use requirejs to load submodules like models, views and collections. These models, collections and views will be 
+      extended versions of backbone classes loaded through cerebral.
+    </p>
+
+    <p>
+      Through the core we will start and stop the todo and achivements modules, this is using require.js behind the scenese to load, unload,
+      define a individual sandbox namespace for the modules and cleanup after them when they are stopped.
+    </p>
+
+    <h2>Directory layout</h2>
+
+    <div class="dir-layout">
+      
+      <div class="dir">
+        <div class="name">app /</div>
+        <div class="content">
+
+          <div class="file html">index.html</div>
+
+          <div class="dir">
+            <div class="name">style /</div>
+            <div class="content">
+              <div class="file desc">..style and graphics..</div>
+            </div>
+          </div>
+
+          <div class="dir">
+            <div class="name">js /</div>
+            <div class="content">
+
+              <div class="file js">app.js</div>
+
+              <div class="dir">
+                <div class="name">modules/ </div>
+                <div class="content">
+
+                  <div class="dir">
+                    <div class="name">todos /</div>
+                    <div class="content">
+
+                      <div class="file js">main.js</div>
+
+                      <div class="dir">
+                        <div class="name">models /</div>
+                        <div class="content">
+                          <div class="file js">Todo.js</div>
+                        </div>
+                      </div>
+
+                      <div class="dir">
+                        <div class="name">views /</div>
+                        <div class="content">
+                          <div class="file js">Todos.js</div>
+                          <div class="file js">Todo.js</div>
+                        </div>
+                      </div>
+
+                      <div class="dir">
+                        <div class="name">collections /</div>
+                        <div class="content">
+                          <div class="file js">Todos.js</div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="dir">
+                    <div class="name">achievements /</div>
+                    <div class="content">
+
+                      <div class="file js">main.js</div>
+
+                      <div class="dir">
+                        <div class="name">models /</div>
+                        <div class="content">
+                          <div class="file js">Achievement.js</div>
+                        </div>
+                      </div>
+
+                      <div class="dir">
+                        <div class="name">views /</div>
+                        <div class="content">
+                          <div class="file js">Achievements.js</div>
+                          <div class="file js">Achievement.js</div>
+                        </div>
+                      </div>
+
+                      <div class="dir">
+                        <div class="name">collections /</div>
+                        <div class="content">
+                          <div class="file js">Achievements.js</div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</body>
+</html>

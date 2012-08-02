@@ -1,0 +1,201 @@
+
+@import url(http://fonts.googleapis.com/css?family=Duru+Sans);
+@import url(http://fonts.googleapis.com/css?family=Capriola);
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRbO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Helvetica Neueu', Helvetica;
+}
+
+body {
+  padding-bottom: 60px;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+  font-family: inherit;
+}
+
+header {
+  padding: 20px 30px;
+}
+
+header nav ul {
+  list-style-type: none
+}
+
+header nav ul li {
+  display: inline-block;
+  vertical-align: top;
+  float: right;
+  margin-left: 30px;
+  font-family: 'Duru Sans';
+  font-size: 12px;
+  border-right: 1px solid #EEEEEE;
+  padding-right: 30px;
+  color: #333333;
+}
+
+header nav ul li:hover {
+  cursor: pointer;
+  color: #8C7294;
+}
+
+header nav ul li.end {
+  border: none;
+}
+
+section#content {
+  max-width: 900px;
+  padding: 0px 150px 0px 150px;
+}
+
+#content h1 {
+  font-family: 'Duru Sans';
+  font-size: 40px;
+  margin-bottom: 10px;
+  color: #2E2E2E;
+  color: #796180;
+}
+
+#hero {
+  margin-top: 220px;
+}
+
+/*  HOME  */
+
+div#hero #in-yo-face {
+  width: 380px;
+  margin-right: 100px;
+  margin-bottom: 60px;
+}
+
+
+div#hero #in-yo-face h2 {
+  font-size: 24px;
+  font-weight: lighter;
+  line-height: 36px;
+  color: #78717A;
+  font-family: 'Open Sans';
+}
+
+div#hero #highlights {
+  display: inline-block;
+  vertical-align: top;
+}
+
+div#hero #highlights ul.features {
+  list-style-type: none;
+}
+
+div#hero #highlights ul.features li.feature {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 33px;
+  margin-bottom: 20px;
+  max-width: 260px;
+}
+
+div#hero #highlights ul.features li.feature h1 {
+  font-family: 'Capriola';
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #68576E;
+}
+
+div#hero #highlights ul.features li.feature p {
+  font-size: 13px;
+  line-height: 23px;
+  font-family: 'Open Sans';
+  color: #696969;
+}
+
+/*  HOME  */
+
+
+/*  GUIDE  */
+
+
+#content.guide h1 {
+  font-family: 'Capriola';
+  font-size: 33px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+
+#content.guide h2 {
+  font-size: 24px;
+  margin-top: 100px;
+  color: #DB9346;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide h3 {
+  font-size: 20px;
+  margin-top: 100px;
+  color: #C9945B;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide p {
+  font-size: 14px;
+  line-height: 28px;
+  font-family: 'Open Sans';
+  color: #525252;
+  margin-bottom: 15px;
+}
+
+
+#content.guide .dir-layout {
+  line-height: 22px;
+  font-size: 14px;
+  font-family: 'Open Sans';
+}
+
+#content.guide .dir-layout .dir {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #8C755B;
+  font-weight: bold;
+  border-left: 1px solid #F2F2F2;
+}
+
+#content.guide .dir-layout .file {
+  padding-left: 25px;
+  margin: 5px 0px;
+  font-weight: normal;
+}
+
+#content.guide .dir-layout .file.js {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #DE7197;
+}
+
+#content.guide .dir-layout .file.html {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #9EAB71;
+}
+#content.guide .dir-layout .file.desc {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #BDBDBD;
+  font-weight: thinner;
+  font-style: italic;
+}
+
+
+
+
+/*  GUIDE  */
