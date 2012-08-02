@@ -212,12 +212,16 @@ function( _, $, sandboxfactory ){
     }
     
     require(requireConfig, [ mainPath ], 
-      function( main ) {
-        if( typeof main !== 'function' ) {
+      function( module ) {
+        if( !module ) {
           core.unloadModule( modulename )
-          callback( TypeError('Module returned value not of type function') )
+          return callback( Error('The module did not return') )
+        }
+        if( typeof module === 'function' || typeof module === 'object' ) {
+          callback( null, module )
         } else {
-          callback( null, main )
+          core.unloadModule( modulename )
+          callback( TypeError('Module must be a main function or Object containing main method') ) 
         }
       },
       function( error ) {
@@ -286,11 +290,22 @@ function( _, $, sandboxfactory ){
       modulename: modulename,
       element: options.element
     }, 
-    function( err, main ) {
+    function( err, module ) {
+      var main
+
       if( err ) {
         throw err
       }
-      main()
+
+      main = typeof module === 'function' ? module :
+             typeof module === 'object' && typeof module.main === 'function' ? module.main :
+             null
+
+      if( main ) {
+        try {
+          main()
+        } catch( e ) { }
+      }
     })  
   
     return core
@@ -304,10 +319,29 @@ function( _, $, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.stop = function( modulename ) {
+    var moduleRoot, mainPath
     if( !core.moduleIsStarted(modulename) )
       return core
 
-    core.unloadModule( modulename )
+    moduleRoot = this.configuration.moduleRoot + modulename
+    mainPath = moduleRoot + '/main'
+
+    require([ mainPath ], function( module ) {
+      if( module ) {
+
+        if( typeof module.destruct === 'function' ) {
+          module.destruct(function() {
+            core.unloadModule( modulename )
+          })
+        } else {
+          core.unloadModule( modulename )
+        }
+
+      }
+    },
+    function( error ) {
+      console.error("core.stop require error:", error);
+    })
 
     return core
   }
