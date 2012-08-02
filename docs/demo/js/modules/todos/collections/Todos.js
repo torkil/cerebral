@@ -11,20 +11,20 @@ function( sandbox, Collection, Todo ){
   Todos = Collection.extend({
     
     model: Todo,
-    firstAdd: true,
-    firstRemove: true,
 
     initialize: function() {
-      this.bindToOnce( this, "add", this.onFirstAdd, this )
-      this.bindToOnce( this, "remove", this.onFirstRemove, this )
+
+      this.bindTo( this, "add", this.onAdd, this )
+      this.bindTo( this, "remove", this.onRemove, this )
+
     },
 
-    onFirstAdd: function( todo ) {
-      sandbox.publish( 'todos.firstTodoAdded', todo )
+    onAdd: function( todo ) {
+      sandbox.publish( 'todos.add', todo )
     },
 
-    onFirstRemove: function( todo ) {
-      sandbox.publish( 'todos.firstTodoRemoved', todo )
+    onRemove: function( todo ) {
+      sandbox.publish( 'todos.remove', todo )
     }
 
   })

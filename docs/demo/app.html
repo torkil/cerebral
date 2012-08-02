@@ -36,6 +36,10 @@
       {
         description: "Open app",
         completed: true
+      },
+      {
+        description: "Complete this, while beeing a boss is optional.",
+        completed: false
       }
     ]
 
@@ -46,8 +50,13 @@
         completed: false
       },
       {
-        tag: "deletetodo",
-        description: "Delete your first todo",
+        tag: "removetodo",
+        description: "Remove your first todo",
+        completed: false
+      },
+      {
+        tag: "threetodos",
+        description: "Create three todos",
         completed: false
       }
     ]
@@ -62,12 +71,18 @@
   <div id="app">
 
     <section id="todos">
-      <input class="new-todo" />
-      <ul class="list"></ul>
+      <h1>Todos</h1>
+      <div class="content">
+        <input class="new-todo" placeholder="Create a todo"/>
+        <ul class="list"></ul>
+      </div>
     </section>
 
     <section id="achievements">
-      <ul class="list"></ul>
+      <h1>Achievements</h1>
+      <div class="content">
+        <ul class="list"></ul>
+      </div>
     </section>
 
   </div>
@@ -75,7 +90,7 @@
   <script type="text/template" id="todo-template">
     <input type="checkbox" class="completed" <% if(completed) { %> checked <% }; %> />
     <div class="description"> <%= description %> </div>
-    <div class="delete">Remove</button>
+    <div class="remove">Remove</button>
   </script>
 
   <script type="text/template" id="achievement-template">

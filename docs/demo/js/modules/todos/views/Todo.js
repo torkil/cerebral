@@ -14,7 +14,7 @@ define([
 
     events: {
       "click .completed": "toggleCompleted",
-      "click .delete": "removeTodo"
+      "click .remove": "removeTodo"
     },
 
     initialize: function() {

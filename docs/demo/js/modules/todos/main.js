@@ -11,12 +11,12 @@ function( sandbox, Todos, TodosView ){
 
     todos.reset( window.bootstrap.todos )
 
-    var appView = new TodosView({
+    var moduleView = new TodosView({
       el: sandbox.element,
       collection: todos
     })
 
-    appView.render()
+    moduleView.render()
 
   }
 

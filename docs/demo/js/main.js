@@ -2,8 +2,8 @@
 require([
   "cerebral/application/core",
   "jquery"
-]
-,function( core, $ ) {
+],
+function( core, $ ) {
 
   core.configure({
     moduleRoot: 'app/modules/'

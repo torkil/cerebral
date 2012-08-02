@@ -46,6 +46,8 @@ define([
         })
 
         this.collection.add( todo )
+
+        this.$el.find(".new-todo").val('')
       }
     }
 

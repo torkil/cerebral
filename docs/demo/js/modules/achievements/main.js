@@ -1,10 +1,9 @@
 define([
   "sandbox",
-  "underscore",
   "./collections/Achievements",
   "./views/Achievements"
 ], 
-function( sandbox, _, Achievements, AchievementsView ){
+function( sandbox, Achievements, AchievementsView ){
   
   return function main() {
 
@@ -12,20 +11,32 @@ function( sandbox, _, Achievements, AchievementsView ){
 
     achievements.reset( window.bootstrap.achievements  )
 
-    sandbox.subscribe("todos.firstTodoAdded", function() {
+    var stats = {
+      nrOfTodosAdded: 0
+    }
 
-      var completed = achievements
-                      .where({ tag: "firsttodo" })
-
-      _(completed).invoke("complete")
+    sandbox.subscribe("todos.add", function() {
+      stats.nrOfTodosAdded++
+      if( stats.nrOfTodosAdded === 1 ) {
+        achievements.complete({ tag: "firsttodo" })
+      }
+      if( stats.nrOfTodosAdded === 3 ) {
+        achievements.complete({ tag: "threetodos" })
+      }
     })
 
-    var appView = new AchievementsView({
+    sandbox.subscribe("todos.remove", function() {
+      achievements.complete({ tag: "removetodo" })
+
+      sandbox.unsubscribe("todos.remove")
+    })
+
+    var moduleView = new AchievementsView({
       el: sandbox.element,
       collection: achievements
     })
 
-    appView.render()
+    moduleView.render()
 
   }
 
