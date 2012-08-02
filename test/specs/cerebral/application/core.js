@@ -107,7 +107,7 @@ require([
 
         })
 
-        it("should pass a TypeError if the module definition is of other type than function", function( done ) {
+        it("should pass a TypeError if the module definition is of other type than function or object", function( done ) {
 
           core.loadModule({
             modulename: 'faultyreturn'
@@ -258,6 +258,76 @@ require([
 
           core.start('calculatordisplay', {
             element: '#calculatordisplay'
+          })
+
+        })
+        
+        it("should run the destruct method of the module if the module has a destruct method", function( done ) {
+          
+          TESTDATA.destructable = {
+            onDestruct: function() {
+
+              done()
+            }
+          }
+
+          core.start("destructable", { 
+            element: 'body' 
+          })
+
+          setTimeout(function() {
+            core.stop( "destructable" )
+          }, 200)
+
+        })
+
+        it("should run the destruct method if the moduledefinition is a function and has a destruct property that is function", function( done ) {
+
+          TESTDATA.destructablefunctionmodule = {
+            onDestruct: function() {
+
+              done()
+            }
+          }
+
+          core.start("destructablefunctionmodule", { 
+            element: 'body' 
+          })
+
+          setTimeout(function() {
+            core.stop( "destructablefunctionmodule" )
+          }, 200)
+
+        })
+
+        it("should not unload modules dependecies before destruct method calls its continuation callback", function( done ) {
+
+          TESTDATA.destructablefunctionmodule = {
+            onMain: function() {
+              expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( true )
+              expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( true )
+              
+              core.stop( "destructablefunctionmodule" )
+
+              setTimeout(function() {
+
+                expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( false )
+                expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( false )
+
+                done()
+              }, 200)
+
+            },
+            onDestruct: function() {
+
+              expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( true )
+              expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( true )
+
+            }
+          }
+
+          core.start("destructablefunctionmodule", { 
+            element: 'body' 
           })
 
         })
