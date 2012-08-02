@@ -20,9 +20,6 @@ function( _, Backbone ) {
   var Model = Backbone.Model.extend({
     constructor: function() {
       Backbone.Model.prototype.constructor.apply( this, arguments )
-
-      // Make sure defaults are not overwritten by setters. Feels like a hack, plx fix.
-      _.extend(this.attributes, this.defaults )
     }
   })
 
@@ -36,7 +33,7 @@ function( _, Backbone ) {
     var value, getter
 
     value = this.attributes[ attr ]
-    getter = this[ 'get:' + attr ] || 0
+    getter = this[ 'get_' + attr ] || 0
 
     if( getter ) {
       return getter.call( this, value )
@@ -63,7 +60,7 @@ function( _, Backbone ) {
     }
 
     for( attr in attrs ) {
-      setter = this[ 'set:' + attr ] || 0
+      setter = this[ 'set_' + attr ] || 0
       if( setter ) {
         attrs[ attr ] = setter.call( this, attrs[attr] )
       }
