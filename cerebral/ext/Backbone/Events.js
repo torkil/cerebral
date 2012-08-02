@@ -51,10 +51,12 @@ function() {
   */
   Events.once = function( event, callback, context ) {
     var fn
+
     fn = _.bind(function() {
       callback.apply( context || this, arguments )
       this.off( event, fn )
     }, this)
+    
     this.on( event, fn )
   }
 
@@ -73,6 +75,7 @@ function() {
       this.bindings = unbindSpecificEvent.apply( this, arguments )
     if( arguments.length === 1 )
       this.bindings = unbindAllOnObject.apply( this, arguments )
+
     return this
   }
 
@@ -85,7 +88,9 @@ function() {
     _.each(this.bindings, function( binding ) {
       binding.obj.unbind( binding.event, binding.callback )
     })
+
     this.bindings = []
+
     return this
   }
 
@@ -98,11 +103,13 @@ function() {
   */
   function unbindAllOnObject( obj ) {
     return _.filter(this.bindings, function( binding, index ) {
+
       if( binding.obj === obj ) {
         binding.obj.unbind( binding.event, binding.callback )
       } else {
         return true
       }
+
     }, this)
   }
 
@@ -116,11 +123,13 @@ function() {
   */
   function unbindSpecificEvent( obj, event ) {
     return _.filter(this.bindings, function( binding, index ) {
+
       if( binding.obj === obj && binding.event === event ) {
         binding.obj.unbind( binding.event, binding.callback )
       } else {
         return true
       }
+
     }, this) 
   }
 
@@ -135,11 +144,13 @@ function() {
   */
   function unbindSpecificCallback( obj, event, callback ) {
     return _.filter(this.bindings, function( binding, index ) {
+
       if( binding.obj === obj && binding.event === event && binding.callback === callback ) {
         binding.obj.unbind( binding.event, binding.callback )
       } else {
         return true
       }
+
     }, this)
   }
 
@@ -154,10 +165,39 @@ function() {
   */
   Events.bindTo = function( obj, event, callback, context ) {
     obj.bind( event, callback, context || this )
+
     this.bindings.push({
       obj: obj,
       event: event,
       callback: callback
+    })
+
+    return this
+  }
+
+  /**
+    Binds a callback to be called when the given event fires on the given object
+    @public
+    @type Function
+    @param {Object} obj The object to bind to
+    @param {String} event The event to listen to
+    @param {Function} callback The callback to fire when the event emits on the object
+    @returns {cerebral/mvc/View} self
+  */
+  Events.bindToOnce = function( obj, event, callback, context ) {
+    var self, _callback
+
+    self = this
+    _callback = function() {
+      callback.apply( this, arguments )
+      self.unbindFrom( obj, event, _callback )
+    }
+
+    obj.bind( event, _callback, context || this )
+    this.bindings.push({
+      obj: obj,
+      event: event,
+      callback: _callback
     })
     return this
   }
