@@ -1,0 +1,41 @@
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+ul { 
+  list-style-type: none;
+}
+
+
+#app {
+  width: 690px;
+  margin: 200px auto 0px auto;
+}
+
+#todos {
+  display: inline-block;
+  vertical-align: top;
+  padding: 20px;
+  margin-right: 100px;
+}
+
+#achievements {
+  display: inline-block;
+  vertical-align: top;
+  padding: 20px;
+}
+
+#achievements .list {}
+
+#achievements .list .achievement { }
+
+#achievements .list .achievement .description {
+  text-decoration: line-through;
+}
+
+#achievements .list .achievement.completed .description {
+  text-decoration: none;
+  color: green;
+}

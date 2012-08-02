@@ -1,0 +1,86 @@
+<html>
+<head>
+  
+  <link rel="stylesheet" type="text/css" href="style/app.css">
+
+  <script type="text/javascript" src="../../cerebral/vendor/require.js"></script>
+
+  <script type="text/javascript">
+
+    require.config({
+      baseUrl: "../../",
+      shim: {
+        "backbone": {
+          deps: ["underscore", "jquery"],
+          exports: "Backbone"
+        },
+        "underscore": {
+          exports: "_"
+        },
+      },
+      paths: {
+        "backbone": "cerebral/vendor/backbone",
+        "underscore": "cerebral/vendor/underscore",
+        "jquery": "cerebral/vendor/jquery",
+        "app": "docs/demo/js"
+      }
+    })
+
+  </script>
+
+  <script type="text/javascript">
+
+    window.bootstrap = {}
+
+    window.bootstrap.todos = [
+      {
+        description: "Open app",
+        completed: true
+      }
+    ]
+
+    window.bootstrap.achievements = [
+      {
+        tag: "firsttodo",
+        description: "Create your first todo",
+        completed: false
+      },
+      {
+        tag: "deletetodo",
+        description: "Delete your first todo",
+        completed: false
+      }
+    ]
+
+  </script>
+
+  <script type="text/javascript" src="./js/main.js"></script>
+
+</head>
+<body>
+
+  <div id="app">
+
+    <section id="todos">
+      <input class="new-todo" />
+      <ul class="list"></ul>
+    </section>
+
+    <section id="achievements">
+      <ul class="list"></ul>
+    </section>
+
+  </div>
+  
+  <script type="text/template" id="todo-template">
+    <input type="checkbox" class="completed" <% if(completed) { %> checked <% }; %> />
+    <div class="description"> <%= description %> </div>
+    <div class="delete">Remove</button>
+  </script>
+
+  <script type="text/template" id="achievement-template">
+    <div class="description"> <%= description %> </div>
+  </script>
+
+</body>
+</html>

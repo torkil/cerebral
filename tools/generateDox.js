@@ -64,10 +64,10 @@ function( modules ) {
 
   docs = generateNamespacedDocs( 'cerebral', modules )
   
-  template = fs.readFileSync(__dirname + '/docstemplate.mustache', 'utf8')
+  template = fs.readFileSync(__dirname + '/doxscript.mustache', 'utf8')
   
   renderer = mustache.renderText(template, {
-    title: 'cerebral.js Documentation',
+    title: 'cerebral.js',
     docs: JSON.stringify( docs )
   })
 
@@ -81,7 +81,7 @@ function( modules ) {
 
     html = buf
 
-    fs.writeFileSync(__dirname + '/../docs/index.html', html, 'utf8')
+    fs.writeFileSync(__dirname + '/../docs/dox.js', html, 'utf8')
 
   })
 
