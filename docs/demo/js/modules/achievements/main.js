@@ -1,5 +1,5 @@
 define([
-  "sandbox",
+  "achievements/sandbox",
   "./collections/Achievements",
   "./views/Achievements"
 ], 

@@ -1,6 +1,6 @@
 
 define([
-  "sandbox",
+  "todos/sandbox",
   "cerebral/mvc/Collection",
   "../models/Todo"
 ], 

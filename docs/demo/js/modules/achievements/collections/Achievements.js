@@ -1,6 +1,6 @@
 
 define([
-  "sandbox",
+  "achievements/sandbox",
   "underscore",
   "cerebral/mvc/Collection",
   "../models/Achievement"

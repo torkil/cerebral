@@ -1,5 +1,5 @@
 define([
-  "sandbox",
+  "achievements/sandbox",
   "cerebral/mvc/View",
   "./Achievement"
 ], 

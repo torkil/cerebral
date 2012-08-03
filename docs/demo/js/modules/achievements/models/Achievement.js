@@ -1,6 +1,6 @@
 
 define([
-  "sandbox",
+  "achievements/sandbox",
   "cerebral/mvc/Model"
 ], 
 function( sandbox, Model ){
