@@ -126,3 +126,17 @@ ul {
   text-decoration: none;
   color: #919C67;
 }
+
+
+#admin {
+  margin-top: 50px;
+}
+
+#admin .buttons {
+  margin: 20px auto 0px auto;
+}
+
+#admin .buttons button {
+  padding: 4px 7px;
+  margin-right: 10px;
+}

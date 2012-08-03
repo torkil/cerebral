@@ -20,6 +20,7 @@
       },
       paths: {
         "backbone": "cerebral/vendor/backbone",
+        "backboneLocalStorage": "docs/demo/js/ext/Backbone.LocalStorage",
         "underscore": "cerebral/vendor/underscore",
         "jquery": "cerebral/vendor/jquery",
         "app": "docs/demo/js"
@@ -34,10 +35,12 @@
 
     window.bootstrap.todos = [
       {
+        id: 1,
         description: "Open app",
         completed: true
       },
       {
+        id: 2,
         description: "Complete this, while beeing a boss is optional.",
         completed: false
       }
@@ -45,21 +48,25 @@
 
     window.bootstrap.achievements = [
       {
+        id: 1,
         tag: "firsttodo",
         description: "Create your first todo",
         completed: false
       },
       {
+        id: 2,
         tag: "firstcomplete",
         description: "Complete your first todo",
         completed: false
       },
       {
+        id: 3,
         tag: "removetodo",
         description: "Remove your first todo",
         completed: false
       },
       {
+        id: 4,
         tag: "threetodos",
         description: "Create three todos",
         completed: false
@@ -75,27 +82,45 @@
 
   <div id="app">
 
-    <section id="todos">
-      <h1>Todos</h1>
-      <div class="content">
-        <input class="new-todo" placeholder="Create a todo"/>
-        <ul class="list"></ul>
-      </div>
-    </section>
+    <section id="todos"> </section>
 
-    <section id="achievements">
-      <h1>Achievements</h1>
-      <div class="content">
-        <ul class="list"></ul>
+    <section id="achievements"> </section>
+
+    <section id="admin">
+      <h1>Admin</h1>
+      <div class="buttons">
+        <button class="start todos">start todos</button>
+        <button class="stop todos">stop todos</button>
+        <button class="start achievements">start achievements</button>
+        <button class="stop achievements">stop achievements</button>
       </div>
     </section>
 
   </div>
   
+  <script type="text/template" id="todos-template">
+    <div id="wrapper"> 
+      <h1>Todos</h1>
+      <div class="content">
+        <input class="new-todo" placeholder="Create a todo"/>
+        <ul class="list"></ul>
+      </div>
+    </div>
+  </script>
+
   <script type="text/template" id="todo-template">
     <input type="checkbox" class="completed" <% if(completed) { %> checked <% }; %> />
     <div class="description"> <%= description %> </div>
     <div class="remove">Remove</button>
+  </script>
+
+  <script type="text/template" id="achievements-template">
+    <div id="wrapper"> 
+      <h1>Achievements</h1>
+      <div class="content">
+        <ul class="list"></ul>
+      </div>
+    </div>
   </script>
 
   <script type="text/template" id="achievement-template">

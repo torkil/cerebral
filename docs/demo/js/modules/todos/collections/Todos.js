@@ -12,6 +12,8 @@ function( sandbox, Collection, Todo ){
     
     model: Todo,
 
+    localStorage: new Backbone.LocalStorage("todos"),
+
     initialize: function() {
 
       this.bindTo( this, "add", this.onAdd, this )

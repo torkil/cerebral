@@ -13,6 +13,8 @@ function( sandbox, _, Collection, Achievement ){
     
     model: Achievement,
 
+    localStorage: new Backbone.LocalStorage("achievements"),
+
     complete: function( filter ) {
       var completed = this.where( filter )
       _(completed).invoke( "complete" )

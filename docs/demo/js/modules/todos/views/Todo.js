@@ -17,10 +17,6 @@ define([
       "click .remove": "removeTodo"
     },
 
-    initialize: function() {
-
-    },
-
     render: function() {
       var html
       html = _.template( this.template, this.model.toJSON() )
@@ -35,6 +31,7 @@ define([
       } else {
         this.model.set( "completed", false )
       }
+      this.model.save()
     },
 
     removeTodo: function() {

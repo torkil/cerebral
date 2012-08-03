@@ -5,43 +5,71 @@ define([
 ], 
 function( sandbox, Achievements, AchievementsView ){
   
-  return function main() {
+  
 
-    var achievements = new Achievements()
+  return {
+    main: function () {
 
-    achievements.reset( window.bootstrap.achievements  )
+      var achievements = new Achievements()
 
-    var stats = {
-      nrOfTodosAdded: 0
+      if( !window.localStorage.achievements ) {
+        _.each(window.bootstrap.achievements, function( achievement ) {
+          achievements.create( achievement )  
+        })
+      } else {
+        achievements.fetch()
+      }
+      
+      if( !window.stats ) {
+        window.stats = {
+          nrOfTodosAdded: 0
+        }
+      }
+
+      function onTodoAdd() {
+        stats.nrOfTodosAdded++
+        if( stats.nrOfTodosAdded === 1 ) {
+          achievements.complete({ tag: "firsttodo" })
+        }
+        if( stats.nrOfTodosAdded >= 3 ) {
+          achievements.complete({ tag: "threetodos" })
+        }
+      }
+
+      function onTodoRemove() {
+        achievements.complete({ tag: "removetodo" })
+
+        sandbox.unsubscribe("todos.remove")
+      }
+
+      function onModelChange( model ) {
+        if( model.get('completed') )
+          achievements.complete({ tag: "firstcomplete" })
+      }
+
+      sandbox.subscribe( "todos.add", onTodoAdd )
+
+      sandbox.subscribe( "todos.remove", onTodoRemove )
+
+      sandbox.subscribe( "todos.modelChange", onModelChange )
+
+      var moduleView = new AchievementsView({
+        collection: achievements
+      })
+
+      moduleView.render()
+      
+      sandbox.element.append( moduleView.el )
+
+    },
+
+    destruct: function( done ) {
+      
+      sandbox.element
+        .find('#wrapper')
+        .fadeOut( 300, done )
+        
     }
-
-    sandbox.subscribe("todos.add", function() {
-      stats.nrOfTodosAdded++
-      if( stats.nrOfTodosAdded === 1 ) {
-        achievements.complete({ tag: "firsttodo" })
-      }
-      if( stats.nrOfTodosAdded === 3 ) {
-        achievements.complete({ tag: "threetodos" })
-      }
-    })
-
-    sandbox.subscribe("todos.remove", function() {
-      achievements.complete({ tag: "removetodo" })
-
-      sandbox.unsubscribe("todos.remove")
-    })
-
-    sandbox.subscribe("todos.modelChange", function( model, changes ) {
-      if( model.get('completed') )
-        achievements.complete({ tag: "firstcomplete" })
-    })
-
-    var moduleView = new AchievementsView({
-      el: sandbox.element,
-      collection: achievements
-    })
-
-    moduleView.render()
 
   }
 

@@ -9,7 +9,13 @@ function( sandbox, View, AchievementView ){
 
   Achievements = View.extend({
 
+    template: $('#achievements-template').html(),
+
     render: function() {
+
+      html = _.template( this.template )
+
+      this.$el.html( html )
 
       var achievementlist = this.$el.find('.list')      
       achievementlist.empty()
@@ -23,6 +29,9 @@ function( sandbox, View, AchievementView ){
         achievementView.render()
 
         achievementlist.append( achievementView.el )
+        
+        this.subviews.attach([ achievementView ])
+
       }, this)
 
     }

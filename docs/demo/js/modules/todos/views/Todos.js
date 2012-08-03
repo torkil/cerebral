@@ -13,6 +13,8 @@ define([
       "keyup .new-todo": "newTodoInput"
     },
 
+    template: $('#todos-template').html(),
+
     initialize: function() {
       this.bindTo( this.collection, "add", this.render, this )
       this.bindTo( this.collection, "remove", this.render, this )
@@ -20,6 +22,12 @@ define([
 
     render: function() {
       
+      var html
+
+      html = _.template( this.template )
+
+      this.$el.html( html )
+
       var todolist = this.$el.find('.list')      
       todolist.empty()
 
@@ -32,6 +40,9 @@ define([
         todoview.render()
 
         todolist.append( todoview.el )
+
+        this.subviews.attach([ todoview ])
+
       }, this)
     },
 
@@ -40,12 +51,13 @@ define([
       if( event.keyCode === 13 ) {
         
         description = this.$el.find(".new-todo").val()
-
         todo = new TodoModel({
           description: description
         })
 
         this.collection.add( todo )
+
+        todo.save()
 
         this.$el.find(".new-todo").val('')
       }
