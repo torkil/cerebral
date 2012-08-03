@@ -32,6 +32,7 @@ function( sandbox, DisplayModel, DisplayView ) {
     if( TESTDATA.calculatordisplay.reportSandbox ) {
       TESTDATA.calculatordisplay.reportSandbox( sandbox )
     }
+
       
   }
   
