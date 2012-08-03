@@ -241,30 +241,40 @@ function( _, $, Module, sandboxfactory ){
     })
 
     if( !require.defined(module.sandboxPath) ) {
+
       define(
         module.sandboxPath,[
         ],
         sandbox
       )
+
     }
 
     require([ module.mainPath ], 
       function( definition ) {
         if( !definition ) {
+
           core.unloadModule( module.name )
           return callback( Error('The definition did not return') )
+
         }
         if( typeof definition === 'function' || (typeof definition === 'object' && typeof definition.main === 'function') ) {
+
           module.loadDefinition( definition )
           callback( null, module )
+
         } else {
+
           core.unloadModule( module.name )
           callback( TypeError('Module must be a main function or Object containing main method') ) 
+
         }
       },
       function( error ) {
+
         core.unloadModule( module.name )
         callback( error )
+        
       })
     return core
   }
@@ -291,7 +301,9 @@ function( _, $, Module, sandboxfactory ){
 
       for( name in definedModules ) {
         if( definedModules.hasOwnProperty(name) && name.indexOf(module.name) !== -1 ) {
+
           require.undef( name )
+
         }
       }  
 
@@ -327,7 +339,6 @@ function( _, $, Module, sandboxfactory ){
       return core
     }
       
-
     options = _.extend( startDefaultOptions, options )
 
     core.loadModule({
