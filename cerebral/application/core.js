@@ -14,7 +14,7 @@ define(
 ], 
 function( _, $, sandboxfactory ){
   
-  var core, channels
+  var core, channels, startDefaultOptions
 
   core = {
     /*
@@ -195,7 +195,7 @@ function( _, $, sandboxfactory ){
       element: options.element
     })
 
-    sandboxNamespace = moduleRoot + '/sandbox'
+    sandboxNamespace = modulename + '/sandbox'
 
     if( !require.defined(sandboxNamespace) ) {
       define(
@@ -205,11 +205,11 @@ function( _, $, sandboxfactory ){
       )
     }
 
-    requireConfig = { map: {} }
+    // requireConfig = { map: {} }
 
-    requireConfig.map[ moduleRoot ] = {
-      'sandbox': sandboxNamespace
-    }
+    // requireConfig.map[ moduleRoot ] = {
+    //   'sandbox': sandboxNamespace
+    // }
     
     require(requireConfig, [ mainPath ], 
       function( module ) {
@@ -274,17 +274,29 @@ function( _, $, sandboxfactory ){
   }
 
   /**
+    Default options for core.start
+    @private
+    @type Object
+  */
+  startDefaultOptions = {
+    onDomReady: true
+  }
+
+  /**
     Load and start a module by running the returned main function with a new sandbox object.
     @public
     @type Function
     @param {String} modulename The name of the namespace/folder that contains the module
     @param {Object} options Options for the module and sandbox
+    @param options.onDomReady If the module should wait for DOM to be ready before executing the modules main function
     @param options.element The element to restrict dom access to
     @returns {cerebral/core} core
   */
   core.start = function( modulename, options ) {
     if( core.moduleIsStarted(modulename) )
       return core
+
+    options = _.extend( startDefaultOptions, options )
 
     core.loadModule({
       modulename: modulename,
@@ -303,7 +315,11 @@ function( _, $, sandboxfactory ){
 
       if( main ) {
         try {
-          main()
+          if( options.onDomReady ) {
+            $(document).ready( main )
+          } else {
+            main()
+          }
         } catch( e ) { }
       }
     })  
