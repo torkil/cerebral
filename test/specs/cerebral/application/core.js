@@ -1,4 +1,5 @@
-require([
+
+ require([
   "cerebral/application/core"
 ], function( core ) {
   
@@ -239,7 +240,7 @@ require([
               expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
               expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
               expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
-              expect( require.defined(moduleRoot + 'calculatordisplay/sandbox') ).to.equal( true )
+              expect( require.defined('calculatordisplay/sandbox') ).to.equal( true )
 
               core.stop('calculatordisplay')
 
@@ -248,7 +249,7 @@ require([
                 expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( false )
                 expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( false )
                 expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( false )
-                expect( require.defined(moduleRoot + 'calculatordisplay/sandbox') ).to.equal( false )
+                expect( require.defined('calculatordisplay/sandbox') ).to.equal( false )
 
                 done()
               }, 200)
@@ -305,14 +306,14 @@ require([
           TESTDATA.destructablefunctionmodule = {
             onMain: function() {
               expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( true )
-              expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( true )
+              expect( require.defined('destructablefunctionmodule/sandbox') ).to.equal( true )
               
               core.stop( "destructablefunctionmodule" )
 
               setTimeout(function() {
 
                 expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( false )
-                expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( false )
+                expect( require.defined('destructablefunctionmodule/sandbox') ).to.equal( false )
 
                 done()
               }, 200)
@@ -321,7 +322,7 @@ require([
             onDestruct: function() {
 
               expect( require.defined(moduleRoot + 'destructablefunctionmodule/main') ).to.equal( true )
-              expect( require.defined(moduleRoot + 'destructablefunctionmodule/sandbox') ).to.equal( true )
+              expect( require.defined('destructablefunctionmodule/sandbox') ).to.equal( true )
 
             }
           }
