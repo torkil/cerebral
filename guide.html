@@ -4,6 +4,9 @@
   <title></title>
 
   <link rel="stylesheet" type="text/css" href="style/main.css">
+  <link rel="stylesheet" type="text/css" href="style/github-highlight.css">
+
+  <script type="text/javascript" src="./js/rainbow-min.js"></script>
 
 </head>
 <body>
@@ -152,6 +155,81 @@
     </div>
 
     <h3>Setup</h3>
+
+    <p>
+      First lets set up the index.html file. Include require.js and configure it so it knows where to look for things like; cerebral, backbone, underscore,
+      jquery and the app itself.
+    </p>
+
+    <pre>
+      <code data-language="html">
+  &lt;script type="text/javascript" src="../../cerebral/vendor/require.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+
+        require.config({
+          baseUrl: "../../",
+          shim: {
+            "backbone": {
+              deps: ["underscore", "jquery"],
+              exports: "Backbone"
+            },
+            "underscore": {
+              exports: "_"
+            },
+          },
+          paths: {
+            "backbone": "cerebral/vendor/backbone",
+            "underscore": "cerebral/vendor/underscore",
+            "jquery": "cerebral/vendor/jquery",
+            "app": "docs/demo/js"
+          }
+        })
+
+  &lt;/script&gt;
+      </code>
+    </pre>
+
+
+    <h3>app.js</h4>
+
+    <p>
+      Now its time to get our hands dirty and code the main application file, app.js. We will configure it to know where to look for 
+      its modules and then start them up.
+    </p>
+
+    <pre>
+      <code data-language="js">
+  require([
+    "cerebral/application/core",
+    "jquery"
+  ],
+  function( core, $ ) {
+
+    core.configure({
+      moduleRoot: 'app/modules/'
+    })
+
+    $(document).ready(function() {
+
+      core.start("todos", {
+        element: "#todos"
+      })
+
+      core.start("achievements", {
+        element: "#achievements"
+      })
+
+    })
+
+  })
+      </code>
+    </pre>
+
+    <h3>Module: todos</h3>
+
+    <p>
+      This module is located
+    </p>
 
   </section>
 
