@@ -10,11 +10,12 @@ define(
 "cerebral/application/core",[
   "underscore",
   "jquery",
+  "cerebral/application/Module",
   "cerebral/application/sandboxfactory"
 ], 
-function( _, $, sandboxfactory ){
+function( _, $, Module, sandboxfactory ){
   
-  var core, channels, startDefaultOptions
+  var core, channels, modules, startDefaultOptions
 
   core = {
     /*
@@ -37,6 +38,13 @@ function( _, $, sandboxfactory ){
     @type Object
   */
   channels = {}
+
+  /**
+    Holds all loaded modules
+    @private
+    @type Object
+  */
+  modules = {}
 
   /**
     The configuration of the core.
@@ -174,6 +182,17 @@ function( _, $, sandboxfactory ){
   }
 
   /**
+    Check if a module is loaded and started
+    @public
+    @type Function
+    @param {String} modulename The name of the namespace/folder that contains the module
+    @returns Boolean
+  */
+  core.modulesIsLoaded = function( modulename ) {
+    return ( modulename in modules )
+  }
+
+  /**
     Require a module from the moduleRoot namespace, will automagicaly look for the main.js within the modulename folder.
     @public
     @type Function
@@ -182,12 +201,22 @@ function( _, $, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.loadModule = function( options, callback ) {
-    var modulename, moduleRoot, mainPath, sandbox, sandboxNamespace, requireConfig
+    var module, sandbox
 
-    modulename = options.modulename
+    if( core.modulesIsLoaded(options.name) ) {
 
-    moduleRoot = this.configuration.moduleRoot + modulename
-    mainPath = moduleRoot + '/main'
+      module = modules[ options.name ]
+      return callback( null, module )
+      
+    }
+
+    module = new Module({
+      root: this.configuration.moduleRoot,
+      name: options.name,
+      element: options.element
+    })
+    
+    modules[ module.name ] = module
 
     sandboxfactory.delegateCoreApi( core.api.public )
 
@@ -195,37 +224,30 @@ function( _, $, sandboxfactory ){
       element: options.element
     })
 
-    sandboxNamespace = modulename + '/sandbox'
-
-    if( !require.defined(sandboxNamespace) ) {
+    if( !require.defined(module.sandboxPath) ) {
       define(
-        sandboxNamespace,[
+        module.sandboxPath,[
         ],
         sandbox
       )
     }
 
-    // requireConfig = { map: {} }
-
-    // requireConfig.map[ moduleRoot ] = {
-    //   'sandbox': sandboxNamespace
-    // }
-    
-    require(requireConfig, [ mainPath ], 
-      function( module ) {
-        if( !module ) {
-          core.unloadModule( modulename )
-          return callback( Error('The module did not return') )
+    require([ module.mainPath ], 
+      function( definition ) {
+        if( !definition ) {
+          core.unloadModule( module.name )
+          return callback( Error('The definition did not return') )
         }
-        if( typeof module === 'function' || typeof module === 'object' ) {
+        if( typeof definition === 'function' || (typeof definition === 'object' && typeof definition.main === 'function') ) {
+          module.loadDefinition( definition )
           callback( null, module )
         } else {
-          core.unloadModule( modulename )
+          core.unloadModule( module.name )
           callback( TypeError('Module must be a main function or Object containing main method') ) 
         }
       },
       function( error ) {
-        core.unloadModule( modulename )
+        core.unloadModule( module.name )
         callback( error )
       })
     return core
@@ -239,38 +261,30 @@ function( _, $, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.unloadModule = function( modulename ) {
-    var definedModules, moduleRoot, sandboxNamespace, name
-
+    var definedModules, name, module
+    
     definedModules = require.s.contexts._.defined
-    moduleRoot = this.configuration.moduleRoot + modulename
-    sandboxNamespace = moduleRoot + '/sandbox'
 
-    if( require.defined(sandboxNamespace) ) {
-      require.undef( sandboxNamespace )
-    }
+    module = modules[ modulename ]
 
-    for( name in definedModules ) {
-      if( definedModules.hasOwnProperty(name) && name.indexOf(modulename) !== -1 ) {
-        require.undef( name )
+    if( module ) {
+
+      if( require.defined(module.sandboxPath) ) {
+        require.undef( module.sandboxPath )
       }
+
+      for( name in definedModules ) {
+        if( definedModules.hasOwnProperty(name) && name.indexOf(module.name) !== -1 ) {
+          require.undef( name )
+        }
+      }  
+
+      module.emptyElement()
+
+      delete modules[ modulename ]
     }
+    
     return core
-  }
-
-  /**
-    Check if a module is loaded and started
-    @public
-    @type Function
-    @param {String} modulename The name of the namespace/folder that contains the module
-    @returns Boolean
-  */
-  core.moduleIsStarted = function( modulename ) {
-    var moduleRoot, mainPath
-
-    moduleRoot = this.configuration.moduleRoot + modulename
-    mainPath = moduleRoot + '/main'
-
-    return require.defined( mainPath )
   }
 
   /**
@@ -293,13 +307,13 @@ function( _, $, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.start = function( modulename, options ) {
-    if( core.moduleIsStarted(modulename) )
+    if( core.modulesIsLoaded(modulename) )
       return core
 
     options = _.extend( startDefaultOptions, options )
 
     core.loadModule({
-      modulename: modulename,
+      name: modulename,
       element: options.element
     }, 
     function( err, module ) {
@@ -309,18 +323,14 @@ function( _, $, sandboxfactory ){
         throw err
       }
 
-      main = typeof module === 'function' ? module :
-             typeof module === 'object' && typeof module.main === 'function' ? module.main :
-             null
-
-      if( main ) {
-        try {
-          if( options.onDomReady ) {
-            $(document).ready( main )
-          } else {
-            main()
-          }
-        } catch( e ) { }
+      try {
+        if( options.onDomReady ) {
+          $(document).ready( module.main )
+        } else {
+          module.main()
+        }
+      } catch( e ) { 
+        // TODO: logger
       }
     })  
   
@@ -335,29 +345,19 @@ function( _, $, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.stop = function( modulename ) {
-    var moduleRoot, mainPath
-    if( !core.moduleIsStarted(modulename) )
+    var module
+    if( !core.modulesIsLoaded(modulename) )
       return core
 
-    moduleRoot = this.configuration.moduleRoot + modulename
-    mainPath = moduleRoot + '/main'
+    module = modules[ modulename ]
 
-    require([ mainPath ], function( module ) {
-      if( module ) {
-
-        if( typeof module.destruct === 'function' ) {
-          module.destruct(function() {
-            core.unloadModule( modulename )
-          })
-        } else {
-          core.unloadModule( modulename )
-        }
-
-      }
-    },
-    function( error ) {
-      console.error("core.stop require error:", error);
-    })
+    if( typeof module.destruct === 'function' ) {
+      module.destruct(function() {
+        core.unloadModule( modulename )
+      })
+    } else {
+      core.unloadModule( modulename )
+    }
 
     return core
   }
