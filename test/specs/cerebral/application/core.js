@@ -11,7 +11,8 @@
     moduleRoot: moduleRoot
   })
 
-  function unloadAll() {
+  function reset() {
+    $('#app_test').html( $('#app_test_template').html() )
     core.unloadModule('calculatordisplay')
     core.unloadModule('calculatorinput')
     core.unloadModule('faultyreturn')
@@ -91,18 +92,20 @@
 
     describe("modules", function() {
 
+      beforeEach( reset )
+
       describe("core.loadModule", function() {
 
-        beforeEach( unloadAll )
+        beforeEach( reset )
 
         it("should use amd loading to load a module from the desired namespace", function( done ) {
 
           core.loadModule({
-            modulename: 'mainreporter'
+            name: 'mainreporter'
           }, 
           function( err, mainreporter ) {
-            expect( mainreporter ).to.be.ok()
-            expect( mainreporter() ).to.equal( 'main' )
+            expect( mainreporter.main ).to.be.ok()
+            expect( mainreporter.main() ).to.equal( 'main' )
             done()
           })
 
@@ -111,7 +114,7 @@
         it("should pass a TypeError if the module definition is of other type than function or object", function( done ) {
 
           core.loadModule({
-            modulename: 'faultyreturn'
+            name: 'faultyreturn'
           }, 
           function( err ) {
             expect( err ).to.be.a( TypeError )
@@ -123,7 +126,7 @@
         it("should pass a Error if the module doesnt exist", function( done ) {
 
           core.loadModule({
-            modulename: 'nonexisting'
+            name: 'nonexisting'
           }, 
           function( err ) {
             expect( err ).to.be.a( Error )
@@ -136,16 +139,16 @@
 
       describe("core.unloadModule", function() {
 
-        beforeEach( unloadAll )
+        beforeEach( reset )
 
         it("should unload all modules that are within the namespace of the module and defined by the amd loader", function( done ) {
 
           core.loadModule({ 
-            modulename: 'calculatordisplay'
+            name: 'calculatordisplay'
           }, 
           function( err, display ) {
 
-            expect( display ).to.be.a( 'function' )
+            expect( display.main ).to.be.a( 'function' )
             expect( require.defined(moduleRoot + 'calculatordisplay/main') ).to.equal( true )
             expect( require.defined(moduleRoot + 'calculatordisplay/models/Display') ).to.equal( true )
             expect( require.defined(moduleRoot + 'calculatordisplay/views/Display') ).to.equal( true )
@@ -167,7 +170,7 @@
 
       describe("core.start", function() {
 
-        beforeEach( unloadAll )
+        beforeEach( reset )
 
         it("should invoke the main function of the module", function( done ) {
 
@@ -230,7 +233,7 @@
 
       describe("core.stop", function() {
 
-        beforeEach( unloadAll )
+        beforeEach( reset )
 
         it("should unload the module definition and all definitions down the hierarchy of the moduleroot namespace", function( done ) {
 
@@ -272,9 +275,7 @@
             }
           }
 
-          core.start("destructable", { 
-            element: 'body' 
-          })
+          core.start( "destructable" )
 
           setTimeout(function() {
             core.stop( "destructable" )
@@ -291,9 +292,7 @@
             }
           }
 
-          core.start("destructablefunctionmodule", { 
-            element: 'body' 
-          })
+          core.start( "destructablefunctionmodule" )
 
           setTimeout(function() {
             core.stop( "destructablefunctionmodule" )
@@ -327,8 +326,37 @@
             }
           }
 
-          core.start("destructablefunctionmodule", { 
-            element: 'body' 
+          core.start( "destructablefunctionmodule" )
+
+        })
+
+        it("should cleanup the DOM element of the module by emptying it", function( done ) {
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              
+              try {
+                expect( $('#inside-calculatordisplay').length ).to.equal( 1 )
+              } catch( e ) {
+                done( e )
+              }
+
+              core.stop("calculatordisplay")
+
+              setTimeout(function() {
+                try {
+                  expect( $('#inside-calculatordisplay').length ).to.equal( 0 )
+                } catch( e ) {
+                  done( e )
+                }
+                done()
+              }, 100)
+
+            }
+          }
+
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
           })
 
         })
@@ -337,7 +365,7 @@
 
       describe("sandbox", function() {
 
-        beforeEach( unloadAll )
+        beforeEach( reset )
 
         it("should expose a shared sandbox object on namespace 'sandbox' to the module and all submodules", function( done ) {
 
