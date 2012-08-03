@@ -202,30 +202,28 @@
           TESTDATA.calculatordisplay = {
             'onMain': function() {
               incrementer++
-
-              if(continuation) continuation()
             }
           }
 
           core.start('calculatordisplay', {
             element: '#calculatordisplay'
           })
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
+          })
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
+          })
 
-          continuation = function() {
-            expect( incrementer ).to.equal( 1 )
-            
-            continuation = function() {
+          setTimeout(function() {
+
+            try {
               expect( incrementer ).to.equal( 1 )
-              done()
+            } catch( e ) {
+              done( e )
             }
-
-            core.start('calculatordisplay', {
-              element: '#calculatordisplay'
-            })
-
-            setTimeout(continuation, 120)
-
-          }
+            done()
+          },100)
 
         })
 
