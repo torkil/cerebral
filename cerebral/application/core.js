@@ -90,6 +90,16 @@ function( _, $, Module, sandboxfactory ){
   /**
     @public
     @type Function
+    @see core.resubscribe
+  */
+  core.api.public.resubscribe = function() {
+    core.resubscribe.apply( core, arguments )
+    return core.api.public
+  }
+
+  /**
+    @public
+    @type Function
     @see core.unsubscribe
   */
   core.api.public.unsubscribe = function() {
@@ -124,6 +134,11 @@ function( _, $, Module, sandboxfactory ){
     })
 
     return core
+  }
+
+  core.resubscribe = function( channel, callback, context ) {
+    core.unsubscribe( channel, callback )
+    core.subscribe( channel, callback, context )
   }
 
   /**
@@ -207,7 +222,7 @@ function( _, $, Module, sandboxfactory ){
 
       module = modules[ options.name ]
       return callback( null, module )
-      
+
     }
 
     module = new Module({
@@ -221,6 +236,7 @@ function( _, $, Module, sandboxfactory ){
     sandboxfactory.delegateCoreApi( core.api.public )
 
     sandbox = sandboxfactory.create({
+      module: module,
       element: options.element
     })
 
@@ -307,8 +323,10 @@ function( _, $, Module, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.start = function( modulename, options ) {
-    if( core.modulesIsLoaded(modulename) )
+    if( core.modulesIsLoaded(modulename) ) {
       return core
+    }
+      
 
     options = _.extend( startDefaultOptions, options )
 
@@ -317,18 +335,19 @@ function( _, $, Module, sandboxfactory ){
       element: options.element
     }, 
     function( err, module ) {
-      var main
 
       if( err ) {
         throw err
       }
 
       try {
+
         if( options.onDomReady ) {
           $(document).ready( module.main )
         } else {
           module.main()
         }
+
       } catch( e ) { 
         // TODO: logger
       }
