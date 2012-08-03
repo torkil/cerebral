@@ -1,3 +1,9 @@
+
+/**
+  @class Module For managing modules
+  @exports Module
+  @requires [jquery, underscore]
+*/
 define(
 "cerebral/application/Module", [
   "jquery",
@@ -5,6 +11,11 @@ define(
 ], 
 function( $, _ ){
   
+  /**
+    Creates a new Module
+    @public
+    @constructor
+  */
   function Module( attributes ) {
     if( !attributes['name'] ||
         !attributes['root'] ) {
@@ -23,12 +34,23 @@ function( $, _ ){
     this.sandboxPath = this.name + "/sandbox"
   }
 
+  /**
+    Empty the modules element
+    @public
+    @type Function
+  */
   Module.prototype.emptyElement = function() {
     if( this.element ) {
       $( this.element ).empty()
     }
   }
 
+  /**
+    Normalize a module definition and extraxt its main if possible destruct functions.
+    @public
+    @type Function
+    @param {Function|Object} definition The definition of the module
+  */
   Module.prototype.loadDefinition = function( definition ) {
     var main, destruct
     if( typeof definition === 'function' ) {
