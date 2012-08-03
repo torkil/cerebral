@@ -1,7 +1,8 @@
 
 /**
-  @class The base view
+  @class View Class for managing views
   @extends Backbone.View
+  @see Backbone.js View
   @requires [underscore, cerebral/lib/Backbone, cerebral/mvc/ViewCollection]
   @exports View
 */

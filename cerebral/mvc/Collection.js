@@ -1,7 +1,8 @@
 
 /**
-  @class Base Collection class, for collections of models
+  @class Collection Collection of moddels.
   @extends Backbone.Collection
+  @see Backbone.js Collection
   @requires [Backbone]
   @exports Collection
 */

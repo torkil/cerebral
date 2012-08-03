@@ -1,7 +1,8 @@
 
 /**
-  @class Base Model class, for data models
+  @class Model Data models
   @extends Backbone.Model
+  @see Backbone.js Model
   @requires [cerebral/lib/Backbone]
   @exports Model
 */

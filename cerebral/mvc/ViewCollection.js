@@ -1,6 +1,6 @@
 
 /**
-  @class for managing subviews for a view
+  @class ViewCollection for managing subviews for a view
   @extends Backbone.Events
   @requires [underscore, cerebral/lib/Backbone]
   @exports ViewCollection
