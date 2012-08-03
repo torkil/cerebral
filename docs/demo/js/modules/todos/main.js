@@ -6,7 +6,9 @@ define([
 function( sandbox, Todos, TodosView ){
 
   function resetTodos( todos ) {
+
     todos.reset([])
+
     _.each(window.bootstrap.todos, function( todo ) {
       todos.create( todo )  
     })
@@ -19,9 +21,7 @@ function( sandbox, Todos, TodosView ){
       var todos = new Todos()
 
       if( !window.localStorage.todos ) {
-        _.each(window.bootstrap.todos, function( todo ) {
-          todos.create( todo )  
-        })
+        resetTodos( todos )
       } else {
         todos.fetch()
       }

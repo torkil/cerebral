@@ -60,17 +60,13 @@ function( sandbox, Achievements, AchievementsView ){
       }
 
       sandbox.subscribe( "todos.add", onTodoAdd )
-
       sandbox.subscribe( "todos.remove", onTodoRemove )
-
       sandbox.subscribe( "todos.modelChange", onModelChange )
-
+      sandbox.subscribe( "admin.reset", onLocalStorageClear )
 
       var moduleView = new AchievementsView({
         collection: achievements
       })
-
-      sandbox.subscribe( "admin.reset", onLocalStorageClear )
 
       moduleView.render()
       
