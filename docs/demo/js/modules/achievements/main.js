@@ -5,7 +5,20 @@ define([
 ], 
 function( sandbox, Achievements, AchievementsView ){
   
-  
+  function resetStats() {
+    window.stats = {
+      nrOfTodosAdded: 0
+    }
+  }
+
+  function resetAchievements( achievements ) {
+
+    achievements.reset([])
+    resetStats()
+    _.each(window.bootstrap.achievements, function( achievement ) {
+      achievements.create( achievement )  
+    })
+  }
 
   return {
     main: function () {
@@ -13,17 +26,10 @@ function( sandbox, Achievements, AchievementsView ){
       var achievements = new Achievements()
 
       if( !window.localStorage.achievements ) {
-        _.each(window.bootstrap.achievements, function( achievement ) {
-          achievements.create( achievement )  
-        })
+        resetAchievements( achievements )
       } else {
+        resetStats()
         achievements.fetch()
-      }
-      
-      if( !window.stats ) {
-        window.stats = {
-          nrOfTodosAdded: 0
-        }
       }
 
       function onTodoAdd() {
@@ -47,15 +53,24 @@ function( sandbox, Achievements, AchievementsView ){
           achievements.complete({ tag: "firstcomplete" })
       }
 
+      function onLocalStorageClear() {
+        window.localStorage.clear()
+        resetAchievements( achievements )
+        moduleView.render()
+      }
+
       sandbox.subscribe( "todos.add", onTodoAdd )
 
       sandbox.subscribe( "todos.remove", onTodoRemove )
 
       sandbox.subscribe( "todos.modelChange", onModelChange )
 
+
       var moduleView = new AchievementsView({
         collection: achievements
       })
+
+      sandbox.subscribe( "admin.reset", onLocalStorageClear )
 
       moduleView.render()
       

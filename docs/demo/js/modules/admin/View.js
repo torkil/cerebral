@@ -9,7 +9,8 @@ define([
       "click .start.todos": "starttodos",
       "click .stop.todos": "stoptodos",
       "click .start.achievements": "startachievements",
-      "click .stop.achievements": "stopachievements"
+      "click .stop.achievements": "stopachievements",
+      "click .reset": "reset"
     },
 
     starttodos: function() {
@@ -26,6 +27,11 @@ define([
 
     stopachievements: function() {
       sandbox.publish( "stopachievements" )
+    },
+
+    reset: function() {
+      window.localStorage.clear()
+      sandbox.publish( "admin.reset" )
     }
 
   })

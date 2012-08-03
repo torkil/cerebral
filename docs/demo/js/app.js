@@ -8,8 +8,6 @@ require([
 function( core, Backbone, BackboneLocalStorage, $ ) {
   
 
-  window.localStorage.clear()
-
   BackboneLocalStorage( Backbone )
 
   core.configure({

@@ -5,6 +5,13 @@ define([
 ], 
 function( sandbox, Todos, TodosView ){
 
+  function resetTodos( todos ) {
+    todos.reset([])
+    _.each(window.bootstrap.todos, function( todo ) {
+      todos.create( todo )  
+    })
+  }
+
   return {
 
     main: function() {
@@ -19,22 +26,28 @@ function( sandbox, Todos, TodosView ){
         todos.fetch()
       }
 
-      this.moduleView = new TodosView({
+      var moduleView = new TodosView({
         collection: todos
       })
 
-      this.moduleView.render()
+      sandbox.subscribe( "admin.reset", function() {
+        window.localStorage.clear()
+        resetTodos( todos )
+        moduleView.render()
+      })
+
+      moduleView.render()
       
-      sandbox.element.append( this.moduleView.el )
+      sandbox.element.append( moduleView.el )
 
     },
 
     destruct: function( done ) {
-
+      
       sandbox.element
         .find('#wrapper')
         .fadeOut( 300, done )
-        
+
     }
 
   }
