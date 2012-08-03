@@ -189,12 +189,57 @@
       </code>
     </pre>
 
+    <p>
+      We allso have to add some mock data for the app to work. We will attach this directly to the global namespace under namespace bootstrap
+      so its easy to reach for our modules.
+    </p>
+
+    <pre>
+      <code data-language="json">
+  window.bootstrap = {}
+
+  window.bootstrap.todos = [
+    {
+      description: "Open app",
+      completed: true
+    },
+    {
+      description: "Complete this, while beeing a boss is optional.",
+      completed: false
+    }
+  ]
+
+  window.bootstrap.achievements = [
+    {
+      tag: "firsttodo",
+      description: "Create your first todo",
+      completed: false
+    },
+    {
+      tag: "firstcomplete",
+      description: "Complete your first todo",
+      completed: false
+    },
+    {
+      tag: "removetodo",
+      description: "Remove your first todo",
+      completed: false
+    },
+    {
+      tag: "threetodos",
+      description: "Create three todos",
+      completed: false
+    }
+  ]
+      </code>
+    </pre>
 
     <h3>app.js</h4>
 
     <p>
       Now its time to get our hands dirty and code the main application file, app.js. We will configure it to know where to look for 
-      its modules and then start them up.
+      its modules and then start them up. Since they are manipulating the DOM we tell them to wait for the DOM to be ready, this is default behaviour
+      but we include it for clarity.
     </p>
 
     <pre>
@@ -209,27 +254,134 @@
       moduleRoot: 'app/modules/'
     })
 
-    $(document).ready(function() {
+    core.start("todos", {
+      element: "#todos",
+      onDomReady: true
+    })
 
-      core.start("todos", {
-        element: "#todos"
-      })
-
-      core.start("achievements", {
-        element: "#achievements"
-      })
-
+    core.start("achievements", {
+      element: "#achievements",
+      onDomReady: true
     })
 
   })
       </code>
     </pre>
 
-    <h3>Module: todos</h3>
+    <h3>todos / main.js</h3>
 
     <p>
-      This module is located
+      When the core was told to start the module `todos` it automaticaly looked for a main.js file directly under the modules namespace(directory).
+      Loaded it and checked if it either returned a function or an object(can allso be a function) that contained a main method and tries to invoke it.
+      <br/><br/>
+      Lets look at the code:
     </p>
+
+    <pre>
+      <code data-language="js">
+  define([
+    "todos/sandbox",
+    "./collections/Todos",
+    "./views/Todos"
+  ], 
+  function( sandbox, Todos, TodosView ){
+    
+    return function main() {
+
+      var todos = new Todos()
+
+      todos.reset( window.bootstrap.todos )
+
+      var moduleView = new TodosView({
+        el: sandbox.element,
+        collection: todos
+      })
+
+      moduleView.render()
+
+    }
+
+  })
+      </code>
+    </pre>
+
+    <p>
+      The main function does a couple of interesting things:
+      <ul>
+        <li>Fetches its sandbox. more details on the sandbox later.</li>
+        <li>Creates a new Todos collection and resets it with the bootstrap data</li>
+        <li>Creates a new TodosView and passes it the element the module has been assigned.</li>
+        <li>Renders the view to the DOM.</li>
+      </ul>
+    </p>
+
+
+    <h3>achievements / main.js</h3>
+
+    <p>
+      The achievments module is concerned with two things:
+
+      <ul>
+        <li>Keeping track of the achievments by subscribing to events elswhere in the application(todos).</li>
+        <li>and updating the achievments view anytime the user completes an achievement.</li>
+      </ul>
+
+      <br/><br/>
+      Lets look at the code:
+    </p>
+
+    <pre>
+      <code data-language="js">
+  define([
+    "achievements/sandbox",
+    "./collections/Achievements",
+    "./views/Achievements"
+  ], 
+  function( sandbox, Achievements, AchievementsView ){
+    
+    return function main() {
+
+      var achievements = new Achievements()
+
+      achievements.reset( window.bootstrap.achievements  )
+
+      var stats = {
+        nrOfTodosAdded: 0
+      }
+
+      sandbox.subscribe("todos.add", function() {
+        stats.nrOfTodosAdded++
+        if( stats.nrOfTodosAdded === 1 ) {
+          achievements.complete({ tag: "firsttodo" })
+        }
+        if( stats.nrOfTodosAdded === 3 ) {
+          achievements.complete({ tag: "threetodos" })
+        }
+      })
+
+      sandbox.subscribe("todos.remove", function() {
+        achievements.complete({ tag: "removetodo" })
+
+        sandbox.unsubscribe("todos.remove")
+      })
+
+      sandbox.subscribe("todos.modelChange", function( model, changes ) {
+        if( model.get('completed') )
+          achievements.complete({ tag: "firstcomplete" })
+      })
+
+      var moduleView = new AchievementsView({
+        el: sandbox.element,
+        collection: achievements
+      })
+
+      moduleView.render()
+
+    }
+
+  })
+      </code>
+    </pre>
 
   </section>
 

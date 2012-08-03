@@ -155,6 +155,18 @@ div#hero #highlights ul.features li.feature p {
   margin-bottom: 15px;
 }
 
+#content.guide ul {
+  color: #525252;
+  padding-left: 20px;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  line-height: 28px;
+}
+
+#content.guide ul li {
+  margin: 10px 0px;
+}
+
 
 #content.guide .dir-layout {
   line-height: 22px;
