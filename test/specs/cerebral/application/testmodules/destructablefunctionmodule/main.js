@@ -1,6 +1,6 @@
 
 define([
-  'sandbox'
+  'destructablefunctionmodule/sandbox'
 ], 
 function( sandbox, InputModel, InputView, ButtonView ) {
   

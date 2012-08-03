@@ -1,5 +1,5 @@
 define([
-  'sandbox',
+  'calculatordisplay/sandbox',
   './models/Display',
   './views/Display'
 ], 

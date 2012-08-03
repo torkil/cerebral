@@ -1,5 +1,5 @@
 define([
-  'sandbox',
+  'calculatorinput/sandbox',
   './models/Input',
   './views/Input',
   './views/Button'

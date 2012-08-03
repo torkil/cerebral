@@ -1,5 +1,5 @@
 define([
-  'sandbox',
+  'calculatordisplay/sandbox',
   'cerebral/mvc/Model'
 ], 
 function( sandbox, Model ) {
