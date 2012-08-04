@@ -98,7 +98,7 @@ function( underscore, $ ){
     @param options.element The DOM element the sandbox has access to
     @returns {Object} sandbox
   */
-  sandboxfactory.create = function(options ) {
+  sandboxfactory.create = function( options ) {
     var proto, sandbox, element
 
     proto = _.clone( properties )

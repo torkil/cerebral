@@ -225,6 +225,8 @@ function( _, $, Module, sandboxfactory ){
 
     }
 
+    sandboxfactory.delegateCoreApi( core.api.public )
+
     module = new Module({
       root: this.configuration.moduleRoot,
       name: options.name,
@@ -233,22 +235,16 @@ function( _, $, Module, sandboxfactory ){
     
     modules[ module.name ] = module
 
-    sandboxfactory.delegateCoreApi( core.api.public )
-
     sandbox = sandboxfactory.create({
       module: module,
       element: options.element
     })
 
-    if( !require.defined(module.sandboxPath) ) {
-
-      define(
-        module.sandboxPath,[
-        ],
-        sandbox
-      )
-
-    }
+    define(
+      module.sandboxPath,[
+      ],
+      sandbox
+    )
 
     require([ module.mainPath ], 
       function( definition ) {

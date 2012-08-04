@@ -12,7 +12,8 @@ ul {
 
 #app {
   width: 1080px;
-  margin: 200px auto 0px auto;
+  margin: 120px auto 0px auto;
+  padding: 20px;
 }
 
 #todos {
@@ -129,7 +130,7 @@ ul {
 
 
 #admin {
-  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 #admin .buttons {
