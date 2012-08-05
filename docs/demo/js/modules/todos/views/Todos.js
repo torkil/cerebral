@@ -61,6 +61,10 @@ define([
 
         this.$el.find(".new-todo").val('')
       }
+    },
+
+    hide: function( callback ) {
+      this.$el.fadeOut( 300, callback )
     }
 
   })

@@ -34,6 +34,10 @@ function( sandbox, View, AchievementView ){
 
       }, this)
 
+    },
+
+    hide: function( callback ) {
+      this.$el.fadeOut( 300, callback )
     }
 
   })

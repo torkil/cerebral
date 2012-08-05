@@ -14,42 +14,40 @@ function( sandbox, Todos, TodosView ){
     })
   }
 
-  return {
+  var moduleView
 
-    main: function() {
+  function main() {
       
-      var todos = new Todos()
+    var todos = new Todos()
 
-      if( !window.localStorage.todos ) {
-        resetTodos( todos )
-      } else {
-        todos.fetch()
-      }
-
-      var moduleView = new TodosView({
-        collection: todos
-      })
-
-      sandbox.subscribe( "admin.reset", function() {
-        window.localStorage.clear()
-        resetTodos( todos )
-        moduleView.render()
-      })
-
-      moduleView.render()
-      
-      sandbox.element.append( moduleView.el )
-
-    },
-
-    destruct: function( done ) {
-      
-      sandbox.element
-        .find('#wrapper')
-        .fadeOut( 300, done )
-
+    if( !window.localStorage.todos ) {
+      resetTodos( todos )
+    } else {
+      todos.fetch()
     }
 
+    moduleView = new TodosView({
+      collection: todos
+    })
+
+    sandbox.subscribe( "admin.reset", function() {
+      window.localStorage.clear()
+      resetTodos( todos )
+      moduleView.render()
+    })
+
+    moduleView.render()
+    
+    sandbox.element.append( moduleView.el )
+
   }
+
+  function destruct( done ) {
+    
+    moduleView.hide( done )
+
+  }
+
+  return { main: main, destruct: destruct }
 
 })
