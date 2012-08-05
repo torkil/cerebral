@@ -7,15 +7,16 @@ function( sandbox, Achievements, AchievementsView ){
   
   var stats, moduleView
 
-  stats = {
-    nrOfTodosAdded: function( val ) {
-      if( val ) {
-        return localStorage.setItem( 'nrOfTodosAdded', val )
-      } else {
-        return parseFloat( localStorage.getItem( 'nrOfTodosAdded' ) ) || 0
-      }
+  stats = { todos:{} }
+
+  Object.defineProperty(stats.todos, "added", {
+    get: function() {
+      return parseFloat( localStorage.getItem('stats.todos.added') ) || 0
+    },
+    set: function( value ) {
+      return localStorage.setItem( 'stats.todos.added', value )
     }
-  }
+  })
 
   function resetAchievements( achievements ) {
     achievements.reset([])
@@ -36,11 +37,11 @@ function( sandbox, Achievements, AchievementsView ){
     }
 
     function onTodoAdd() {
-      stats.nrOfTodosAdded( stats.nrOfTodosAdded() + 1 )
-      if( stats.nrOfTodosAdded() === 1 ) {
+      stats.todos.added++
+      if( stats.todos.added === 1 ) {
         achievements.complete({ tag: "firsttodo" })
       }
-      if( stats.nrOfTodosAdded() >= 3 ) {
+      if( stats.todos.added >= 3 ) {
         achievements.complete({ tag: "threetodos" })
       }
     }
