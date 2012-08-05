@@ -179,6 +179,7 @@
           },
           paths: {
             "backbone": "cerebral/vendor/backbone",
+            "backboneLocalStorage": "docs/demo/js/ext/Backbone.LocalStorage",
             "underscore": "cerebral/vendor/underscore",
             "jquery": "cerebral/vendor/jquery",
             "app": "docs/demo/js"
@@ -290,7 +291,7 @@
 
       var todos = new Todos()
 
-      todos.reset( window.bootstrap.todos )
+      todos.fetch()
 
       var moduleView = new TodosView({
         el: sandbox.element,
@@ -309,7 +310,7 @@
       The main function does a couple of interesting things:
       <ul>
         <li>Fetches its sandbox. more details on the sandbox later.</li>
-        <li>Creates a new Todos collection and resets it with the bootstrap data</li>
+        <li>Creates a new Todos collection and fetches its content.</li>
         <li>Creates a new TodosView and passes it the element the module has been assigned.</li>
         <li>Renders the view to the DOM.</li>
       </ul>
