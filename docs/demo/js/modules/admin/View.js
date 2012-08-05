@@ -14,19 +14,19 @@ define([
     },
 
     starttodos: function() {
-      sandbox.publish( "starttodos" )
+      sandbox.publish( "admin.starttodos" )
     },
 
     stoptodos: function() {
-      sandbox.publish( "stoptodos" )
+      sandbox.publish( "admin.stoptodos" )
     },
 
     startachievements: function() {
-      sandbox.publish( "startachievements" )
+      sandbox.publish( "admin.startachievements" )
     },
 
     stopachievements: function() {
-      sandbox.publish( "stopachievements" )
+      sandbox.publish( "admin.stopachievements" )
     },
 
     reset: function() {
