@@ -8,6 +8,8 @@
   src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRbO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
 }
 
+@import url(http://fonts.googleapis.com/css?family=Maven+Pro);
+
 * {
   margin: 0px;
   padding: 0px;
@@ -73,18 +75,80 @@ section#content {
 /*  HOME  */
 
 div#hero #in-yo-face {
-  width: 380px;
+  width: 680px;
   margin-right: 100px;
   margin-bottom: 60px;
 }
 
+div#hero #in-yo-face .logo {
+  max-width: 385px;
+  display: inline-block;
+}
 
-div#hero #in-yo-face h2 {
+div#hero #in-yo-face .logo h1 {
+  
+}
+
+div#hero #in-yo-face .logo h2 {
+  width: 385px;
   font-size: 24px;
   font-weight: lighter;
   line-height: 36px;
   color: #78717A;
   font-family: 'Open Sans';
+}
+
+div#hero #in-yo-face .download {
+  vertical-align: top;
+  display: inline-block;
+  margin-left: 50px;
+  margin-top: 40px;
+}
+
+div#hero #in-yo-face .download .button {
+  padding: 10px 14px;
+  border: 1px solid #78667D;
+  border-radius: 5px;
+  font-family: "Maven Pro", sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  color: whitesmoke;
+  line-height: 16px;
+  box-shadow: 1px 1px 3px 0px #B3B3B3, inset 0px 1px 1px 0px rgba(255,255,255, 0.4);
+  background-color: #827785;
+  text-shadow: 1px 1px 1px rgba(255,255,255, 0.2);
+  -webkit-transition: -webkit-transform 0.05s, box-shadow 0.05s;
+  -moz-transition: -moz-transform 0.05s, box-shadow 0.05s;
+  -o-transition: -o-transform 0.05s, box-shadow 0.05s;
+  -ms-transition: -ms-transform 0.05s, box-shadow 0.05s;
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+
+div#hero #in-yo-face .download .button:active {
+  box-shadow: 0px 0px 3px 0px #B3B3B3, inset 0px 1px 1px 0px rgba(255,255,255, 0.2);
+  -webkit-transform: translate(1px, 1px);
+  -moz-transform: translate(1px, 1px);
+  -o-transform: translate(1px, 1px);
+  -ms-transform: translate(1px, 1px);
+  transform: translate(1px, 1px);
+}
+
+div#hero #in-yo-face .download .alternatives {
+  margin-top: 5px;
+  font-size: 11px;
+  text-align: center;
+}
+
+div#hero #in-yo-face .download .alternatives .size {
+  border-right: 1px solid #DEDEDE;
+  padding-right: 5px;
+  color: #8A8A8A;
+}
+
+div#hero #in-yo-face .download .alternatives .dev {
+  color: #DE9849;
+  padding-left: 5px;
+  font-weight: bold;
 }
 
 div#hero #highlights {
@@ -207,7 +271,36 @@ div#hero #highlights ul.features li.feature p {
   font-style: italic;
 }
 
-
-
-
 /*  GUIDE  */
+
+
+
+footer {
+  position: absolute;
+  width: 100%;
+  background: white;
+  color: #616161;
+  font-size: 12px;
+  padding: 15px 0px 15px 0px;
+}
+
+footer.index {
+  bottom: 0px;
+}
+
+footer .credits {
+  width: 400px;
+  text-align: center;
+  margin: 0px auto 0px auto;
+  line-height: 30px;
+}
+
+footer .credits .gorillatron {
+  color: #D13F17;
+  font-family: "Capriola";
+}
+
+footer .credits .wtw img {
+  margin-bottom: -2px;
+  margin-left: 6px;
+}
