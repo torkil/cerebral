@@ -1,32 +1,34 @@
 
 /**
-  Mixin for extending Backbone.Events and Backbone.Model|Collection|View|Router.prototype
-  @exports Events
+  Factory that creates Events object for extending Backbone.Events and Backbone.Model|Collection|View|Router.prototype
+  @exports EventsFactory
 */
 define(
 "cerebral/ext/Backbone/Events", [
+  "underscore"
 ],
-function() {
+function( _ ) {
   
   var Events
 
   Events = {}
 
-  Events.bindings = []
-
   /**
     Alias trigger as emit
     @public
     @type Function
+    @returns {Mixed} self
   */
   Events.emit = function() {
     this.trigger.apply( this, arguments )
+    return this
   }
 
   /**
     Alias on as addEventListener
     @public
     @type Function
+    @returns {Mixed} self
   */
   Events.addEventListener = function() {
     this.on.apply( this, arguments )
@@ -36,6 +38,7 @@ function() {
     Alias off as removeEventListener
     @public
     @type Function
+    @returns {Mixed} self
   */
   Events.removeEventListener = function() {
     this.off.apply( this, arguments )
@@ -48,6 +51,7 @@ function() {
     @param {String} event The event to bind to
     @param {Function} callback The callback to bind
     @param {Object} context The context, this value of the callback
+    @returns {Mixed} self
   */
   Events.once = function( event, callback, context ) {
     var fn
@@ -67,6 +71,7 @@ function() {
     @param {Object} obj The object to unbind from
     @param {String} [event] The event to unbind events from
     @param {Function} [callback] The callback to unbind
+    @returns {Mixed} self
   */
   Events.unbindFrom = function( obj, event, callback ) {
     if( arguments.length === 3 )
@@ -83,12 +88,15 @@ function() {
     Unbinds all listeners
     @public
     @type Function
+    @returns {Mixed} self
   */
   Events.unbindAll = function() {
-    _.each(this.bindings, function( binding ) {
-      binding.obj.unbind( binding.event, binding.callback )
-    })
+    var i, binding
 
+    for ( i = this.bindings.length - 1; i >= 0; i-- ) {
+      binding = this.bindings[i]
+      binding.obj.unbind( binding.event, binding.callback )
+    }
     this.bindings = []
 
     return this
@@ -154,6 +162,7 @@ function() {
     }, this)
   }
 
+
   /**
     Binds a callback to be called when the given event fires on the given object
     @public
@@ -161,11 +170,13 @@ function() {
     @param {Object} obj The object to bind to
     @param {String} event The event to listen to
     @param {Function} callback The callback to fire when the event emits on the object
-    @returns {cerebral/mvc/View} self
+    @returns {Mixed} self
   */
   Events.bindTo = function( obj, event, callback, context ) {
-    obj.bind( event, callback, context || this )
+    if( !this.bindings )
+      this.bindings = []
 
+    obj.bind( event, callback, context || this )
     this.bindings.push({
       obj: obj,
       event: event,
@@ -182,7 +193,7 @@ function() {
     @param {Object} obj The object to bind to
     @param {String} event The event to listen to
     @param {Function} callback The callback to fire when the event emits on the object
-    @returns {cerebral/mvc/View} self
+    @returns {Mixed} self
   */
   Events.bindToOnce = function( obj, event, callback, context ) {
     var self, _callback
@@ -193,12 +204,11 @@ function() {
       self.unbindFrom( obj, event, _callback )
     }
 
-    obj.bind( event, _callback, context || this )
-    this.bindings.push({
-      obj: obj,
-      event: event,
-      callback: _callback
-    })
+    if( !this.bindings )
+      this.bindings = []
+
+    this.bindTo( obj, event, _callback, context )
+
     return this
   }
 
