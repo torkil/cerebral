@@ -1,11 +1,12 @@
 define([
   "achievements/sandbox",
+  "./models/Achievement",
   "./collections/Achievements",
   "./views/Achievements"
 ], 
-function( sandbox, Achievements, AchievementsView ){
+function( sandbox, Achievement ,Achievements, AchievementsView ){
   
-  var stats, moduleView
+  var stats, moduleView, achievements
 
   stats = { todos:{} }
 
@@ -20,15 +21,18 @@ function( sandbox, Achievements, AchievementsView ){
 
   function resetAchievements( achievements ) {
     achievements.reset([])
-    _.each(window.bootstrap.achievements, function( achievement ) {
-      achievements.create( achievement )  
+    stats.todos.added = 0
+    _.each(window.bootstrap.achievements, function( attrs ) {
+      var achievement = new Achievement( attrs )
+      achievements.add( achievement, {silent: true} ) 
+      achievements.invoke('save')
     })
   }
 
 
   function main() {
 
-    var achievements = new Achievements()
+    achievements = new Achievements()
 
     if( !window.localStorage.achievements ) {
       resetAchievements( achievements )
@@ -56,7 +60,7 @@ function( sandbox, Achievements, AchievementsView ){
         achievements.complete({ tag: "firstcomplete" })
     }
 
-    function onLocalStorageClear() {
+    function onReset() {
       window.localStorage.clear()
       resetAchievements( achievements )
       moduleView.render()
@@ -65,7 +69,7 @@ function( sandbox, Achievements, AchievementsView ){
     sandbox.subscribe( "todos.add", onTodoAdd )
     sandbox.subscribe( "todos.remove", onTodoRemove )
     sandbox.subscribe( "todos.modelChange", onModelChange )
-    sandbox.subscribe( "admin.reset", onLocalStorageClear )
+    sandbox.subscribe( "admin.reset", onReset )
 
     moduleView = new AchievementsView({
       collection: achievements
@@ -79,7 +83,13 @@ function( sandbox, Achievements, AchievementsView ){
 
   function destruct( done ) {
     
-    moduleView.hide( done )
+    moduleView.hide(function() {
+
+      achievements.unbindAll()
+      moduleView.dispose()
+
+      done()
+    })
       
   }
   

@@ -14,11 +14,11 @@ function( sandbox, Todos, TodosView ){
     })
   }
 
-  var moduleView
+  var moduleView, todos
 
   function main() {
       
-    var todos = new Todos()
+    todos = new Todos()
 
     if( !window.localStorage.todos ) {
       resetTodos( todos )
@@ -44,7 +44,13 @@ function( sandbox, Todos, TodosView ){
 
   function destruct( done ) {
     
-    moduleView.hide( done )
+    moduleView.hide(function() {
+
+      todos.unbindAll()
+      moduleView.dispose()
+      
+      done()
+    })
 
   }
 
