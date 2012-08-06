@@ -3,6 +3,7 @@ define([
 ], 
 function( Backbone ) {  
 
+  
   describe("cerebral/ext/Backbone/Events", function() {
 
     describe("Backbone.Events.bindTo", function() {
@@ -148,24 +149,67 @@ function( Backbone ) {
 
     describe("Backbone.Events.unbindAll", function() {
 
+      var binderA, binderB, objA, objB 
+
+      beforeEach(function() {
+        binderA = Object.create( Backbone.Events )
+        binderB = Object.create( Backbone.Events )
+        objA = Object.create( Backbone.Events )
+        objB = Object.create( Backbone.Events )
+      })
+
       it("should remove all bound listeners", function() {
-        var binder = Object.create( Backbone.Events ),
-          obj = Object.create( Backbone.Events ),
-          nrOfChangeFired = 0,
-          nrOfUpdateFired = 0
-        binder.bindTo(obj, "change", function() { nrOfChangeFired++ })
-        binder.bindTo(obj, "update", function() { nrOfUpdateFired++ })
-        expect(nrOfChangeFired).to.equal(0)
-        expect(nrOfUpdateFired).to.equal(0)
-        obj.trigger("change")
-        obj.trigger("update")
-        expect(nrOfChangeFired).to.equal(1)
-        expect(nrOfUpdateFired).to.equal(1)
-        binder.unbindAll()
-        obj.trigger("change")
-        obj.trigger("update")
-        expect(nrOfChangeFired).to.equal(1)
-        expect(nrOfUpdateFired).to.equal(1)
+        
+        var nrOfChangeFired = 0
+        var nrOfUpdateFired = 0
+
+        binderA.bindTo(objA, "change", function() { nrOfChangeFired++ })
+        binderA.bindTo(objA, "update", function() { nrOfUpdateFired++ })
+
+        expect( nrOfChangeFired ).to.equal( 0 )
+        expect( nrOfUpdateFired ).to.equal( 0 )
+
+        objA.trigger( "change" )
+        objA.trigger( "update" )
+
+        expect(nrOfChangeFired).to.equal( 1 )
+        expect(nrOfUpdateFired).to.equal( 1 )
+
+        binderA.unbindAll()
+
+        objA.trigger( "change" )
+        objA.trigger( "update" )
+
+        expect(nrOfChangeFired).to.equal( 1 )
+        expect(nrOfUpdateFired).to.equal( 1 )
+
+      })
+
+      it("should not unbind events for other listeners than the object calling unbindAll", function() {
+
+        var a = 0,
+            b = 0
+
+        function listenerA() { a++ }
+        function listenerB() { b++ }
+
+        binderA.bindTo( objA, "change", listenerA )
+        binderB.bindTo( objB, "change", listenerB )
+
+        objA.emit( "change" ) 
+        objB.emit( "change" ) 
+
+        expect( a ).to.equal( 1 )
+        expect( b ).to.equal( 1 )
+
+        binderA.unbindAll()
+
+        objA.emit( "change" ) 
+        objB.emit( "change" ) 
+
+        expect( a ).to.equal( 1 )
+        expect( b ).to.equal( 2 )
+
       })
 
     })
