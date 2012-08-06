@@ -20,6 +20,9 @@ function( _, Backbone ) {
   */
   var Model = Backbone.Model.extend({
     constructor: function() {
+
+      this.bindings = []
+
       Backbone.Model.prototype.constructor.apply( this, arguments )
     }
   })

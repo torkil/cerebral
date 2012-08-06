@@ -22,8 +22,11 @@ function( _,Backbone, ViewCollection ) {
   */
   var View = Backbone.View.extend({
     constructor: function() {
-      Backbone.View.prototype.constructor.apply( this, arguments )
+
       this.subviews = new ViewCollection()
+      this.bindings = []
+
+      Backbone.View.prototype.constructor.apply( this, arguments )
     }
   })
 
@@ -48,12 +51,13 @@ function( _,Backbone, ViewCollection ) {
     @type Function
   */
   View.prototype.dispose = function() {
-    this.trigger('dispose', this)
+    this.trigger( 'dispose', this )
     this.subviews.invoke( 'dispose' )
+    this.subviews.detachAll()
     this.unbindAll()
     this.unbind()
     this.remove()
-
+    delete this.el
     return this
   }
   

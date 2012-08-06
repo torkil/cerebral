@@ -17,7 +17,14 @@ function( Backbone ) {
     @public
     @constructor
   */
-  var Collection = Backbone.Collection.extend({})
+  var Collection = Backbone.Collection.extend({
+    constructor: function() {
+
+      this.bindings = []
+      
+      Backbone.Collection.prototype.constructor.apply( this, arguments )
+    }
+  })
 
   return Collection
 })
