@@ -40,6 +40,16 @@ function( _, $, Module, sandboxfactory ){
   channels = {}
 
   /**
+    Get the the channels. Meant for testing and debugging only.
+    @public
+    @type Function
+    @returns {Object} channels
+  */
+  core.__getChannels = function() {
+    return channels
+  }
+
+  /**
     Holds all loaded modules
     @private
     @type Object
@@ -116,7 +126,7 @@ function( _, $, Module, sandboxfactory ){
     @param {Object} context The context of the callback. The callback will have this paramter as its this value
     @returns {cerebral/core} core
   */
-  core.subscribe = function( channel, callback, context ) {
+  core.subscribe = function( channel, callback, context, listener ) {
     if( typeof channel !== 'string' ) {
       throw new TypeError( 'channel must be string' ) 
     }
@@ -128,17 +138,16 @@ function( _, $, Module, sandboxfactory ){
       channels[ channel ] = [] 
     }
 
+    context = context || {}
+    listener = listener || null
+
     channels[ channel ].push({
       callback: callback,
-      context: context || {}
+      context: context,
+      listener: listener
     })
 
     return core
-  }
-
-  core.resubscribe = function( channel, callback, context ) {
-    core.unsubscribe( channel, callback )
-    core.subscribe( channel, callback, context )
   }
 
   /**
@@ -149,24 +158,35 @@ function( _, $, Module, sandboxfactory ){
     @param {Function} callback The callback to unbind
     @returns {cerebral/core} core
   */
-  core.unsubscribe = function( channel, callback ) {
-    var listeners, index, listener
+  core.unsubscribe = function( channel, callback, listener ) {
+    var subscriptions, index, subscription
 
     if( typeof channel !== 'string' ) {
       throw new TypeError( 'channel must be string' ) 
     }
 
-    listeners = channels[ channel ]
-    if( !listeners || !listeners.length ) {
+    subscriptions = channels[ channel ]
+    if( !subscriptions || !subscriptions.length ) {
       return null
     }
 
-    for( index = 0; index < listeners.length; index++ ) {
-      listener = listeners[ index ] 
-      if( listener.callback === callback ) {
-        listeners.splice( index, 1 )
+    for( index = 0; index < subscriptions.length; index++ ) {
+      subscription = subscriptions[ index ] 
+      
+      if( typeof callback === 'function' && typeof listener !== 'undefined' ) {
+        if( subscription.callback === callback && subscription.listener === listener ) {
+          subscriptions.splice( index, 1 )  
+        }
+      } else if( callback && subscription.callback === callback ) {
+        subscriptions.splice( index, 1 )
+      } else if( listener && subscription.listener === listener ) {
+        subscriptions.splice( index, 1 )
       }
+
     }
+
+    if( subscriptions.length === 0 )
+      delete channels[ channel ]
 
     return core
   }
@@ -206,7 +226,7 @@ function( _, $, Module, sandboxfactory ){
   core.modulesIsLoaded = function( modulename ) {
     return ( modulename in modules )
   }
-
+  
   /**
     Require a module from the moduleRoot namespace, will automagicaly look for the main.js within the modulename folder.
     @public
@@ -217,7 +237,6 @@ function( _, $, Module, sandboxfactory ){
   */
   core.loadModule = function( options, callback ) {
     var module, sandbox
-
     if( core.modulesIsLoaded(options.name) ) {
 
       module = modules[ options.name ]
@@ -248,26 +267,20 @@ function( _, $, Module, sandboxfactory ){
 
     require([ module.mainPath ], 
       function( definition ) {
-        if( !definition ) {
+        var exception
 
-          core.unloadModule( module.name )
-          return callback( Error('The definition did not return') )
-
-        }
-        if( typeof definition === 'function' || (typeof definition === 'object' && typeof definition.main === 'function') ) {
-
+        try {
           module.loadDefinition( definition )
-          callback( null, module )
-
-        } else {
-
-          core.unloadModule( module.name )
-          callback( TypeError('Module must be a main function or Object containing main method') ) 
-
+        } catch( e ) {
+          exception = e
+          return callback( exception )
         }
+
+        callback( null, module )  
+        
       },
       function( error ) {
-
+        
         core.unloadModule( module.name )
         callback( error )
         
@@ -350,9 +363,15 @@ function( _, $, Module, sandboxfactory ){
       try {
 
         if( options.onDomReady ) {
-          $(document).ready( module.main )
+          $(document).ready(function() {
+
+            module.main()
+
+          })
         } else {
+
           module.main()
+
         }
 
       } catch( e ) { 
@@ -376,14 +395,10 @@ function( _, $, Module, sandboxfactory ){
       return core
 
     module = modules[ modulename ]
-
-    if( typeof module.destruct === 'function' ) {
-      module.destruct(function() {
-        core.unloadModule( modulename )
-      })
-    } else {
+    
+    module.destruct(function() {
       core.unloadModule( modulename )
-    }
+    })
 
     return core
   }
