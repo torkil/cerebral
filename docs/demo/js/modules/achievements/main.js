@@ -21,12 +21,38 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
 
   function resetAchievements( achievements ) {
     achievements.reset([])
-    stats.todos.added = 0
     _.each(window.bootstrap.achievements, function( attrs ) {
       var achievement = new Achievement( attrs )
       achievements.add( achievement, {silent: true} ) 
       achievements.invoke('save')
     })
+    stats.todos.added = 0
+  }
+
+  function onTodoAdd() {
+    stats.todos.added++
+    if( stats.todos.added === 1 ) {
+      achievements.complete({ tag: "firsttodo" })
+    }
+    if( stats.todos.added >= 3 ) {
+      achievements.complete({ tag: "threetodos" })
+    }
+  }
+
+  function onTodoRemove() {
+    achievements.complete({ tag: "removetodo" })
+    sandbox.unsubscribe("todos.remove")
+  }
+
+  function onModelChange( model ) {
+    if( model.get('completed') )
+      achievements.complete({ tag: "firstcomplete" })
+  }
+
+  function onReset() {
+    window.localStorage.clear()
+    resetAchievements( achievements )
+    moduleView.render()
   }
 
 
@@ -38,32 +64,6 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
       resetAchievements( achievements )
     } else {
       achievements.fetch()
-    }
-
-    function onTodoAdd() {
-      stats.todos.added++
-      if( stats.todos.added === 1 ) {
-        achievements.complete({ tag: "firsttodo" })
-      }
-      if( stats.todos.added >= 3 ) {
-        achievements.complete({ tag: "threetodos" })
-      }
-    }
-
-    function onTodoRemove() {
-      achievements.complete({ tag: "removetodo" })
-      sandbox.unsubscribe("todos.remove")
-    }
-
-    function onModelChange( model ) {
-      if( model.get('completed') )
-        achievements.complete({ tag: "firstcomplete" })
-    }
-
-    function onReset() {
-      window.localStorage.clear()
-      resetAchievements( achievements )
-      moduleView.render()
     }
 
     sandbox.subscribe( "todos.add", onTodoAdd )
@@ -83,6 +83,11 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
 
   function destruct( done ) {
     
+    sandbox.unsubscribe( "todos.add", onTodoAdd )
+    sandbox.unsubscribe( "todos.remove", onTodoRemove )
+    sandbox.unsubscribe( "todos.modelChange", onModelChange )
+    sandbox.unsubscribe( "admin.reset", onReset )
+
     moduleView.hide(function() {
 
       achievements.unbindAll()
