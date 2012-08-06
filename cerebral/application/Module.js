@@ -52,26 +52,32 @@ function( $, _ ){
     @param {Function|Object} definition The definition of the module
   */
   Module.prototype.loadDefinition = function( definition ) {
-    var main, destruct
+    if( !definition ) {
+      throw new Error( 'The definition did not return' )
+    }
     if( typeof definition === 'function' ) {
-      main = definition
-    } else if( typeof definition === 'object' ) {
-      if( definition.main ) {
-        main = definition.main
-      } else {
-        throw new TypeError( "when definiton is object it must contain a main method/property" )
-      }
+      this.definition = definition
+    } else if( typeof definition === 'object' && typeof definition.main === 'function' ) {
+      this.definition = definition
     } else {
-      
-      throw new TypeError( "definition must be function or object" )
+      throw new TypeError( 'Module must be a main function or Object containing main method' ) 
     }
-    if( typeof definition.destruct === 'function' ) {
-      destruct = definition.destruct
-    } else if( typeof definition.destruct !== 'undefined' ) {
-      throw new TypeError( "definition.destruct must be function" )
+  }
+
+  Module.prototype.main = function() {
+    if( typeof this.definition === 'function' ) {
+      return this.definition()
+    } else if( typeof this.definition === 'object' && typeof this.definition.main === 'function' ) {
+      return this.definition.main()
+    } 
+  }
+
+  Module.prototype.destruct = function( callback ) {
+    if( typeof this.definition.destruct === 'function' ) {
+      this.definition.destruct( callback )
+    } else {
+      callback()
     }
-    this.main = main
-    this.destruct = destruct
   }
 
   return Module
