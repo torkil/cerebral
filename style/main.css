@@ -28,11 +28,38 @@ a {
 }
 
 header {
-  padding: 20px 30px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  padding: 20px 130px;
+  box-sizing: border-box;
+  -moz-transition: border-bottom 1s, box-shadow 1s, background-color 0.7s;
+  -o-transition: border-bottom 1s, box-shadow 1s, background-color 0.7s;
+  -ms-transition: border-bottom 1s, box-shadow 1s, background-color 0.7s;
+  -webkit-transition: border-bottom 1s, box-shadow 1s, background-color 0.7s;
+  transition: border-bottom 1s, box-shadow 1s, background-color 0.7s;
+}
+
+header.bordered {
+  background-color: rgba(255,255,255, 0.90);
+  border-bottom: 1px solid #F7F7F7;
+  box-shadow: 0px 0px 12px 1px rgba(10,10,10, 0.4);
+}
+
+header h1 {
+  display: inline-block;
+  font-size: 28px;
+}
+
+header nav {
+  display: inline-block;
+  position: absolute;
+  top: 30px;
+  right: 150px;
 }
 
 header nav ul {
-  list-style-type: none
+  list-style-type: none;
 }
 
 header nav ul li {
@@ -52,6 +79,10 @@ header nav ul li:hover {
   color: #8C7294;
 }
 
+header nav ul li.active {
+  color: #8C7294;
+}
+
 header nav ul li.end {
   border: none;
 }
@@ -61,7 +92,7 @@ section#content {
   padding: 0px 150px 0px 150px;
 }
 
-#content h1 {
+h1 {
   font-family: 'Duru Sans';
   font-size: 40px;
   margin-bottom: 10px;
@@ -251,6 +282,9 @@ div#hero #highlights ul.features li.feature p {
   margin: 10px 0px;
 }
 
+#content .tag {
+  color: #80688F;
+}
 
 #content.guide .dir-layout {
   line-height: 22px;
@@ -299,9 +333,10 @@ footer {
   position: absolute;
   width: 100%;
   background: white;
-  color: #616161;
+  color: #ADADAD;
   font-size: 12px;
-  padding: 15px 0px 15px 0px;
+  padding: 50px 0px;
+  margin-top: 40px;
 }
 
 footer.index {
@@ -310,8 +345,7 @@ footer.index {
 
 footer .credits {
   width: 400px;
-  text-align: center;
-  margin: 0px auto 0px auto;
+  margin: 0px 0px 0px 150px;
   line-height: 30px;
 }
 

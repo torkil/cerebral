@@ -6,6 +6,8 @@
   <link rel="stylesheet" type="text/css" href="style/main.css">
   <link rel="stylesheet" type="text/css" href="style/github-highlight.css">
 
+  
+
   <script type="text/javascript" src="./js/rainbow.js"></script>
   <script type="text/javascript" src="./js/languages/generic.js"></script>
   <script type="text/javascript" src="./js/languages/html.js"></script>
@@ -24,10 +26,30 @@
     })();
 
   </script>
+
+  <script type="text/javascript">
+    (function() {
+      var fadedIn
+      window.addEventListener("scroll", function() {
+        if(!fadedIn && window.pageYOffset > 50) {
+          var header = document.getElementsByTagName('header')[0]
+          header.className = 'bordered'
+          fadedIn = true
+        } else if( window.pageYOffset < 50 ) {
+          var header = document.getElementsByTagName('header')[0]
+          header.className = ''
+          fadedIn = false
+        }
+      })
+    })()
+    
+  </script>
+
 </head>
 <body>
 
   <header>
+    <h1>cerebral.js</h1>
     <nav>
       <ul>
         <li class="end"><a href="https://github.com/gorillatron/cerebral">github</a></li>
@@ -45,11 +67,15 @@
     <section id="preface">
       <h1>Requirements and dependencies</h1>
       <p>
-        Cerebral depends on and utelizes the following libraries; requirejs, backbone, underscore/lo-dash and jQuery. 
+        Cerebral depends on and utelizes the following libraries; 
+        <a class="tag" href="http://requirejs.org/">requirejs</a>, 
+        <a class="tag" href="http://backbonejs.org/">backbone</a>, 
+        <a class="tag" href="http://documentcloud.github.com/underscore/">underscore</a> or <a class="tag" href="http://lodash.com/">lo-dash</a> and 
+        <a class="tag" href="http://jquery.com/">jQuery</a>.
       </p>
       <p>
         For now these are requirements. In future development we will try to make it work with a more lightweight module loader like almond, 
-        and be DOM library agnostic so you can use zepto, ender or any other library if choice for DOM manipulation.
+        and be DOM library agnostic so you can use zepto, ender or any other library of choice for DOM manipulation.
       </p>
 
       <h3>Disclaimer</h3>
