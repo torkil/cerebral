@@ -73,11 +73,15 @@ section#content {
 }
 
 #content h3 {
-  color: #C9AF3A;
+  color: #5E5E5E;
+}
+
+#content h4 {
+  color: #5E5E5E;
 }
 
 #content p {
-  color: #525252;
+  color: #5E5E5E;
 }
 
 #hero {
@@ -208,14 +212,21 @@ div#hero #highlights ul.features li.feature p {
 }
 
 #content.guide h2 {
-  font-size: 20px;
+  font-size: 18px;
   margin-top: 100px;
   margin-bottom: 17px;
   margin-top: 40px;
 }
 
 #content.guide h3 {
-  font-size: 16px;
+  font-size: 14px;
+  margin-top: 100px;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide h4 {
+  font-size: 12px;
   margin-top: 100px;
   margin-bottom: 17px;
   margin-top: 40px;
