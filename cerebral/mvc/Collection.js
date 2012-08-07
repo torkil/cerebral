@@ -16,6 +16,7 @@ function( Backbone ) {
     Creates a new Collection
     @public
     @constructor
+    @property {Array} bindings Event bindings. Used by Backbone.View.prototype to handle events.
   */
   var Collection = Backbone.Collection.extend({
     constructor: function() {

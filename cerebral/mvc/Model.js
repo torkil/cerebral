@@ -17,6 +17,7 @@ function( _, Backbone ) {
     Creates a new Model
     @public
     @constructor
+    @property {Array} bindings Event bindings. Used by Backbone.View.prototype to handle events.
   */
   var Model = Backbone.Model.extend({
     constructor: function() {

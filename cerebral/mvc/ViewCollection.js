@@ -116,6 +116,7 @@ function( _, Backbone ) {
     @private
     @type Function
     @param {Backbone.View|cerebral/mvc/View} instance The view to detach
+    @return {Object} detachedView Name and the view itself
   */
   function detachByInstance( instance ) {
     var key, view
@@ -138,6 +139,7 @@ function( _, Backbone ) {
     @private
     @type Function
     @param {string} name The name or cid of the view
+    @return {Object} detachedView Name and the view itself
   */
   function detachByName( name ) {
     var view

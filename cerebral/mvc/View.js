@@ -19,6 +19,7 @@ function( _,Backbone, ViewCollection ) {
     @public
     @constructor
     @property {cerebral/mvc/ViewCollection} subviews
+    @property {Array} bindings Event bindings. Used by Backbone.View.prototype to handle events.
   */
   var View = Backbone.View.extend({
     constructor: function() {
@@ -51,12 +52,11 @@ function( _,Backbone, ViewCollection ) {
     @type Function
   */
   View.prototype.dispose = function() {
-    this.trigger( 'dispose', this )
+    this.unbindAll()
     this.subviews.invoke( 'dispose' )
     this.subviews.detachAll()
-    this.unbindAll()
-    this.unbind()
     this.remove()
+    this.trigger( 'dispose', this )
     delete this.el
     return this
   }
