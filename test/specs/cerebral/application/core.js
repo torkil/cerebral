@@ -1,7 +1,8 @@
 
  require([
-  "cerebral/application/core"
-], function( core ) {
+  "cerebral/application/core",
+  "cerebral/application/sandboxfactory"
+], function( core, sandboxfactory ) {
   
   window._core = core
 
@@ -425,9 +426,9 @@
 
           TESTDATA.calculatordisplay = {
             'reportSandbox': function( sandbox ) {
-              
+              console.log(sandbox);
               try {
-                expect( $('#inside-calculatordisplay').length ).to.equal( 1 )
+                expect( sandbox.$('#inside-calculatordisplay').length ).to.equal( 1 )
               } catch( e ) {
                 done( e )
               }
@@ -436,7 +437,7 @@
 
               setTimeout(function() {
                 try {
-                  expect( $('#inside-calculatordisplay').length ).to.equal( 0 )
+                  expect( sandbox.$('#inside-calculatordisplay').length ).to.equal( 0 )
                 } catch( e ) {
                   done( e )
                 }
@@ -447,7 +448,9 @@
           }
 
           core.start('calculatordisplay', {
-            element: '#calculatordisplay'
+            sandbox: {
+              element: '#calculatordisplay'
+            }
           })
 
         })
@@ -477,7 +480,9 @@
           }, 500)
 
           core.start('calculatordisplay', {
-            element: '#calculatordisplay'
+            sandbox: {
+              element: '#calculatordisplay'
+            }
           })
 
         })
@@ -514,11 +519,15 @@
           }
 
           core.start('calculatordisplay', {
-            element: '#calculatordisplay'
+            sandbox: {
+              element: '#calculatordisplay'
+            }
           })
 
           core.start('calculatorinput', {
-            element: '#calculatorinput'
+            sandbox: {
+              element: '#calculatorinput'
+            }
           })
 
         })
@@ -530,20 +539,25 @@
           nrOfReports = 0
 
           function check() {
+
             if(nrOfReports === 2) {
               if( displaySB && inputSB ) {
 
-                expect( displaySB !== inputSB ).to.equal( true )
-                expect( displaySB.$ && inputSB.$ ).to.be.ok()
+                try {
+                  expect( displaySB !== inputSB ).to.equal( true )
+                  expect( displaySB.$ && inputSB.$ ).to.be.ok()
+                  
+                  expect( displaySB.$('#inside-calculatordisplay').length ).to.equal( 1 )
+                  expect( inputSB.$('#inside-calculatorinput').length ).to.equal( 1 )
 
-                expect( displaySB.$('#inside-calculatordisplay').length ).to.equal( 1 )
-                expect( inputSB.$('#inside-calculatorinput').length ).to.equal( 1 )
+                  expect( inputSB.$('#inside-calculatordisplay').length ).to.equal( 0 )
+                  expect( displaySB.$('#inside-calculatorinput').length ).to.equal( 0 )
 
-                expect( inputSB.$('#inside-calculatordisplay').length ).to.equal( 0 )
-                expect( displaySB.$('#inside-calculatorinput').length ).to.equal( 0 )
-
-                expect( inputSB.$('body').length ).to.equal( 0 )
-                expect( displaySB.$('body').length ).to.equal( 0 )
+                  expect( inputSB.$('body').length ).to.equal( 0 )
+                  expect( displaySB.$('body').length ).to.equal( 0 )
+                } catch( e ) {
+                  done( e )
+                }
 
                 done()
               } else {
@@ -569,11 +583,15 @@
           }
 
           core.start('calculatordisplay', {
-            element: '#calculatordisplay'
+            sandbox: {
+              element: '#calculatordisplay'
+            }
           })
 
           core.start('calculatorinput', {
-            element: '#calculatorinput'
+            sandbox: {
+              element: '#calculatorinput'
+            }
           })
 
         })
@@ -594,12 +612,9 @@
 
                 expect( possibleCores.length ).to.equal( 4 )
 
-                _.forEach(possibleCores, function( possiblecore ) {
+                _.forEach(possibleCores, function( possiblecore, index ) {
                   if( possiblecore === core ) {
                     done( new Error('the sandbox has access to core') )
-                  }
-                  if( possiblecore === core.api.public ) {
-                    done( new Error('the sandbox has acces to core.api.public') )
                   }
                 })
 
@@ -611,7 +626,150 @@
           }
 
           core.start('calculatordisplay', {
-            element: '#calculatordisplay'
+            sandbox: {
+              element: '#calculatordisplay'
+            }
+          })
+
+        })
+
+
+        it("should not have access to other modules individual sandbox properties", function( done ) {
+
+          var displaySB, inputSB
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              displaySB = sandbox
+              check()
+            }
+          }
+
+          TESTDATA.calculatorinput = {
+            'reportSandbox': function( sandbox ) {
+              inputSB = sandbox
+              check()
+            }
+          }
+
+          function check() {
+            if( displaySB && inputSB ) {
+              
+              try {
+
+                expect( displaySB.num ).to.equal( 1 )
+                expect( inputSB.num ).to.equal( 2 )
+
+                expect( displaySB.displaySpecific() ).to.equal( 'display' )
+                expect( displaySB.inputspecific ).to.equal( undefined )
+
+                expect( inputSB.inputspecific() ).to.equal( 'input' )
+                expect( inputSB.displaySpecific ).to.equal( undefined )
+
+              } catch( e ) {
+                done( e )
+              }
+
+              done()
+            }
+          }
+
+          core.start('calculatordisplay', {
+            sandbox: {
+              element: '#calculatordisplay',
+              num: 1,
+              displaySpecific: function() {
+                return 'display'
+              }
+            }
+          })
+
+          core.start('calculatorinput', {
+            sandbox: {
+              element: '#calculatorinput',
+              num: 2,
+              inputspecific: function() {
+                return 'input'
+              }
+            }
+          })
+
+        })
+
+        it("should take a created sandbox straight from sandboxfactory.create as parameter", function( done ) {
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              
+              try {
+                expect( sandbox.report() ).to.equal( 'report' )
+              } catch( e ) {
+                done( e )
+              }
+
+              done()
+            }
+          }
+
+          core.start('calculatordisplay', {
+            sandbox: sandboxfactory.create({
+              element: '#calculatordisplay',
+              report: function() {
+                return 'report'
+              }
+            })
+          })
+
+        })
+
+        it("should be able to share sandbox if it is created be sandboxfactory beforehand", function( done ) {
+
+          var displaySB, inputSB, sharedSB
+
+          TESTDATA.calculatordisplay = {
+            'reportSandbox': function( sandbox ) {
+              displaySB = sandbox
+              check()
+            }
+          }
+
+          TESTDATA.calculatorinput = {
+            'reportSandbox': function( sandbox ) {
+              inputSB = sandbox
+              check()
+            }
+          }
+
+          function check() {
+            if( displaySB && inputSB ) {
+              
+              try {
+                
+                expect( displaySB === sharedSB ).to.equal( true )
+                expect( inputSB === sharedSB ).to.equal( true )
+
+                expect( displaySB.sharedMethod() + inputSB.sharedMethod() ).to.equal( "sharedshared" )
+
+              } catch( e ) {
+                done( e )
+              }
+
+              done()
+            }
+          }
+
+          sharedSB = sandboxfactory.create({
+            sharedMethod: function() {
+              return 'shared'
+            }
+          })
+
+          core.start('calculatordisplay', {
+            sandbox: sharedSB
+          })
+
+          core.start('calculatorinput', {
+            sandbox: sharedSB
           })
 
         })

@@ -20,8 +20,10 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
   })
 
   function resetAchievements( achievements ) {
+    window.localStorage.clear()
     achievements.reset([])
     _.each(window.bootstrap.achievements, function( attrs ) {
+      console.log(arguments[1]);
       var achievement = new Achievement( attrs )
       achievements.add( achievement, {silent: true} ) 
       achievements.invoke('save')
@@ -50,7 +52,6 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
   }
 
   function onReset() {
-    window.localStorage.clear()
     resetAchievements( achievements )
     moduleView.render()
   }

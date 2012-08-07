@@ -17,25 +17,37 @@ function( core, Backbone, BackboneLocalStorage, $ ) {
 
   /* Start modules */
   core.start("todos", {
-    element: "#todos",
+    onDomReady: true,
+    sandbox: {
+      element: "#todos"
+    }
   })
 
   core.start("achievements", {
-    element: "#achievements",
-    onDomReady: true
+    onDomReady: true,
+    sandbox: {
+      element: "#achievements"
+    }
   })
 
   core.start("admin", {
-    element: "#admin",
-    onDomReady: true
+    onDomReady: true,
+    sandbox: {
+      element: "#admin"
+    }
   })
 
   
   /* Subscripe to admin events */
   core.subscribe("admin.starttodos", function() { 
+
     core.start("todos", {
-      element: "#todos",
+      onDomReady: true,
+      sandbox: {
+        element: "#todos"
+      }
     })
+
   })
 
   core.subscribe("admin.stoptodos", function() { 
@@ -43,9 +55,14 @@ function( core, Backbone, BackboneLocalStorage, $ ) {
   })
 
   core.subscribe("admin.startachievements", function() { 
+    
     core.start("achievements", {
-      element: "#achievements"
-    }) 
+      onDomReady: true,
+      sandbox: {
+        element: "#achievements"
+      }
+    })
+    
   })
 
   core.subscribe("admin.stopachievements", function() { 
