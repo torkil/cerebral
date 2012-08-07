@@ -236,7 +236,7 @@ function( _, $, Module, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.loadModule = function( options, callback ) {
-    var module, sandbox
+    var module, sandboxAttributes, sandbox
     if( core.modulesIsLoaded(options.name) ) {
 
       module = modules[ options.name ]
@@ -244,20 +244,26 @@ function( _, $, Module, sandboxfactory ){
 
     }
 
-    sandboxfactory.delegateCoreApi( core.api.public )
-
     module = new Module({
       root: this.configuration.moduleRoot,
-      name: options.name,
-      element: options.element
+      name: options.name
     })
-    
+
     modules[ module.name ] = module
 
-    sandbox = sandboxfactory.create({
-      module: module,
-      element: options.element
-    })
+    sandboxfactory.delegateCoreApi( core.api.public )
+    
+    if( options.sandbox ) {
+      if( sandboxfactory.isSandbox(options.sandbox) ) {
+        sandbox = options.sandbox
+      } else {
+        sandbox = sandboxfactory.create( options.sandbox )
+      }
+    } else {
+      sandbox = sandboxfactory.create({ })
+    }
+
+    module.element = sandbox.element
 
     define(
       module.sandboxPath,[
@@ -352,7 +358,7 @@ function( _, $, Module, sandboxfactory ){
 
     core.loadModule({
       name: modulename,
-      element: options.element
+      sandbox: options.sandbox
     }, 
     function( err, module ) {
 
