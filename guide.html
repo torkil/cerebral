@@ -8,6 +8,19 @@
 
   <script type="text/javascript" src="./js/rainbow-min.js"></script>
 
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33922998-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
 </head>
 <body>
 
@@ -22,372 +35,179 @@
     </nav>
   </header>
 
+  
+
   <section id="content" class="guide">
 
-    <h1>Lets make an app!</h1>
+    <section id="preface">
+      <h1>Requirements and dependencies</h1>
+      <p>
+        Cerebral depends on and utelizes the following libraries; requirejs, backbone, underscore/lo-dash and jQuery. 
+      </p>
+      <p>
+        For now these are requirements. In future development we will try to make it work with a more lightweight module loader like almond, 
+        and be DOM library agnostic so you can use zepto, ender or any other library if choice for DOM manipulation.
+      </p>
 
-    <p>
-      The app will consist of two simple modules. A todo module, but of course, and an achievements module for tracking and
-      showing achievements the user earn while learning the very complex todo app.
-    </p>
+      <h3>Disclaimer</h3>
+      <p>
+        Understanding of backbone and amd loaders like requirejs needed.
+      </p>
+      <p>
+        All APIs er subject to change.
+      </p>
+    </section>
 
-    <h3>require.js and backbone.js</h3>
+    <section id="getting-started">
+      <h1>Getting started</h1>
+      <p>
+        First we set up requirejs so cerebral knows where to look for backbone, underscore and jquery.
+      </p>
+<pre>
+<code data-language="html">
+  &lt;script type="text/javascript" src="cerebral/vendor/require.js"></script>
 
-    <p>
-      Both modules will use requirejs to load submodules like models, views and collections. These models, collections and views will be 
-      extended versions of backbone classes loaded through cerebral.
-    </p>
-
-    <p>
-      Through the core we will start and stop the todo and achivements modules, this is using require.js behind the scenese to load, unload,
-      define a individual sandbox namespace for the modules and cleanup after them when they are stopped.
-    </p>
-
-    <h2>Directory layout</h2>
-
-    <p>
-      Heres a quick overview of the directory layout of the app we are going to make.
-    </p>
-
-    <div class="dir-layout">
-      
-      <div class="dir">
-        <div class="name">. . / . . / cerebral /</div>
-        <div class="content">
-          <div class="file desc">this is where cerebral lib is located</div>
-        </div>
-      </div>
-
-      <div class="dir">
-        <div class="name">app /</div>
-        <div class="content">
-
-          <div class="file html">index.html</div>
-
-          <div class="dir">
-            <div class="name">style /</div>
-            <div class="content">
-              <div class="file desc">..style and graphics..</div>
-            </div>
-          </div>
-
-          <div class="dir">
-            <div class="name">js /</div>
-            <div class="content">
-
-              <div class="file js">app.js</div>
-
-              <div class="dir">
-                <div class="name">modules/ </div>
-                <div class="content">
-
-                  <div class="dir">
-                    <div class="name">todos /</div>
-                    <div class="content">
-
-                      <div class="file js">main.js</div>
-
-                      <div class="dir">
-                        <div class="name">models /</div>
-                        <div class="content">
-                          <div class="file js">Todo.js</div>
-                        </div>
-                      </div>
-
-                      <div class="dir">
-                        <div class="name">views /</div>
-                        <div class="content">
-                          <div class="file js">Todos.js</div>
-                          <div class="file js">Todo.js</div>
-                        </div>
-                      </div>
-
-                      <div class="dir">
-                        <div class="name">collections /</div>
-                        <div class="content">
-                          <div class="file js">Todos.js</div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="dir">
-                    <div class="name">achievements /</div>
-                    <div class="content">
-
-                      <div class="file js">main.js</div>
-
-                      <div class="dir">
-                        <div class="name">models /</div>
-                        <div class="content">
-                          <div class="file js">Achievement.js</div>
-                        </div>
-                      </div>
-
-                      <div class="dir">
-                        <div class="name">views /</div>
-                        <div class="content">
-                          <div class="file js">Achievements.js</div>
-                          <div class="file js">Achievement.js</div>
-                        </div>
-                      </div>
-
-                      <div class="dir">
-                        <div class="name">collections /</div>
-                        <div class="content">
-                          <div class="file js">Achievements.js</div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-
-    <h3>Setup</h3>
-
-    <p>
-      First lets set up the index.html file. Include require.js and configure it so it knows where to look for things like; cerebral, backbone, underscore,
-      jquery and the app itself.
-    </p>
-
-    <pre>
-      <code data-language="html">
-  &lt;script type="text/javascript" src="../../cerebral/vendor/require.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript"&gt;
-
-        require.config({
-          baseUrl: "../../",
-          shim: {
-            "backbone": {
-              deps: ["underscore", "jquery"],
-              exports: "Backbone"
-            },
-            "underscore": {
-              exports: "_"
-            },
+  &lt;script type="text/javascript">
+      require.config({
+        baseUrl: "js/",
+        shim: {
+          "backbone": {
+            deps: ["underscore", "jquery"],
+            exports: "Backbone"
           },
-          paths: {
-            "backbone": "cerebral/vendor/backbone",
-            "backboneLocalStorage": "docs/demo/js/ext/Backbone.LocalStorage",
-            "underscore": "cerebral/vendor/underscore",
-            "jquery": "cerebral/vendor/jquery",
-            "app": "docs/demo/js"
-          }
-        })
-
-  &lt;/script&gt;
-      </code>
-    </pre>
-
-    <p>
-      We allso have to add some mock data for the app to work. We will attach this directly to the global namespace under namespace bootstrap
-      so its easy to reach for our modules.
-    </p>
-
-    <pre>
-      <code data-language="json">
-  window.bootstrap = {}
-
-  window.bootstrap.todos = [
-    {
-      description: "Open app",
-      completed: true
-    },
-    {
-      description: "Complete this, while beeing a boss is optional.",
-      completed: false
-    }
-  ]
-
-  window.bootstrap.achievements = [
-    {
-      tag: "firsttodo",
-      description: "Create your first todo",
-      completed: false
-    },
-    {
-      tag: "firstcomplete",
-      description: "Complete your first todo",
-      completed: false
-    },
-    {
-      tag: "removetodo",
-      description: "Remove your first todo",
-      completed: false
-    },
-    {
-      tag: "threetodos",
-      description: "Create three todos",
-      completed: false
-    }
-  ]
-      </code>
-    </pre>
-
-    <h3>app.js</h4>
-
-    <p>
-      Now its time to get our hands dirty and code the main application file, app.js. We will configure it to know where to look for 
-      its modules and then start them up. Since they are manipulating the DOM we tell them to wait for the DOM to be ready, this is default behaviour
-      but we set it to true for clarity.
-    </p>
-
-    <pre>
-      <code data-language="js">
-  require([
-    "cerebral/application/core",
-    "jquery"
-  ],
-  function( core, $ ) {
-
-    core.configure({
-      moduleRoot: 'app/modules/'
-    })
-
-    core.start("todos", {
-      element: "#todos",
-      onDomReady: true
-    })
-
-    core.start("achievements", {
-      element: "#achievements",
-      onDomReady: true
-    })
-
-  })
-      </code>
-    </pre>
-
-    <h3>todos / main.js</h3>
-
-    <p>
-      When the core was told to start the module `todos` it automaticaly looked for a main.js file directly under the modules namespace(directory).
-      Loaded it and checked if it either returned a function or an object(can allso be a function) that contained a main method and tries to invoke it.
-      <br/><br/>
-      Lets look at the code:
-    </p>
-
-    <pre>
-      <code data-language="js">
-  define([
-    "todos/sandbox",
-    "./collections/Todos",
-    "./views/Todos"
-  ], 
-  function( sandbox, Todos, TodosView ){
-    
-    return function main() {
-
-      var todos = new Todos()
-
-      todos.fetch()
-
-      var moduleView = new TodosView({
-        el: sandbox.element,
-        collection: todos
-      })
-
-      moduleView.render()
-
-    }
-
-  })
-      </code>
-    </pre>
-
-    <p>
-      The main function does a couple of interesting things:
-      <ul>
-        <li>Fetches its sandbox. more details on the sandbox later.</li>
-        <li>Creates a new Todos collection and fetches its content.</li>
-        <li>Creates a new TodosView and passes it the element the module has been assigned.</li>
-        <li>Renders the view to the DOM.</li>
-      </ul>
-    </p>
-
-
-    <h3>achievements / main.js</h3>
-
-    <p>
-      The achievments module is concerned with two things:
-
-      <ul>
-        <li>Keeping track of the achievments by subscribing to events elswhere in the application(todos).</li>
-        <li>and updating the achievments view anytime the user completes an achievement.</li>
-      </ul>
-
-      <br/><br/>
-      Lets look at the code:
-    </p>
-
-    <pre>
-      <code data-language="js">
-  define([
-    "achievements/sandbox",
-    "./collections/Achievements",
-    "./views/Achievements"
-  ], 
-  function( sandbox, Achievements, AchievementsView ){
-    
-    return function main() {
-
-      var achievements = new Achievements()
-
-      achievements.reset( window.bootstrap.achievements  )
-
-      var stats = {
-        nrOfTodosAdded: 0
-      }
-
-      sandbox.subscribe("todos.add", function() {
-        stats.nrOfTodosAdded++
-        if( stats.nrOfTodosAdded === 1 ) {
-          achievements.complete({ tag: "firsttodo" })
-        }
-        if( stats.nrOfTodosAdded === 3 ) {
-          achievements.complete({ tag: "threetodos" })
+          "underscore": {
+            exports: "_"
+          },
+        },
+        paths: {
+          "backbone": "cerebral/vendor/backbone",
+          "underscore": "cerebral/vendor/underscore",
+          "jquery": "cerebral/vendor/jquery"
         }
       })
+  </script>
+</code>
+</pre>
+    
+    <h2>Setting up the app</h2>
+    <p>
+      Now we include the main javascript file of our application, this will use the cerebral/application/core to load its modules.
+    </p>
 
-      sandbox.subscribe("todos.remove", function() {
-        achievements.complete({ tag: "removetodo" })
+<pre>
+<code data-language="html">
+  &lt;script type="text/javascript" src="js/app.js"></script>
+</code>
+</pre>
+    
+      <h3>app.js</h3>
+      <p>
+        In app.js we configure the core so it knows where to look for modules and start them up. More on what happens when you start and stop modules after the code.
+      </p>
 
-        sandbox.unsubscribe("todos.remove")
-      })
+<pre>
+<code data-language="js">
+require([ "cerebral/application/core" ], function( core ){
+  
+  var app = Object.create( core )
 
-      sandbox.subscribe("todos.modelChange", function( model, changes ) {
-        if( model.get('completed') )
-          achievements.complete({ tag: "firstcomplete" })
-      })
-
-      var moduleView = new AchievementsView({
-        el: sandbox.element,
-        collection: achievements
-      })
-
-      moduleView.render()
-
-    }
-
+  app.configure({
+    moduleRoot: 'modules/'
   })
-      </code>
-    </pre>
+
+  app.start("chat", {
+    element: '#chat'
+  })
+
+  app.start("log", {
+    element: '#log'
+  })
+
+})
+</code>
+</pre>
+      
+      <p>
+        When core starts the module named chat it will look for its main file under the module root you specified when you configures the core, so in our case
+        it will look for it under 'js/modules/chat/main.js'.
+      </p>
+
+      <p>
+        It will use requirejs to load the modules main file and check that it either returns a function or an object containing a main method. Here is and example
+        of a module main file.
+      </p>  
+<pre>
+<code data-language="js">
+//inside chat/main.js
+define([ "chat/sandbox" ], function( sandbox ){
+  
+  function main() {
+    console.log( "started chat" )
+  }
+
+  return main
+})
+</code>
+</pre>
+
+      <p>
+        You might allso notice that when we started our modules we gave an object as our second parameter containing a element with a string css selector as a value. This will be used to
+        tell the modules sandbox what element on the pace it has access to.
+      </p>
+
+      <h2>Sandbox</h2>
+      <p>
+        When the chat module is loaded it is defined a namespace using requirejs where the chat modules sandbox is located. This sandbox will contain the element the module is assigned,
+        a scoped jQuery/DOM manipulation function that only has access to elements within the module element and other properties you specify on the sandboxfactory.
+      </p>
+
+<pre>
+<code data-language="js">
+//inside chat/main.js
+define([ "chat/sandbox" ], function( sandbox ){
+
+  function main() {
+    
+    sandbox.element[ 0 ] === $('#chat')[ 0 ] 
+    true
+
+    sandbox.$( '#other-module' ).length === 0   
+    true
+
+  }
+
+</code>
+</pre>
+
+      <h3>Modifying sandbox properties</h3>
+      <p>
+        We want to make a logging function on our sandbox so we can easily swap the logging mechanics at a later time or even do additional stuff like log to the server via ajax.
+      </p>
+
+<pre>
+<code data-language="js">
+require([ "cerebral/application/core", "cerebral/application/sandboxfactory" ], function( core, sandboxfactory ){
+  
+  var app = Object.create( core )
+
+  sandboxfactory.defineProperty("log", function( msg ) {
+    if( window.console && console.log )
+      console.log( msg )
+  })
+
+  app.configure({...
+    
+</code>
+
+
+    </section>
 
   </section>
 
-<footer>
+
+
+
+  <footer>
     <div class="credits">
       Built by Andre Tangen <span class="gorillatron"><a href="https://twitter.com/gorillatron">@gorillatron</a></span> and <span class="wtw"><img src="style/gfx/wtw3.png"></span>
     </div>

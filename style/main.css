@@ -13,11 +13,12 @@
 * {
   margin: 0px;
   padding: 0px;
-  font-family: 'Helvetica Neueu', Helvetica;
+  
 }
 
 body {
   padding-bottom: 60px;
+  font-family: 'Helvetica Neueu', Helvetica;
 }
 
 a {
@@ -64,8 +65,19 @@ section#content {
   font-family: 'Duru Sans';
   font-size: 40px;
   margin-bottom: 10px;
-  color: #2E2E2E;
   color: #796180;
+}
+
+#content h2 {
+  color: #6C79A1;
+}
+
+#content h3 {
+  color: #C9AF3A;
+}
+
+#content p {
+  color: #525252;
 }
 
 #hero {
@@ -146,7 +158,7 @@ div#hero #in-yo-face .download .alternatives .size {
 }
 
 div#hero #in-yo-face .download .alternatives .dev {
-  color: #DE9849;
+  color: #C9AF3A;
   padding-left: 5px;
   font-weight: bold;
 }
@@ -189,24 +201,22 @@ div#hero #highlights ul.features li.feature p {
 
 
 #content.guide h1 {
-  font-family: 'Capriola';
-  font-size: 33px;
+  font-family: 'Duru Sans';
+  font-size: 22px;
   margin-top: 100px;
   margin-bottom: 20px;
 }
 
 #content.guide h2 {
-  font-size: 24px;
+  font-size: 20px;
   margin-top: 100px;
-  color: #DB9346;
   margin-bottom: 17px;
   margin-top: 40px;
 }
 
 #content.guide h3 {
-  font-size: 20px;
+  font-size: 16px;
   margin-top: 100px;
-  color: #C9945B;
   margin-bottom: 17px;
   margin-top: 40px;
 }
@@ -215,7 +225,6 @@ div#hero #highlights ul.features li.feature p {
   font-size: 14px;
   line-height: 28px;
   font-family: 'Open Sans';
-  color: #525252;
   margin-bottom: 15px;
 }
 
@@ -296,7 +305,7 @@ footer .credits {
 }
 
 footer .credits .gorillatron {
-  color: #D13F17;
+  color: #CF6538;
   font-family: "Capriola";
 }
 

@@ -5,18 +5,19 @@
  * @version 1.0.3
  */
 pre {
-    border: 1px solid #ccc;
+    background-color: #FFFFFF;
+    border: 1px solid #F2F2F2;
     word-wrap: break-word;
     padding: 6px 10px;
     line-height: 19px;
     margin-bottom: 20px;
+    box-shadow: 0px 1px 3px 0px #EBEBEB;
 }
 
 code {
-    border: 1px solid #eaeaea;
     margin: 0px 2px;
     padding: 0px 5px;
-    font-size: 12px;
+    font-family: Monaco, Consolas, Menlo, 'Liberation Mono', Courier, monospace !important;
 }
 
 pre code {
@@ -29,16 +30,14 @@ pre code {
 }
 
 pre, code {
-    font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
-    color: #333;
-    background: #f8f8f8;
+    color: #5E5E5E;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
 }
 
 pre, pre code {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 pre .comment {
@@ -50,11 +49,12 @@ pre .support {
 }
 
 pre .tag, pre .tag-name {
-    color: navy;
+    color: #796180;
 }
 
 pre .keyword, pre .css-property, pre .vendor-prefix, pre .sass, pre .class, pre .id, pre .css-value, pre .entity.function, pre .storage.function {
     font-weight: bold;
+    color: #736054;
 }
 
 pre .css-property, pre .css-value, pre .vendor-prefix, pre .support.namespace {
@@ -63,7 +63,7 @@ pre .css-property, pre .css-value, pre .vendor-prefix, pre .support.namespace {
 
 pre .constant.numeric, pre .keyword.unit, pre .hex-color {
     font-weight: normal;
-    color: #099;
+    color: #6794C2;
 }
 
 pre .entity.class {
@@ -71,7 +71,7 @@ pre .entity.class {
 }
 
 pre .entity.id, pre .entity.function {
-    color: #900;
+    color: #CF673E;
 }
 
 pre .attribute, pre .variable {
@@ -80,9 +80,14 @@ pre .attribute, pre .variable {
 
 pre .string, pre .support.value  {
     font-weight: normal;
-    color: #d14;
+    color: #AD6A50;
 }
 
 pre .regexp {
     color: #009926;
+}
+
+pre .constant.language {
+    font-weight: bold;
+    color: #6794C2;
 }
