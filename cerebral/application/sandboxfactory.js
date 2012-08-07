@@ -21,7 +21,7 @@ function( underscore, $ ){
     @private
     @type Object
   */
-  properties = {
+  sandboxfactory.sandboxprototype = {
     /*
       Scoped DOM manipulation function, proxy for jquery/zepto/ender/etc.. Only has acces to elements within
       its own element
@@ -75,18 +75,21 @@ function( underscore, $ ){
     @returns {cerebral/application/sandboxfactory} self
   */
   sandboxfactory.delegateCoreApi = function( coreapi ) {
+    var attr
     if( typeof coreapi !== 'object' ) {
       throw new TypeError( 'No api delegated' )
     }
 
-    _.forEach(coreapi, function( propertyvalue, propertyname ) {
-      
-      sandboxfactory.defineProperty(propertyname, function() {
-        coreapi[ propertyname ].apply( {}, arguments )
-      })
-    })
+    for( attr in coreapi ) {
+      sandboxfactory.sandboxprototype[ attr ] = coreapi[ attr ]
+    }
 
     return this
+  }
+
+  sandboxfactory.isSandbox = function( test ) {
+    if( Object.getPrototypeOf( test ) === sandboxfactory.sandboxprototype )
+      return true
   }
 
   /**
@@ -98,17 +101,14 @@ function( underscore, $ ){
     @param options.element The DOM element the sandbox has access to
     @returns {Object} sandbox
   */
-  sandboxfactory.create = function( options ) {
-    var proto, sandbox, element
+  sandboxfactory.create = function( attributes ) {
+    var sandbox
 
-    proto = _.clone( properties )
+    sandbox = Object.create( sandboxfactory.sandboxprototype )
+    sandbox = _.extend( sandbox, attributes )
 
-    sandbox = Object.create( proto )
-
-    element = options.element
-    if( element ) {
-      sandbox.element = $( options.element )
-    }
+    if( sandbox.element )
+      sandbox.element = $( sandbox.element )
 
     return sandbox
   }
