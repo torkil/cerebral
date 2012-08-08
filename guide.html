@@ -4,6 +4,7 @@
   <title></title>
 
   <link rel="stylesheet" type="text/css" href="style/main.css">
+  <link rel="stylesheet" type="text/css" href="style/guide.css">
   <link rel="stylesheet" type="text/css" href="style/github-highlight.css">
 
   
@@ -12,20 +13,6 @@
   <script type="text/javascript" src="./js/languages/generic.js"></script>
   <script type="text/javascript" src="./js/languages/html.js"></script>
   <script type="text/javascript" src="./js/languages/javascript.js"></script>
-
-  <script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-33922998-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-  </script>
 
   <script type="text/javascript">
     (function() {
@@ -41,8 +28,52 @@
           fadedIn = false
         }
       })
+
+      function scrollToNode( nodeId ) {
+        window.location = '#' + nodeId
+        var section = document.getElementById( nodeId )
+        if( section ) {
+          window.scrollTo( window.scrollX, section.offsetTop - 110 )   
+        }
+      }
+
+      window.addEventListener('load', function(){
+        setTimeout(function() {
+          if( window.location.hash ) {
+            scrollToNode( window.location.hash.replace('#', '') )
+          }
+
+          var sectionLinks = document.getElementsByClassName( 'sec' )
+          for ( var i = sectionLinks.length - 1; i >= 0; i-- ) {
+            (function( sectionLink ) {
+
+              sectionLink.addEventListener('click', function() {
+                var nodeId = sectionLink.dataset['sec']
+                scrollToNode( nodeId )
+              })
+
+            })( sectionLinks[i] )
+          }
+        }, 0)
+      })
+      
+
     })()
     
+  </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33922998-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
   </script>
 
 </head>
@@ -53,7 +84,7 @@
     <nav>
       <ul>
         <li class="end"><a href="https://github.com/gorillatron/cerebral">github</a></li>
-        <li>API Reference</li>
+        <li><a href="./api.html">API Reference</a></li>
         <li class="active">Guide</li>
         <li> <a href="./index.html">Home</a></li>
       </ul>
@@ -78,7 +109,7 @@
         and be DOM library agnostic so you can use zepto, ender or any other library of choice for DOM manipulation.
       </p>
 
-      <h3>Disclaimer</h3>
+      <h3 id="disclaimer">Disclaimer</h3>
       <p>
         Understanding of backbone and amd loaders like requirejs needed.
       </p>
@@ -88,7 +119,7 @@
     </section>
 
     <section id="getting-started">
-      <h1>Getting started</h1>
+      <h1 id="getting-started">Getting started</h1>
       <p>
         First we set up requirejs so cerebral knows where to look for backbone, underscore and jquery.
       </p>
@@ -118,7 +149,7 @@
 </code>
 </pre>
     
-    <h2>Setting up the app</h2>
+    <h2 id="setup">Setting up the app</h2>
     <p>
       Now we include the main javascript file of our application, this will use the cerebral/application/core to load its modules.
     </p>
@@ -129,7 +160,7 @@
 </code>
 </pre>
     
-      <h3>app.js</h3>
+      <h3 id="app">app.js</h3>
       <p>
         This is the main executable javascript file of your application. You dont have to name it app offcourse. This is where we require the core, set up the app,
         configure it and start some modules.
@@ -161,7 +192,7 @@ require([ "cerebral/application/core" ], function( core ){
 </code>
 </pre>
       
-      <h4>core.configure</h4>
+      <h4 id="configure">core.configure</h4>
       <p>
         This method configures the core, the most important for now is the 'moduleRoot' property, this tells the app where its modules are located so it can load them and
         start them up.
@@ -180,7 +211,7 @@ core.start( 'chat' ) // -> js/modules/chat/main.js
 </code>
 </pre>
       
-      <h4>core.start</h4>
+      <h4 id="start">core.start</h4>
       <p>
         It will use requirejs to load the modules main file and check that it either returns a function or an object containing a main method. Here is and example
         of a module main file.
@@ -208,7 +239,7 @@ function( sandbox ) {
         tell the modules sandbox what element on the pace it has access to.
       </p>
 
-      <h3>Modules</h3>
+      <h3 id="modules">Modules</h3>
       <p>
         A module consists of a main.js file and any other javacript, html or css files it needs. It can also have its own sub modules( <i>folders</i> ), but they will not be treated as a application module (<i>can be started and stopped via the core</i> ).
       </p>
@@ -255,7 +286,7 @@ return main
       
       
       
-      <h4>destruct</h4>
+      <h4 id="destruct">destruct</h4>
       <p>
         The 'done' parameter sent to destruct is meant to be called when you are done destructing your module. It must allways be called to be sure the module
         is properly stopped and unloaded. But is handy when you want to do asynchronous things like wait for an animation to finish or an ajax call to return before
@@ -277,7 +308,7 @@ return {
 </code>
 </pre>
 
-      <h2>Sandbox</h2>
+      <h2 id="sandbox">Sandbox</h2>
       <p>
         When the chat module is loaded it is defined a namespace using requirejs where the chat modules sandbox is located. This sandbox will contain the element the module is assigned,
         a scoped jQuery/DOM manipulation function that only has access to elements within the module element and other properties you specify on the sandboxfactory.
@@ -305,13 +336,13 @@ function( sandbox ) {
 </code>
 </pre>
       
-      <h3>pub-sub</h3>
+      <h3 id="pub-sub">pub-sub</h3>
       <p>
         The sandbox is delegated safe to use methods from the core for subscribing and publishing events. This is the only way modules should communicate with each other.
         However you can overide this if needed.
       </p>
 
-      <h4>subscribing to events</h4>
+      <h4 id="subscribing">Subscribing to events</h4>
       <p>
         Subscribing sets a callback to fire when that channel gets published to, passing published parameters to the callback.
       </p>
@@ -326,7 +357,7 @@ sandbox.subscribe( "chat.userleave", function( user ){ usercount-- } )
 </code>
 </pre>
 
-<h4>publishing events</h4>
+<h4 id="publishing">Publishing events</h4>
 <p>
   Publishing to a channel will fire all the callbacks for that channel, passing arguments after channelname to the callbacks ar arguments.
 </p>
@@ -340,7 +371,7 @@ sandbox.publish( "chat.userleave", user )
 </pre>
 
 
-      <h3>Cutomizing the sandbox</h3>
+      <h3 id="customizing">Cutomizing the sandbox</h3>
       <p>
         The philosophy behind the sandbox is giving your modules a defined environment to work in. Where additional functionality is added only one place
         and underlying mechanics can easily be swapped, but the interface stay intact.
@@ -353,8 +384,13 @@ sandbox.publish( "chat.userleave", user )
 
 <pre>
 <code data-language="js">
-require([ "cerebral/application/core", "cerebral/application/sandboxfactory" ], function( core, sandboxfactory ){
+require([ 
+  "cerebral/application/core", 
+  "cerebral/application/sandboxfactory" 
+], 
+function( core, sandboxfactory ){
   
+  // attch new method to the prototype object of all sandboxes
   sandboxfactory.sandboxprototype.log = function( msg ) {
     if( window.console && console.log )
       console.log( msg )
@@ -362,12 +398,11 @@ require([ "cerebral/application/core", "cerebral/application/sandboxfactory" ], 
       alert( msg )
   }
 
-  var app = Object.create( core )
-  app.configure({...
+  ...
 </code>
 </pre>
       
-      <h4>Individual sandboxes</h4>
+      <h4 id="individual">Individual sandboxes</h4>
       <p>
         You can give individual modules specific sandboxes by either sending an object with attributes as sandbox value to 'core.start' or you can create one with the sandboxfactory
         and send it as sandbox.
@@ -397,7 +432,7 @@ core.start('module', {
 </code>
 </pre>
 
-      <h4>Shared sandboxes</h4>
+      <h4 id="shared">Shared sandboxes</h4>
       <p>
         By creating and sending a sandbox reference directly the sandbox can be shared accross modules.
       </p>
@@ -421,7 +456,32 @@ core.start('another-module', {
 
   </section>
 
-
+  <section id="contents">
+    <section class="req">
+      <h1 class="sec" data-sec="preface">Requirements and dependencies</h1>
+      <h3 class="sec" data-sec="disclaimer">Disclaimer</h3>
+    </section>
+    <section class="getting-started">
+      <h1 class="sec" data-sec="getting-started">Getting started</h1>
+      <h2 class="sec" data-sec="setup">Setting up the app</h2>
+      <h3 class="sec" data-sec="app">app.js</h3>
+      <h4 class="sec" data-sec="configure">core.configure</h4>
+      <h4 class="sec" data-sec="start">core.start</h4>
+    </section>
+    <section class="modules">
+      <h1 class="sec" data-sec="modules">Modules</h1>
+      <h4 class="sec" data-sec="destruct">destruct</h4>
+    </section>
+    <section class="sandbox">
+      <h1 class="sec" data-sec="sandbox">Sandbox</h1>
+      <h3 class="sec" data-sec="pub-sub">pub-sub</h3>
+      <h4 class="sec" data-sec="subscribing">Subscribing to events</h4>
+      <h4 class="sec" data-sec="publishing">Publishing events</h4>
+      <h3 class="sec" data-sec="customizing">Customizing the sandbox</h3>
+      <h4 class="sec" data-sec="individual">Individual sandboxes</h4>
+      <h4 class="sec" data-sec="shared">Shared sandboxes</h4>
+    </section>
+  </section>
 
 
   <footer>

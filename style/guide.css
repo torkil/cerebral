@@ -1,0 +1,125 @@
+/*  GUIDE  */
+
+#content.guide {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#content.guide h1 {
+  font-family: 'Duru Sans';
+  font-size: 22px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+#content.guide h2 {
+  font-size: 18px;
+  margin-top: 100px;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide h3 {
+  font-size: 14px;
+  margin-top: 100px;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide h4 {
+  font-size: 12px;
+  margin-top: 100px;
+  margin-bottom: 17px;
+  margin-top: 40px;
+}
+
+#content.guide p {
+  font-size: 13px;
+  line-height: 28px;
+  font-family: 'Open Sans';
+  margin-bottom: 15px;
+}
+
+#content.guide ul {
+  color: #525252;
+  padding-left: 20px;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  line-height: 28px;
+}
+
+#content.guide ul li {
+  margin: 10px 0px;
+}
+
+#content .tag {
+  color: #80688F;
+}
+
+#content.guide .dir-layout {
+  line-height: 22px;
+  font-size: 14px;
+  font-family: 'Open Sans';
+}
+
+#content.guide .dir-layout .dir {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #8C755B;
+  font-weight: bold;
+  border-left: 1px solid #F2F2F2;
+}
+
+#content.guide .dir-layout .file {
+  padding-left: 25px;
+  margin: 5px 0px;
+  font-weight: normal;
+}
+
+#content.guide .dir-layout .file.js {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #DE7197;
+}
+
+#content.guide .dir-layout .file.html {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #9EAB71;
+}
+#content.guide .dir-layout .file.desc {
+  padding-left: 25px;
+  margin: 5px 0px;
+  color: #BDBDBD;
+  font-weight: thinner;
+  font-style: italic;
+}
+
+section#contents {
+  vertical-align: top;
+  margin-top: 180px;
+  display: inline-block;
+  position: fixed;
+}
+
+section#contents section {
+  margin-bottom: 20px;
+}
+
+section#contents h1, section#contents h2, section#contents h3, section#contents h4 {
+  font-family: 'Helvetica Neueu' Helvetica;
+  line-height: 20px;
+}
+
+section#contents h1 {
+  font-size: 14px
+}
+section#contents h2 {
+  font-size: 11px
+}
+section#contents h3 {
+  font-size: 11px
+}
+section#contents h4 {
+  font-size: 11px
+}

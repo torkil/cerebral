@@ -99,16 +99,20 @@ h1 {
   color: #796180;
 }
 
-#content h2 {
+h2 {
   color: #6C79A1;
 }
 
-#content h3 {
+h3 {
   color: #5E5E5E;
 }
 
-#content h4 {
+h4 {
   color: #5E5E5E;
+}
+
+section#content {
+  padding-top: 180px;
 }
 
 #content p {
@@ -229,102 +233,6 @@ div#hero #highlights ul.features li.feature p {
   color: #696969;
 }
 
-/*  HOME  */
-
-
-/*  GUIDE  */
-
-
-#content.guide h1 {
-  font-family: 'Duru Sans';
-  font-size: 22px;
-  margin-top: 100px;
-  margin-bottom: 20px;
-}
-
-#content.guide h2 {
-  font-size: 18px;
-  margin-top: 100px;
-  margin-bottom: 17px;
-  margin-top: 40px;
-}
-
-#content.guide h3 {
-  font-size: 14px;
-  margin-top: 100px;
-  margin-bottom: 17px;
-  margin-top: 40px;
-}
-
-#content.guide h4 {
-  font-size: 12px;
-  margin-top: 100px;
-  margin-bottom: 17px;
-  margin-top: 40px;
-}
-
-#content.guide p {
-  font-size: 13px;
-  line-height: 28px;
-  font-family: 'Open Sans';
-  margin-bottom: 15px;
-}
-
-#content.guide ul {
-  color: #525252;
-  padding-left: 20px;
-  font-family: 'Open Sans';
-  font-size: 14px;
-  line-height: 28px;
-}
-
-#content.guide ul li {
-  margin: 10px 0px;
-}
-
-#content .tag {
-  color: #80688F;
-}
-
-#content.guide .dir-layout {
-  line-height: 22px;
-  font-size: 14px;
-  font-family: 'Open Sans';
-}
-
-#content.guide .dir-layout .dir {
-  padding-left: 25px;
-  margin: 5px 0px;
-  color: #8C755B;
-  font-weight: bold;
-  border-left: 1px solid #F2F2F2;
-}
-
-#content.guide .dir-layout .file {
-  padding-left: 25px;
-  margin: 5px 0px;
-  font-weight: normal;
-}
-
-#content.guide .dir-layout .file.js {
-  padding-left: 25px;
-  margin: 5px 0px;
-  color: #DE7197;
-}
-
-#content.guide .dir-layout .file.html {
-  padding-left: 25px;
-  margin: 5px 0px;
-  color: #9EAB71;
-}
-#content.guide .dir-layout .file.desc {
-  padding-left: 25px;
-  margin: 5px 0px;
-  color: #BDBDBD;
-  font-weight: thinner;
-  font-style: italic;
-}
-
 .caution {
   background-image: url('./gfx/caution.png');
   background-repeat: no-repeat;
@@ -332,7 +240,7 @@ div#hero #highlights ul.features li.feature p {
   padding-left: 19px;
 }
 
-/*  GUIDE  */
+/*  HOME  */
 
 
 

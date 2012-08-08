@@ -1,0 +1,66 @@
+<html>
+<head>
+
+  <title></title>
+
+  <link rel="stylesheet" type="text/css" href="style/main.css">
+
+  <script type="text/javascript">
+    (function() {
+      var fadedIn
+      window.addEventListener("scroll", function() {
+        if(!fadedIn && window.pageYOffset > 50) {
+          var header = document.getElementsByTagName('header')[0]
+          header.className = 'bordered'
+          fadedIn = true
+        } else if( window.pageYOffset < 50 ) {
+          var header = document.getElementsByTagName('header')[0]
+          header.className = ''
+          fadedIn = false
+        }
+      })
+    })()
+    
+  </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33922998-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+  
+</head>
+<body>
+
+  <header>
+    <h1>cerebral.js</h1>
+    <nav>
+      <ul>
+        <li class="end"><a href="https://github.com/gorillatron/cerebral">github</a></li>
+        <li class="active"><a href="./api.html">API Reference</a></li>
+        <li> <a href="./guide.html">Guide</a></li>
+        <li > <a href="./index.html">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="content" class="api">
+    <h4 class="caution"> . . comming soon</h4>
+  </section>
+
+  <footer class="index">
+    <div class="credits">
+      Built by Andre Tangen (<span class="gorillatron"><a href="https://twitter.com/gorillatron">@gorillatron</a></span>) and <span class="wtw"><img src="style/gfx/wtw3.png"></span>
+    </div>
+  </footer>
+
+</body>
+</html>
