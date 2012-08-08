@@ -17,8 +17,8 @@ function( underscore, $ ){
   sandboxfactory = {}
 
   /**
-    The properties to attach to the created sandbox objects prototype.
-    @private
+    The object to be used as the prototype of created sansboxes
+    @public
     @type Object
   */
   sandboxfactory.sandboxprototype = {
@@ -58,9 +58,20 @@ function( underscore, $ ){
     return this
   }
 
+  /**
+    Check if an object is a sandbox, checks if the prototype of the test is the same as sandbox.sandboxprototype
+    @public
+    @type Function
+    @param {Mixed} test The object to check if is a sandbox
+    @returns Boolean
+  */
   sandboxfactory.isSandbox = function( test ) {
-    if( Object.getPrototypeOf( test ) === sandboxfactory.sandboxprototype )
+    if( Object.getPrototypeOf( test ) === sandboxfactory.sandboxprototype ) {
       return true
+    }
+    else {
+      return false
+    }
   }
 
   /**
