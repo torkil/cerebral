@@ -39,35 +39,6 @@ function( underscore, $ ){
   }
 
   /**
-    Set a property in the properties object.
-    @public
-    @type Function
-    @param {String} name The name of the property
-    @param {Mixed} value The value of the property
-    @returns {cerebral/application/sandboxfactory} self
-  */
-  sandboxfactory.defineProperty = function( name, value ) {
-    if( typeof name !== 'string' ) {
-      throw new TypeError( 'Name of property must be name' )
-    }
-
-    properties[ name ] = value
-    return this
-  }
-
-  /**
-    Delete a property from the properties object.
-    @public
-    @type Function
-    @param {String} name The name of the property to remove
-    @returns {cerebral/application/sandboxfactory} self
-  */
-  sandboxfactory.removeProperty = function( name ) {
-    delete properties[ name ]
-    return this
-  }
-
-  /**
     Delegate the core public api to the factory so we can facade core methods for publishing and subscribing as sandbox properties.
     @public
     @type Function
