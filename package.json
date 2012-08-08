@@ -1,7 +1,7 @@
 {
   "author": "Jorn Andre Tangen <jornandretangen@gmail.com> (gorillatron.me)",
   "name": "cerebral",
-  "description": "Backbonejs extensions",
+  "description": "Library for creating well behaved web applications",
   "version": "0.0.1",
   "dependencies": { },
   "devDependencies": {}
