@@ -250,8 +250,6 @@ function( _, $, Module, sandboxfactory ){
     })
 
     modules[ module.name ] = module
-
-    sandboxfactory.delegateCoreApi( core.api.public )
     
     if( options.sandbox ) {
       if( sandboxfactory.isSandbox(options.sandbox) ) {
@@ -346,7 +344,8 @@ function( _, $, Module, sandboxfactory ){
     @param {String} modulename The name of the namespace/folder that contains the module
     @param {Object} options Options for the module and sandbox
     @param options.onDomReady If the module should wait for DOM to be ready before executing the modules main function
-    @param options.element The element to restrict dom access to
+    @param options.sandbox The sandbox or an object of attrubutes to set on the sandbox for the module to start
+    @param. options.sandbox.element The element to restrict dom access to
     @returns {cerebral/core} core
   */
   core.start = function( modulename, options ) {
@@ -408,6 +407,12 @@ function( _, $, Module, sandboxfactory ){
 
     return core
   }
+
+  /**
+    Delegate the core.api.public to the sandboxprototype
+    @augments sandboxfactory.sandboxprototype
+  */
+  sandboxfactory.delegateCoreApi( core.api.public )
 
   return core
 })
