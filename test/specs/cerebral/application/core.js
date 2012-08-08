@@ -456,6 +456,45 @@
         })
 
       })
+      
+      describe("context", function() {
+
+        it("should call the methods of the module with the module as context so the module can refer to itself as this within its methods", function( done ) {
+
+          var mainthis, destructthis
+
+          core.start('context', {
+            sandbox: {
+              mainThis: function( module ) {
+
+                mainthis = module
+                core.stop('context')
+
+              },
+              destructThis: function( module ) {
+                destructthis = module
+
+                try {
+
+                  expect( mainthis === destructthis ).to.equal( true )
+                  expect( mainthis.prop ).to.equal( 'prop' )
+                  expect( mainthis.foo ).to.equal( 'bar' )
+                  expect( mainthis.mainset ).to.equal( 'mainset' )
+                  expect( destructthis.prop ).to.equal( 'prop' )
+                  expect( destructthis.destructset ).to.equal( 'destructset' )
+
+                } catch( e ) {
+                  done( e )
+                }
+
+                done()
+              }
+            }
+          })
+
+        })
+
+      })
 
       describe("sandbox", function() {
 
