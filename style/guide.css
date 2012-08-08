@@ -106,9 +106,26 @@ section#contents section {
   margin-bottom: 20px;
 }
 
-section#contents h1, section#contents h2, section#contents h3, section#contents h4 {
+section#contents .sec {
   font-family: 'Helvetica Neueu' Helvetica;
   line-height: 20px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  -webkit-transition: -webkit-transform 0.05s, -webkit-transform-origin 0.05s;
+  -moz-transition: -moz-transform 0.05s, -moz-transform-origin 0.05s;
+  -o-transition: -o-transform 0.05s, -o-transform-origin 0.05s;
+  transition: transform 0.05s, transform-origin 0.05s;
+}
+
+section#contents .sec:hover {
+  -webkit-transform-origin: top center;
+  -webkit-transform: scale(1.1);
+  -moz-transform-origin: top center;
+  -moz-transform: scale(1.1);
+  -o-transform-origin: top center;
+  -o-transform: scale(1.1);
+  transform-origin: top center;
+  transform: scale(1.1);
 }
 
 section#contents h1 {
