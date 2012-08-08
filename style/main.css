@@ -325,6 +325,13 @@ div#hero #highlights ul.features li.feature p {
   font-style: italic;
 }
 
+.caution {
+  background-image: url('./gfx/caution.png');
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding-left: 19px;
+}
+
 /*  GUIDE  */
 
 

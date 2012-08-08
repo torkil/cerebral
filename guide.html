@@ -131,7 +131,8 @@
     
       <h3>app.js</h3>
       <p>
-        In app.js we configure the core so it knows where to look for modules and start them up. More on what happens when you start and stop modules after the code.
+        This is the main executable javascript file of your application. You dont have to name it app offcourse. This is where we require the core, set up the app,
+        configure it and start some modules.
       </p>
 
 <pre>
@@ -160,15 +161,30 @@ require([ "cerebral/application/core" ], function( core ){
 </code>
 </pre>
       
+      <h4>core.configure</h4>
       <p>
-        When core starts the module named chat it will look for its main file under the module root you specified when you configures the core, so in our case
-        it will look for it under 'js/modules/chat/main.js'.
+        This method configures the core, the most important for now is the 'moduleRoot' property, this tells the app where its modules are located so it can load them and
+        start them up.
       </p>
 
+      <p>Here is an example of how the path for a module is resolved:</p>
+<pre>
+<code data-language="js">
+
+require.config({ baseUrl: 'js/' })
+
+core.configure({ moduleRoot: 'modules/' })
+
+core.start( 'chat' ) // -> js/modules/chat/main.js
+
+</code>
+</pre>
+      
+      <h4>core.start</h4>
       <p>
         It will use requirejs to load the modules main file and check that it either returns a function or an object containing a main method. Here is and example
         of a module main file.
-      </p>  
+      </p>
 <pre>
 <code data-language="js">
 //chat/main.js
@@ -191,6 +207,75 @@ function( sandbox ) {
         You might allso notice that when we started our modules we gave an object as our second parameter containing a element with a string css selector as a value. This will be used to
         tell the modules sandbox what element on the pace it has access to.
       </p>
+
+      <h3>Modules</h3>
+      <p>
+        A module consists of a main.js file and any other javacript, html or css files it needs. It can also have its own sub modules( <i>folders</i> ), but they will not be treated as a application module (<i>can be started and stopped via the core</i> ).
+      </p>
+
+      <p>
+        There are several ways to define your modules main method, and also a destruct method.
+      </p>
+
+      <p>
+        Using an object is the prefered way. This ensures that you can refer to the module as 'this' within its methods.
+      </p>
+
+<pre>
+<code data-language="js">
+// somemodules/main.js
+
+return {
+  main: function(){ ... },
+  destruct: function( done ){ ... }
+}
+</code>
+</pre>
+
+<p>
+  Using a function:<br>
+  <b class="caution">caution:</b> This is not recomended if you refer to the module itself as 'this' within one of its methods.
+</p>
+
+<pre>
+<code data-language="js">
+// somemodules/main.js
+
+return function main(){ ... }
+
+// or
+
+function main(){ ... }
+
+main.destruct = function( done ){ ... }
+
+return main
+</code>
+</pre>
+      
+      
+      
+      <h4>destruct</h4>
+      <p>
+        The 'done' parameter sent to destruct is meant to be called when you are done destructing your module. It must allways be called to be sure the module
+        is properly stopped and unloaded. But is handy when you want to do asynchronous things like wait for an animation to finish or an ajax call to return before
+        unloading.
+      </p>
+
+<pre>
+<code data-language="js">
+// somemodules/main.js
+
+return {
+  main: function(){ ... },
+  destruct: function( done ){ 
+
+    view.$el.fadeOut( 300, done )
+
+  }
+}
+</code>
+</pre>
 
       <h2>Sandbox</h2>
       <p>
@@ -264,19 +349,17 @@ sandbox.publish( "chat.userleave", user )
       <p>
         The property 'sandboxprototype' of the sandboxfactory is the object that every created sandbox will have as its prototype. By modifying it you modify the
         functionality of all created sandboxes.
-      </p>  
+      </p>
 
 <pre>
 <code data-language="js">
 require([ "cerebral/application/core", "cerebral/application/sandboxfactory" ], function( core, sandboxfactory ){
   
-  sandboxfactory.sandboxprototype = {
-    log: function( msg ) {
-      if( window.console && console.log )
-        console.log( msg )
-      else
-        alert( msg )
-    }
+  sandboxfactory.sandboxprototype.log = function( msg ) {
+    if( window.console && console.log )
+      console.log( msg )
+    else
+      alert( msg )
   }
 
   var app = Object.create( core )
