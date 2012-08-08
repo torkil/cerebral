@@ -2,8 +2,7 @@
 var filewalker = require('./filewalker').filewalker,
     fs = require('fs'),
     util = require('util'),
-    dox = require('dox'),
-    mustache = require('mu2')
+    dox = require('dox')
 
 
 function getmodules( root, options, done ){
@@ -60,29 +59,11 @@ getmodules('cerebral', {
   ignore: 'vendor'
 },
 function( modules ) {
-  var docs, template, renderer, buf, html
+  var docs, json
 
   docs = generateNamespacedDocs( 'cerebral', modules )
+  json = JSON.stringify( docs )
   
-  template = fs.readFileSync(__dirname + '/doxscript.mustache', 'utf8')
-  
-  renderer = mustache.renderText(template, {
-    title: 'cerebral.js',
-    docs: JSON.stringify( docs )
-  })
-
-  buf = ''
-
-  renderer.on('data', function( data ) {
-    buf += data
-  })
-
-  renderer.on('end', function() {
-
-    html = buf
-
-    fs.writeFileSync(__dirname + '/../docs/dox.js', html, 'utf8')
-
-  })
+  fs.writeFileSync(__dirname + '/../docs/documentation.json', json, 'utf8')
 
 })
