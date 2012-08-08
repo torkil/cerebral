@@ -52,7 +52,9 @@ function( underscore, $ ){
     }
 
     for( attr in coreapi ) {
-      sandboxfactory.sandboxprototype[ attr ] = coreapi[ attr ]
+      if( coreapi.hasOwnProperty(attr) ) {
+        sandboxfactory.sandboxprototype[ attr ] = coreapi[ attr ]
+      }
     }
 
     return this
