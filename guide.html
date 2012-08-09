@@ -284,7 +284,29 @@ return main
 </code>
 </pre>
       
-      
+      <h4 id="main">main and module properties</h4>
+      <p>
+        The main method is invoked when you start the module, if you stop it then start it again it will be invoked again. The module can allso define other methods and properties.
+      </p>
+
+<pre>
+<code data-language="js">
+// somemodules/main.js
+
+return {
+  foo: 'bar',
+  getFoo: function() { return this.foo },
+  main: function() {
+
+    console.log( this.getFoo() )
+    // -> 'bar'
+
+  }
+}
+
+</code>
+</pre>
+
       
       <h4 id="destruct">destruct</h4>
       <p>
@@ -415,7 +437,6 @@ sandbox = sandboxfactory.create({ ... })
 core.start('module', {
   sandbox: sandbox
 })
-
 </code>
 </pre>
 
@@ -428,13 +449,15 @@ core.start('module', {
 core.start('module', {
   sandbox: { ... }
 })
-
 </code>
 </pre>
 
       <h4 id="shared">Shared sandboxes</h4>
       <p>
-        By creating and sending a sandbox reference directly the sandbox can be shared accross modules.
+        By creating and sending a sandbox reference directly the sandbox can be shared accross modules. </br>
+        <b class="caution">
+          Sharing state between modules using a shared sandbox is possible, but inadvisable.
+        </b>
       </p>
 
 <pre>
@@ -448,7 +471,6 @@ core.start('module', {
 core.start('another-module', {
   sandbox: sharedSandbox
 })
-
 </code>
 </pre>
 
@@ -470,6 +492,7 @@ core.start('another-module', {
     </section>
     <section class="modules">
       <h1 class="sec" data-sec="modules">Modules</h1>
+      <h4 class="sec" data-sec="main">main and module properties</h4>
       <h4 class="sec" data-sec="destruct">destruct</h4>
     </section>
     <section class="sandbox">
