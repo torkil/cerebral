@@ -462,6 +462,7 @@ sandbox.subscribe( "chat::userleave", function( user ){ usercount-- } )
 <p>
   Publishing to a channel will fire all the callbacks for that channel, passing arguments after channelname to the callbacks ar arguments.
 </p>
+
 <pre>
 <code data-language="js">
 //chat/main.js
@@ -475,19 +476,34 @@ sandbox.publish( "chat::userleave", user )
 <p>
   By using a namespace delimiter you can namespace your subscriptions and publishing.
 </p>
+
 <pre>
 <code data-language="js">
 //chat/main.js
 
-sandbox.publish("chat::login")
-sandbox.publish("chat::message")
+sandbox.publish( "chat::login" )
+sandbox.publish( "chat::message" )
 
-sandbox.subscribe("chat") 
+sandbox.subscribe( "chat" ) 
 // -> will fire on both
 
-sandbox.unsubscribe("chat") 
+sandbox.unsubscribe( "chat" ) 
 // -> will unsubscribe to both chat::login and chat::message
 
+</code>
+</pre>
+
+      <h4>Customizing the delimiter</h4>
+      <p>
+        If you dont like the double colon namespace delimiter you can configure the core to use another one.
+      </p>
+<pre>
+<code data-language="js">
+core.configure({
+  namespaceDelimiter: '->'
+})
+
+core.publish( "core->init" )
 </code>
 </pre>
 
