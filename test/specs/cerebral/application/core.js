@@ -22,162 +22,259 @@
   
   describe("cerebral/application/core", function() {
     
-    describe("cores.subscribe", function() {
-      
-      it("should bind the third context callback as the this value for the callback", function() {
+    describe("pub-sub", function() {
+
+      describe("cores.subscribe", function() {
         
-        var _this, that
+        it("should bind the third context callback as the this value for the callback", function() {
+          
+          var _this, that
 
-        _this = { foo: 'bar' }
+          _this = { foo: 'bar' }
 
-        core.subscribe("context", function() {
-          that = this
-        }, _this)
+          core.subscribe("context", function() {
+            that = this
+          }, _this)
 
-        core.publish( "context" )
+          core.publish( "context" )
 
-        expect( _this ).to.equal( that )
-        expect( that["foo"] ).to.equal( "bar" )
+          expect( _this ).to.equal( that )
+          expect( that["foo"] ).to.equal( "bar" )
 
-      })
-
-      it("should attach a listener to the subscription if one is given, else it should be null", function() {
-
-        var listener = {}
-
-        core.subscribe( "listener-obj", function() {}, null, listener )
-        core.subscribe( "listener-null", function() {} )
-
-        var channels = core.__getChannels()
-
-        expect( channels['listener-obj'][0].listener ).to.equal( listener )
-        expect( channels['listener-null'][0].listener ).to.equal( null )
-
-      })
-
-    })
-
-    describe("core.publish", function() {
-      
-      it("should fire all subscribing callbacks with the arguments.. after channel", function() {
-        
-        var a, b, c
-
-        core.subscribe("abc", function( _a, _b, _c) {
-          a = _a
-          b = _b
-          c = _c
         })
 
-        core.publish( "abc", 'a', 'b', 'c' )
+        it("should attach a listener to the subscription if one is given, else it should be null", function() {
 
-        expect( a ).to.equal( "a" )
-        expect( b ).to.equal( "b" )
-        expect( c ).to.equal( "c" )
+          var listener = {}
+
+          core.subscribe( "listener-obj", function() {}, null, listener )
+          core.subscribe( "listener-null", function() {} )
+
+          var channels = core.__getChannels()
+
+          expect( channels['listener-obj'][0].listener ).to.equal( listener )
+          expect( channels['listener-null'][0].listener ).to.equal( null )
+
+        })
 
       })
 
-    })
+      describe("core.publish", function() {
+        
+        it("should fire all subscribing callbacks with the arguments.. after channel", function() {
+          
+          var a, b, c
+
+          core.subscribe("abc", function( _a, _b, _c) {
+            a = _a
+            b = _b
+            c = _c
+          })
+
+          core.publish( "abc", 'a', 'b', 'c' )
+
+          expect( a ).to.equal( "a" )
+          expect( b ).to.equal( "b" )
+          expect( c ).to.equal( "c" )
+
+        })
+
+      })
 
 
-    describe("core.unsubscribe", function() {
+      describe("core.unsubscribe", function() {
+        
+        it("should remove all callbacks if only channel is given", function() {
+
+          var calls = 0
+
+          core.subscribe( "foo", function() { calls++ } )
+          core.subscribe( "foo", function() { calls++ } )
+          core.subscribe( "foo", function() { calls++ } )
+
+          core.publish("foo")
+          expect( calls ).to.equal( 3 )
+
+          core.unsubscribe( "foo" )
+
+          core.publish("foo")
+          expect( calls ).to.equal( 3 )
+
+        })
+
+        it("should remove a specific subscription that has the callback specified in parameters", function() {
+          
+          var i, callback
+
+          i = 0
+          callback = function() { i++ }
+
+          core.subscribe( "increment", callback )
+
+          core.publish( "increment" )
+          core.publish( "increment" )
+
+          expect( i ).to.equal( 2 )
+
+          core.unsubscribe( "increment", callback )
+
+          core.publish( "increment" )
+
+          expect( i ).to.equal( 2 )
+
+        })
+
+        it("should remove all callbacks asociated with a specific listener if a listener is specified in the parameters", function() {
+
+          var listenerA, listenerB, i
+
+          listenerA = {}
+          listenerB = {}
+
+          i = 0
+
+          core.subscribe( "increment-two", function() { i++ }, null, listenerA )
+          core.subscribe( "increment-two", function() { i++ }, null, listenerB )
+          expect( core.__getChannels()['increment-two'].length ).to.equal( 2 )
+
+          core.publish( "increment-two" )
+          expect( i ).to.equal( 2 )
+
+          core.unsubscribe( "increment-two", null, listenerA ) 
+          expect( core.__getChannels()['increment-two'].length ).to.equal( 1 )
+
+          core.publish( "increment-two" )
+          expect( i ).to.equal( 3 )
+
+          core.unsubscribe( "increment-two", null, listenerB )
+          expect( !core.__getChannels()['increment-two'] || core.__getChannels()['increment-two'].length === 0 ).to.equal( true )
+
+          core.publish( "increment-two" )
+          expect( i ).to.equal( 3 )
+
+        })
+
+        it("should only remove callbacks where both callback and listener is matching parameters if both is given", function() {
+          
+          var listenerA, listenerB, i
+
+          listenerA = {}
+          listenerB = {}
+
+          i = 0
+
+          function sharedCallback() { i++ }
+
+          core.subscribe( "match", sharedCallback, null, listenerA )
+          core.subscribe( "match", sharedCallback, null, listenerB )
+
+          core.publish( "match" )
+          expect( i ).to.equal( 2 )
+
+          core.unsubscribe( "match", sharedCallback, listenerA )
+
+          core.publish( "match" )
+          expect( i ).to.equal( 3 )
+
+        })
+
+        it("should remove all subscriptions to given channel that match listener if only listener is given", function() {
+
+          var i, listener
+
+          i = 0
+          listener = {}
+
+          core.subscribe( "hell-of-alot", function() { i++ }, null, listener )
+
+          core.publish( "hell-of-alot" )
+          core.publish( "hell-of-alot" )
+          core.publish( "hell-of-alot" )
+
+          expect( i ).to.equal( 3 )
+
+          core.unsubscribe( "hell-of-alot", null, listener )
+
+          core.publish( "hell-of-alot" )
+
+          expect( i ).to.equal( 3 )
+
+        })
+
+      })
       
-      it("should remove a specific subscription that has the callback specified in parameters", function() {
-        
-        var i, callback
+      describe("namespaces", function() {
 
-        i = 0
-        callback = function() { i++ }
+        describe("core.namespaceMatch", function() {
 
-        core.subscribe( "increment", callback )
+          it("should", function() {
 
-        core.publish( "increment" )
-        core.publish( "increment" )
+            expect( core.namespaceMatch("foo", "foo") ).to.equal( true )  
+            expect( core.namespaceMatch("foo::bar", "foo") ).to.equal( true )
+            expect( core.namespaceMatch("foo::bar::lol", "foo") ).to.equal( true )
 
-        expect( i ).to.equal( 2 )
+            expect( core.namespaceMatch("foo::bar", "foo::bar") ).to.equal( true )  
+            expect( core.namespaceMatch("foo::bar::nice", "foo::bar") ).to.equal( true )  
+            expect( core.namespaceMatch("not::bar::nice", "foo::bar") ).to.equal( false )  
 
-        core.unsubscribe( "increment", callback )
+          })
+          
 
-        core.publish( "increment" )
+        })
 
-        expect( i ).to.equal( 2 )
+        it("should fire all subscribers where where subscriber namespace is within the published namespace", function() {
 
-      })
+          var stat = {
+            "foo": 0,
+            "foo::bar": 0,
+            "foo::bar::lol": 0
+          }
 
-      it("should remove all callbacks asociated with a specific listener if a listener is specified in the parameters", function() {
+          core.subscribe("foo",           function( n ) { stat["foo"] += n })
+          core.subscribe("foo::bar",      function( n ) { stat["foo::bar"] += n })
+          core.subscribe("foo::bar::lol", function( n ) { stat["foo::bar::lol"] += n })
+          
+          core.publish("foo", 1)
+          core.publish("foo::bar", 1)
+          core.publish("foo::bar::lol", 1)
 
-        var listenerA, listenerB, i
+          expect( stat["foo"] ).to.equal( 3 )
+          expect( stat["foo::bar"] ).to.equal( 2 )
+          expect( stat["foo::bar::lol"] ).to.equal( 1 )
 
-        listenerA = {}
-        listenerB = {}
+        })
 
-        i = 0
+        it("should remove all subscribers where where subscriber namespace is within the unsubscribed namespace", function() {
 
-        core.subscribe( "increment-two", function() { i++ }, null, listenerA )
-        core.subscribe( "increment-two", function() { i++ }, null, listenerB )
-        expect( core.__getChannels()['increment-two'].length ).to.equal( 2 )
+          var stat = {
+            "foo": 0,
+            "foo::bar": 0,
+            "foo::bar::lol": 0
+          }
 
-        core.publish( "increment-two" )
-        expect( i ).to.equal( 2 )
+          core.subscribe("foo",           function( n ) { stat["foo"] += n })
+          core.subscribe("foo::bar",      function( n ) { stat["foo::bar"] += n })
+          core.subscribe("foo::bar::lol", function( n ) { stat["foo::bar::lol"] += n })
+          
+          core.publish("foo", 1)
+          core.publish("foo::bar", 1)
+          core.publish("foo::bar::lol", 1)
 
-        core.unsubscribe( "increment-two", null, listenerA ) 
-        expect( core.__getChannels()['increment-two'].length ).to.equal( 1 )
+          expect( stat["foo"] ).to.equal( 3 )
+          expect( stat["foo::bar"] ).to.equal( 2 )
+          expect( stat["foo::bar::lol"] ).to.equal( 1 )
 
-        core.publish( "increment-two" )
-        expect( i ).to.equal( 3 )
+          core.unsubscribe("foo")
 
-        core.unsubscribe( "increment-two", null, listenerB )
-        expect( !core.__getChannels()['increment-two'] || core.__getChannels()['increment-two'].length === 0 ).to.equal( true )
+          core.publish("foo", 1)
+          core.publish("foo::bar", 1)
+          core.publish("foo::bar::lol", 1)
 
-        core.publish( "increment-two" )
-        expect( i ).to.equal( 3 )
+          expect( stat["foo"] ).to.equal( 3 )
+          expect( stat["foo::bar"] ).to.equal( 2 )
+          expect( stat["foo::bar::lol"] ).to.equal( 1 )
 
-      })
-
-      it("should only remove callbacks where both callback and listener is matching parameters if both is given", function() {
-        
-        var listenerA, listenerB, i
-
-        listenerA = {}
-        listenerB = {}
-
-        i = 0
-
-        function sharedCallback() { i++ }
-
-        core.subscribe( "match", sharedCallback, null, listenerA )
-        core.subscribe( "match", sharedCallback, null, listenerB )
-
-        core.publish( "match" )
-        expect( i ).to.equal( 2 )
-
-        core.unsubscribe( "match", sharedCallback, listenerA )
-
-        core.publish( "match" )
-        expect( i ).to.equal( 3 )
-
-      })
-
-      it("should remove all subscriptions to given channel that match listener if only listener is given", function() {
-
-        var i, listener
-
-        i = 0
-        listener = {}
-
-        core.subscribe( "hell-of-alot", function() { i++ }, null, listener )
-
-        core.publish( "hell-of-alot" )
-        core.publish( "hell-of-alot" )
-        core.publish( "hell-of-alot" )
-
-        expect( i ).to.equal( 3 )
-
-        core.unsubscribe( "hell-of-alot", null, listener )
-
-        core.publish( "hell-of-alot" )
-
-        expect( i ).to.equal( 3 )
+        })
 
       })
 
@@ -426,7 +523,6 @@
 
           TESTDATA.calculatordisplay = {
             'reportSandbox': function( sandbox ) {
-              console.log(sandbox);
               try {
                 expect( sandbox.$('#inside-calculatordisplay').length ).to.equal( 1 )
               } catch( e ) {
