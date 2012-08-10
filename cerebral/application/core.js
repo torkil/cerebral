@@ -101,16 +101,6 @@ function( _, $, Module, sandboxfactory ){
   /**
     @public
     @type Function
-    @see core.resubscribe
-  */
-  core.api.public.resubscribe = function() {
-    core.resubscribe.apply( core, arguments )
-    return core.api.public
-  }
-
-  /**
-    @public
-    @type Function
     @see core.unsubscribe
   */
   core.api.public.unsubscribe = function() {
