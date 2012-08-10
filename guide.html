@@ -358,41 +358,6 @@ function( sandbox ) {
 </code>
 </pre>
       
-      <h3 id="pub-sub">pub-sub</h3>
-      <p>
-        The sandbox is delegated safe to use methods from the core for subscribing and publishing events. This is the only way modules should communicate with each other.
-        However you can overide this if needed.
-      </p>
-
-      <h4 id="subscribing">Subscribing to events</h4>
-      <p>
-        Subscribing sets a callback to fire when that channel gets published to, passing published parameters to the callback.
-      </p>
-<pre>
-<code data-language="js">
-//log/main.js
-
-usercount = 0
-
-sandbox.subscribe( "chat.userenter", function( user ){ usercount++ } )
-sandbox.subscribe( "chat.userleave", function( user ){ usercount-- } )
-</code>
-</pre>
-
-<h4 id="publishing">Publishing events</h4>
-<p>
-  Publishing to a channel will fire all the callbacks for that channel, passing arguments after channelname to the callbacks ar arguments.
-</p>
-<pre>
-<code data-language="js">
-//chat/main.js
-
-sandbox.publish( "chat.userenter", user )
-sandbox.publish( "chat.userleave", user )
-</code>
-</pre>
-
-
       <h3 id="customizing">Cutomizing the sandbox</h3>
       <p>
         The philosophy behind the sandbox is giving your modules a defined environment to work in. Where additional functionality is added only one place
@@ -455,9 +420,7 @@ core.start('module', {
       <h4 id="shared">Shared sandboxes</h4>
       <p>
         By creating and sending a sandbox reference directly the sandbox can be shared accross modules. </br>
-        <b class="caution">
-          Sharing state between modules using a shared sandbox is possible, but inadvisable.
-        </b>
+        <b class="caution">Caution:</b> Sharing state between modules using a shared sandbox is possible, but an inadvisable pattern as it leads to tighter coupling between modules.
       </p>
 
 <pre>
@@ -471,6 +434,60 @@ core.start('module', {
 core.start('another-module', {
   sandbox: sharedSandbox
 })
+</code>
+</pre>
+
+      <h3 id="pub-sub">pub-sub</h3>
+      <p>
+        The sandbox is delegated safe to use methods from the core for subscribing and publishing events. This is the only way modules should communicate with each other.
+        However you can overide this if needed.
+      </p>
+
+      <h4 id="subscribing">Subscribing to events</h4>
+      <p>
+        Subscribing sets a callback to fire when that channel gets published to, passing published parameters to the callback.
+      </p>
+<pre>
+<code data-language="js">
+//log/main.js
+
+usercount = 0
+
+sandbox.subscribe( "chat::userenter", function( user ){ usercount++ } )
+sandbox.subscribe( "chat::userleave", function( user ){ usercount-- } )
+</code>
+</pre>
+
+      <h4 id="publishing">Publishing events</h4>
+<p>
+  Publishing to a channel will fire all the callbacks for that channel, passing arguments after channelname to the callbacks ar arguments.
+</p>
+<pre>
+<code data-language="js">
+//chat/main.js
+
+sandbox.publish( "chat::userenter", user )
+sandbox.publish( "chat::userleave", user )
+</code>
+</pre>
+
+      <h4 id="namespaced">Namespaced Subscriptions</h4>
+<p>
+  By using a namespace delimiter you can namespace your subscriptions and publishing.
+</p>
+<pre>
+<code data-language="js">
+//chat/main.js
+
+sandbox.publish("chat::login")
+sandbox.publish("chat::message")
+
+sandbox.subscribe("chat") 
+// -> will fire on both
+
+sandbox.unsubscribe("chat") 
+// -> will unsubscribe to both chat::login and chat::message
+
 </code>
 </pre>
 
@@ -497,12 +514,13 @@ core.start('another-module', {
     </section>
     <section class="sandbox">
       <h1 class="sec" data-sec="sandbox">Sandbox</h1>
-      <h3 class="sec" data-sec="pub-sub">pub-sub</h3>
-      <h4 class="sec" data-sec="subscribing">Subscribing to events</h4>
-      <h4 class="sec" data-sec="publishing">Publishing events</h4>
       <h3 class="sec" data-sec="customizing">Customizing the sandbox</h3>
       <h4 class="sec" data-sec="individual">Individual sandboxes</h4>
       <h4 class="sec" data-sec="shared">Shared sandboxes</h4>
+      <h2 class="sec" data-sec="pub-sub">pub-sub</h2>
+      <h4 class="sec" data-sec="subscribing">Subscribing to events</h4>
+      <h4 class="sec" data-sec="publishing">Publishing events</h4>
+      <h4 class="sec" data-sec="namespaced">Namespaced Subscriptions</h4>
     </section>
   </section>
 
