@@ -227,6 +227,14 @@ function( _, $, Module, sandboxfactory ){
     return core
   }
 
+  /**
+    Check if a channel name is within the bound of another channel namespace.
+    @public
+    @type Function
+    @param {String} publishedChannel The name of the channel published to
+    @param {String} subscribingChannel The name of the subscribing channel to test against
+    @returns Boolean
+  */
   core.namespaceMatch = function( publishedChannel, subscribingChannel ) {
     var matches, publishNamespace, subscriptionNamespace, i
 
