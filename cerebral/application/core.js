@@ -62,7 +62,8 @@ function( _, $, Module, sandboxfactory ){
     @type Object
   */
   core.configuration = {
-    moduleRoot: '/'
+    moduleRoot: '/',
+    namespaceDelimiter: "::"
   }
 
   /**
@@ -159,34 +160,39 @@ function( _, $, Module, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.unsubscribe = function( channel, callback, listener ) {
-    var subscriptions, index, subscription
+    var subscriptions, subscribingChannel, index, subscription
 
     if( typeof channel !== 'string' ) {
       throw new TypeError( 'channel must be string' ) 
     }
 
-    subscriptions = channels[ channel ]
-    if( !subscriptions || !subscriptions.length ) {
-      return null
-    }
+    for( subscribingChannel in channels ) {
+      if( core.namespaceMatch(subscribingChannel, channel) ) {
+        subscriptions = channels[ subscribingChannel ]
 
-    for( index = 0; index < subscriptions.length; index++ ) {
-      subscription = subscriptions[ index ] 
-      
-      if( typeof callback === 'function' && typeof listener !== 'undefined' ) {
-        if( subscription.callback === callback && subscription.listener === listener ) {
-          subscriptions.splice( index, 1 )  
+        for( index = 0; index < subscriptions.length; index = index+1 ) {
+          subscription = subscriptions[ index ]
+          
+          if( typeof callback === 'function' && typeof listener !== 'undefined' ) {
+            if( subscription.callback === callback && subscription.listener === listener ) {
+              subscriptions.splice( index, 1 )
+            }
+          } else if( callback && subscription.callback === callback ) {
+            subscriptions.splice( index, 1 )
+          } else if( listener && subscription.listener === listener ) {
+            subscriptions.splice( index, 1 )
+          } else {
+            subscriptions.splice( 0 )
+          }
+
         }
-      } else if( callback && subscription.callback === callback ) {
-        subscriptions.splice( index, 1 )
-      } else if( listener && subscription.listener === listener ) {
-        subscriptions.splice( index, 1 )
+        
+        if( subscriptions.length === 0 ) {
+          delete channels[ subscribingChannel ]
+        }
+
       }
-
     }
-
-    if( subscriptions.length === 0 )
-      delete channels[ channel ]
 
     return core
   }
@@ -200,20 +206,42 @@ function( _, $, Module, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.publish = function( channel ) {
-    var listeners, args, index, listener
+    var subscriptions, args, subscribingChannel, i, subscription
 
-    listeners = channels[ channel ]
-    if( !listeners || !listeners.length ) {
-      return null
+    subscriptions = []
+    args = [].slice.call(arguments, 1)
+
+    for( subscribingChannel in channels ) {
+      if( core.namespaceMatch(channel, subscribingChannel) ) {
+        if( channels[channel] ) {
+          subscriptions = subscriptions.concat( channels[subscribingChannel] )
+        }
+      }
     }
 
-    args = [].splice.call( arguments, 1 )
-    for( index = 0; index < listeners.length; index++ ) {
-      listener = listeners[ index ]
-      listener.callback.apply( listener.context, args )
+    for( i = 0; i < subscriptions.length; i = i+1 ) {
+      subscription = subscriptions[i]
+      subscription.callback.apply( subscription.context, args )
     }
 
     return core
+  }
+
+  core.namespaceMatch = function( publishedChannel, subscribingChannel ) {
+    var matches, publishNamespace, subscriptionNamespace, i
+
+    matches = true
+    publishNamespace = publishedChannel.split( core.configuration.namespaceDelimiter )
+    subscriptionNamespace = subscribingChannel.split( core.configuration.namespaceDelimiter )
+
+    for( i = 0; i < subscriptionNamespace.length; i = i+1 ) {
+      if( publishNamespace[i] !== subscriptionNamespace[i] ) {
+        matches = false
+        break
+      }
+    }
+
+    return matches
   }
 
   /**
