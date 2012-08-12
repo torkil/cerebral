@@ -68,6 +68,12 @@ function( $, _ ){
     }
   }
 
+  /**
+    Run the main method of the module definition.
+    @public
+    @type Function
+    @param {Function|Object} definition The definition of the module
+  */
   Module.prototype.main = function() {
     if( typeof this.definition === 'function' ) {
       return this.definition()
@@ -76,6 +82,11 @@ function( $, _ ){
     } 
   }
 
+  /**
+    Run the destruct method of the module definition if any.
+    @public
+    @type Function
+  */
   Module.prototype.destruct = function( callback ) {
     if( typeof this.definition.destruct === 'function' ) {
       this.definition.destruct( callback )
