@@ -70,8 +70,9 @@ function( underscore, $ ){
   sandboxfactory.isSandbox = function( test ) {
     if( Object.getPrototypeOf( test ) === sandboxfactory.sandboxprototype ) {
       return true
-    }
-    else {
+    } else if( test.__cerebralsandbox__ ) {
+      return true
+    } else {
       return false
     }
   }
@@ -90,6 +91,7 @@ function( underscore, $ ){
 
     sandbox = Object.create( sandboxfactory.sandboxprototype )
     sandbox = _.extend( sandbox, attributes )
+    sandbox.__cerebralsandbox__ = true
 
     if( sandbox.element )
       sandbox.element = $( sandbox.element )
