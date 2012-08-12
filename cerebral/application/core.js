@@ -141,6 +141,67 @@ function( _, $, Module, sandboxfactory ){
     return core
   }
 
+
+  function removeSubscriptionsByChannel( channel, callback, listener ){
+    var subscriptions, subscribingChannel, index, subscription
+
+    for( subscribingChannel in channels ) {
+      if( core.namespaceMatch(subscribingChannel, channel) ) {
+        subscriptions = channels[ subscribingChannel ]
+
+        for( index = 0; index < subscriptions.length; index = index+1 ) {
+
+          subscription = subscriptions[ index ]
+          
+          if( typeof callback === 'function' && typeof listener !== 'undefined' ) {
+            if( subscription.callback === callback && subscription.listener === listener ) {
+              subscriptions.splice( index, 1 )
+              index = index - 1
+            }
+          } else if( callback ) {
+            if( subscription.callback === callback ) {
+              subscriptions.splice( index, 1 )
+              index = index - 1
+            }
+          } else if( listener ) {
+            if( subscription.listener === listener ) {
+              subscriptions.splice( index, 1 )
+              index = index - 1
+            }
+          } else {
+            subscriptions.splice( 0 )
+            index = index - 1
+          }
+
+        }
+        
+        if( subscriptions.length === 0 ) {
+          delete channels[ subscribingChannel ]
+        }
+
+      }
+    }
+  }
+
+  function removeSubscriptionsByListener( listener ){
+    var subscriptions, subscribingChannel, index, subscription
+    for( subscribingChannel in channels ) { 
+      subscriptions = channels[ subscribingChannel ]
+
+      for( index = 0; index < subscriptions.length; index = index+1 ) {
+        subscription = subscriptions[ index ]
+        if( subscription.listener === listener ) {
+          subscriptions.splice( index, 1 )
+          index = index - 1
+        }
+      }
+
+      if( subscriptions.length === 0 ) {
+        delete channels[ subscribingChannel ]
+      }
+    }
+  }
+
   /**
     Unbind the callback from firing when published to the given channel.
     @public
@@ -152,36 +213,10 @@ function( _, $, Module, sandboxfactory ){
   core.unsubscribe = function( channel, callback, listener ) {
     var subscriptions, subscribingChannel, index, subscription
 
-    if( typeof channel !== 'string' ) {
-      throw new TypeError( 'channel must be string' ) 
-    }
-
-    for( subscribingChannel in channels ) {
-      if( core.namespaceMatch(subscribingChannel, channel) ) {
-        subscriptions = channels[ subscribingChannel ]
-
-        for( index = 0; index < subscriptions.length; index = index+1 ) {
-          subscription = subscriptions[ index ]
-          
-          if( typeof callback === 'function' && typeof listener !== 'undefined' ) {
-            if( subscription.callback === callback && subscription.listener === listener ) {
-              subscriptions.splice( index, 1 )
-            }
-          } else if( callback && subscription.callback === callback ) {
-            subscriptions.splice( index, 1 )
-          } else if( listener && subscription.listener === listener ) {
-            subscriptions.splice( index, 1 )
-          } else {
-            subscriptions.splice( 0 )
-          }
-
-        }
-        
-        if( subscriptions.length === 0 ) {
-          delete channels[ subscribingChannel ]
-        }
-
-      }
+    if( channel ) {
+      removeSubscriptionsByChannel( channel, callback, listener )
+    } else if( listener ) {
+      removeSubscriptionsByListener( listener )
     }
 
     return core
@@ -235,7 +270,7 @@ function( _, $, Module, sandboxfactory ){
     for( i = 0; i < subscriptionNamespace.length; i = i+1 ) {
       if( publishNamespace[i] !== subscriptionNamespace[i] ) {
         matches = false
-        break
+        break;
       }
     }
 
@@ -288,6 +323,7 @@ function( _, $, Module, sandboxfactory ){
     }
 
     module.element = sandbox.element
+    sandbox.module = module
 
     define(
       module.sandboxPath,[
@@ -346,7 +382,7 @@ function( _, $, Module, sandboxfactory ){
         }
       }  
 
-      module.emptyElement()
+      module.cleanupDOM()
 
       delete modules[ modulename ]
     }
@@ -394,19 +430,16 @@ function( _, $, Module, sandboxfactory ){
       try {
 
         if( options.onDomReady ) {
-          $(document).ready(function() {
-
+          $( document ).ready(function() {
             module.main()
-
           })
         } else {
-
           module.main()
-
         }
 
       } catch( e ) { 
-        // TODO: logger
+        console.log( "module: " + modulename + " main method threw expection: " )
+        throw e
       }
     })  
   
@@ -438,7 +471,11 @@ function( _, $, Module, sandboxfactory ){
     Delegate the core.api.public to the sandboxprototype
     @augments sandboxfactory.sandboxprototype
   */
-  sandboxfactory.delegateCoreApi( core.api.public )
+  sandboxfactory.delegatePubSubApi({
+    subscribe: core.subscribe,
+    unsubscribe: core.unsubscribe,
+    publish: core.publish
+  })
 
   return core
 })
