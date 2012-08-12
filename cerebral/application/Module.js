@@ -24,6 +24,8 @@ function( $, _ ){
 
     attributes = _.extend({}, attributes)
 
+    this.running = false
+
     this.name = attributes[ 'name' ]
     this.root = attributes[ 'root' ]
     this.path = this.root + this.name
@@ -32,6 +34,14 @@ function( $, _ ){
     
     this.mainPath = this.path + "/main"
     this.sandboxPath = this.name + "/sandbox"
+  }
+
+  Module.prototype.isRunning = function() {
+    if( this.running ) {
+      return true
+    } else {
+      return false
+    }
   }
 
   /**
@@ -75,6 +85,9 @@ function( $, _ ){
     @param {Function|Object} definition The definition of the module
   */
   Module.prototype.main = function() {
+    if( !this.definition ) {
+      return null
+    }
     if( typeof this.definition === 'function' ) {
       return this.definition()
     } else if( typeof this.definition === 'object' && typeof this.definition.main === 'function' ) {
@@ -88,6 +101,9 @@ function( $, _ ){
     @type Function
   */
   Module.prototype.destruct = function( callback ) {
+    if( !this.definition ) {
+      return null
+    }
     if( typeof this.definition.destruct === 'function' ) {
       this.definition.destruct( callback )
     } else {

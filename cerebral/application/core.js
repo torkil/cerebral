@@ -57,6 +57,16 @@ function( _, $, Module, sandboxfactory ){
   modules = {}
 
   /**
+    Get the the modules. Meant for testing and debugging only.
+    @public
+    @type Function
+    @returns {Object} channels
+  */
+  core.__getModules = function() {
+    return modules
+  }
+
+  /**
     The configuration of the core.
     @public
     @type Object
@@ -333,12 +343,10 @@ function( _, $, Module, sandboxfactory ){
 
     require([ module.mainPath ], 
       function( definition ) {
-        var exception
 
         try {
           module.loadDefinition( definition )
-        } catch( e ) {
-          exception = e
+        } catch( exception ) {
           return callback( exception )
         }
 
@@ -429,6 +437,8 @@ function( _, $, Module, sandboxfactory ){
 
       try {
 
+        module.running = true
+
         if( options.onDomReady ) {
           $( document ).ready(function() {
             module.main()
@@ -439,6 +449,7 @@ function( _, $, Module, sandboxfactory ){
 
       } catch( e ) { 
         console.log( "module: " + modulename + " main method threw expection: " )
+        module.running = false
         throw e
       }
     })  
@@ -455,12 +466,14 @@ function( _, $, Module, sandboxfactory ){
   */
   core.stop = function( modulename ) {
     var module
+
     if( !core.modulesIsLoaded(modulename) )
       return core
 
     module = modules[ modulename ]
     
     module.destruct(function() {
+      module.running = false
       core.unloadModule( modulename )
     })
 

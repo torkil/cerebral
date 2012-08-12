@@ -14,10 +14,10 @@
 
   function reset() {
     $('#app_test').html( $('#app_test_template').html() )
-    core.unloadModule('calculatordisplay')
-    core.unloadModule('calculatorinput')
-    core.unloadModule('faultyreturn')
-    core.unloadModule('mainreporter')
+    core.stop('calculatordisplay')
+    core.stop('calculatorinput')
+    core.stop('faultyreturn')
+    core.stop('mainreporter')
   }
   
   describe("cerebral/application/core", function() {
@@ -407,7 +407,7 @@
 
         it("should not invoke the main method if the module is allready started", function( done ) {
 
-          var incrementer, continuation
+          var incrementer
 
           incrementer = 0
 
@@ -417,16 +417,6 @@
             }
           }
 
-          core.start('calculatordisplay', {
-            element: '#calculatordisplay'
-          })
-          core.start('calculatordisplay', {
-            element: '#calculatordisplay'
-          })
-          core.start('calculatordisplay', {
-            element: '#calculatordisplay'
-          })
-
           setTimeout(function() {
 
             try {
@@ -434,8 +424,19 @@
             } catch( e ) {
               done( e )
             }
+
             done()
           },100)
+
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
+          })
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
+          })
+          core.start('calculatordisplay', {
+            element: '#calculatordisplay'
+          })
 
         })
 
