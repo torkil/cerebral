@@ -35,13 +35,17 @@ function( $, _ ){
   }
 
   /**
-    Empty the modules element
+    Clean up the DOM element of the module
     @public
     @type Function
   */
-  Module.prototype.emptyElement = function() {
+  Module.prototype.cleanupDOM = function() {
     if( this.element ) {
-      $( this.element ).empty()
+      $( this.element )
+        .find( '*' )
+        .andSelf()
+        .unbind()
+        .empty()
     }
   }
 
