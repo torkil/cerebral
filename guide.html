@@ -377,17 +377,21 @@ require([
 ], 
 function( core, sandboxfactory ){
   
-  // attch new method to the prototype object of all sandboxes
   sandboxfactory.sandboxprototype.log = function( msg ) {
-    if( window.console && console.log )
-      console.log( msg )
-    else
-      alert( msg )
+    console.log( msg )
+  }
+
+  sandboxfactory.sandboxprototype.JSONstringify = function( obj ) {
+    return somelib.stringify( obj )
   }
 
   ...
 </code>
 </pre>
+      <p>
+        <b class="caution">caution:</b> it is possible to overwrite the sandboxprototype entirely, but this will remove methods like subscribe, unsubscribe and publish.
+        Could be usefull if you wanted to use another library for mediating however.
+      </p>
       
       <h4 id="individual">Individual sandboxes</h4>
       <p>
@@ -420,7 +424,7 @@ core.start('module', {
       <h4 id="shared">Shared sandboxes</h4>
       <p>
         By creating and sending a sandbox reference directly the sandbox can be shared accross modules. </br>
-        <b class="caution">Caution:</b> Sharing state between modules using a shared sandbox is possible, but an inadvisable pattern as it leads to tighter coupling between modules.
+        <b class="caution">caution:</b> Sharing state between modules using a shared sandbox is possible, but an inadvisable pattern as it leads to tighter coupling between modules.
       </p>
 
 <pre>
