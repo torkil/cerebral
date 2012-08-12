@@ -45,16 +45,16 @@ function( underscore, $ ){
     @param {cerebral/application/core.api} coreapi The application core api
     @returns {cerebral/application/sandboxfactory} self
   */
-  sandboxfactory.delegateCoreApi = function( coreapi ) {
-    var attr
-    if( typeof coreapi !== 'object' ) {
-      throw new TypeError( 'No api delegated' )
+  sandboxfactory.delegatePubSubApi = function( api ) {
+    
+    sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
+      api.subscribe( channel, callback, context, this.module )
     }
-
-    for( attr in coreapi ) {
-      if( coreapi.hasOwnProperty(attr) ) {
-        sandboxfactory.sandboxprototype[ attr ] = coreapi[ attr ]
-      }
+    sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
+      api.unsubscribe( channel, callback, this.module )
+    }
+    sandboxfactory.sandboxprototype.publish = function( channel ) {
+      api.publish.apply( api, arguments )
     }
 
     return this
