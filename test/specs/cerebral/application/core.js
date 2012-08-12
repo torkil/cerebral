@@ -147,7 +147,7 @@
           expect( i ).to.equal( 3 )
 
           core.unsubscribe( "increment-two", null, listenerB )
-          expect( !core.__getChannels()['increment-two'] || core.__getChannels()['increment-two'].length === 0 ).to.equal( true )
+          expect( core.__getChannels()['increment-two'] ).to.equal( undefined )
 
           core.publish( "increment-two" )
           expect( i ).to.equal( 3 )
@@ -186,18 +186,39 @@
           listener = {}
 
           core.subscribe( "hell-of-alot", function() { i++ }, null, listener )
+          core.subscribe( "hell-of-alot", function() { i++ }, null, listener )
+          core.subscribe( "hell-of-alot", function() { i++ }, null, listener )
 
           core.publish( "hell-of-alot" )
           core.publish( "hell-of-alot" )
           core.publish( "hell-of-alot" )
 
-          expect( i ).to.equal( 3 )
+          expect( i ).to.equal( 9 )
 
           core.unsubscribe( "hell-of-alot", null, listener )
 
           core.publish( "hell-of-alot" )
 
-          expect( i ).to.equal( 3 )
+          expect( i ).to.equal( 9 )
+
+        })
+
+        it("should remove all subscriptions for a listener of only a listener is given", function() {
+
+          var listener = { name: 'listener' }
+
+          core.subscribe( "only-listener-a", function() {}, null, listener)
+          core.subscribe( "only-listener-a", function() {}, null, listener)
+          core.subscribe( "only-listener-b", function() {}, null, listener)
+          core.subscribe( "only-listener-b", function() {}, null, listener)
+
+          expect( core.__getChannels()['only-listener-a'].length ).to.equal( 2 )
+          expect( core.__getChannels()['only-listener-b'].length ).to.equal( 2 )
+
+          core.unsubscribe( null, null, listener )
+
+          expect( core.__getChannels()['only-listener-a'] ).to.equal( undefined )
+          expect( core.__getChannels()['only-listener-b'] ).to.equal( undefined )
 
         })
 
