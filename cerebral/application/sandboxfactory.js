@@ -38,6 +38,16 @@ function( underscore, $ ){
     element: '#sandbox'
   }
 
+  sandboxfactory.permissions = {
+    perms: {}
+  }
+
+  sandboxfactory.permissions.extend = function( attrs ) {
+    _.extend( this.perms, attrs )
+    return this
+  }
+  
+
   /**
     Delegate the core public api to the factory so we can facade core methods for publishing and subscribing as sandbox properties.
     @public
@@ -45,19 +55,39 @@ function( underscore, $ ){
     @param {cerebral/application/core.api} coreapi The application core api
     @returns {cerebral/application/sandboxfactory} self
   */
-  sandboxfactory.delegatePubSubApi = function( api ) {
+  sandboxfactory.delegateCoreApi = function( coreApi ) {
     
-    sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
-      api.subscribe( channel, callback, context, this.module )
-    }
-    sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
-      api.unsubscribe( channel, callback, this.module )
-    }
-    sandboxfactory.sandboxprototype.publish = function( channel ) {
-      api.publish.apply( api, arguments )
+
+    function validatePermission( module, channel ) {
+      var moduleName, permissions, permission
+      
+      permissions = this.permissions.perms[ module.name ] 
+      if( !permissions ) {
+        return false
+      }
+      for( permission in permissions ) {
+        if( coreApi.namespaceMatch( permission, channel ) ) {
+          return permissions[ permission ]
+        }
+      }
+
+      return false
     }
 
-    return this
+    sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
+      if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
+        coreApi.subscribe( channel, callback, context, this.module )
+      }
+    }
+    sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
+      coreApi.unsubscribe( channel, callback, this.module )
+    }
+    sandboxfactory.sandboxprototype.publish = function( channel ) {
+      if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
+        coreApi.publish.apply( coreApi, arguments )
+      }
+    }
+
   }
 
   /**
