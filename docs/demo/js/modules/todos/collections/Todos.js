@@ -23,15 +23,15 @@ function( sandbox, Collection, Todo ){
     },
 
     onAdd: function( todo ) {
-      sandbox.publish( 'todos.add', todo )
+      sandbox.publish( 'todos::add', todo )
     },
 
     onRemove: function( todo ) {
-      sandbox.publish( 'todos.remove', todo )
+      sandbox.publish( 'todos::remove', todo )
     },
 
     modelChange: function( model, changes ) {
-      sandbox.publish( 'todos.modelChange', model, changes )
+      sandbox.publish( 'todos::modelChange', model, changes )
     }
 
   })

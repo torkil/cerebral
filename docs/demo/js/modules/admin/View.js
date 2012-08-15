@@ -14,24 +14,24 @@ define([
     },
 
     starttodos: function() {
-      sandbox.publish( "admin.starttodos" )
+      sandbox.publish( "admin::starttodos" )
     },
 
     stoptodos: function() {
-      sandbox.publish( "admin.stoptodos" )
+      sandbox.publish( "admin::stoptodos" )
     },
 
     startachievements: function() {
-      sandbox.publish( "admin.startachievements" )
+      sandbox.publish( "admin::startachievements" )
     },
 
     stopachievements: function() {
-      sandbox.publish( "admin.stopachievements" )
+      sandbox.publish( "admin::stopachievements" )
     },
 
     reset: function() {
       window.localStorage.clear()
-      sandbox.publish( "admin.reset" )
+      sandbox.publish( "admin::reset" )
     }
 
   })

@@ -6,9 +6,7 @@ define([
 function( sandbox, Todos, TodosView ){
 
   function resetTodos( todos ) {
-
     todos.reset([])
-
     _.each(window.bootstrap.todos, function( todo ) {
       todos.create( todo )  
     })
@@ -30,8 +28,7 @@ function( sandbox, Todos, TodosView ){
       collection: todos
     })
 
-    sandbox.subscribe( "admin.reset", function() {
-      window.localStorage.clear()
+    sandbox.subscribe( "admin::reset", function() {
       resetTodos( todos )
       moduleView.render()
     })
@@ -44,6 +41,8 @@ function( sandbox, Todos, TodosView ){
 
   function destruct( done ) {
     
+    sandbox.unsubscribe( "admin::reset" )
+
     moduleView.hide(function() {
 
       todos.unbindAll()

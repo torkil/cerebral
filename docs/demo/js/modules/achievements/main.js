@@ -67,10 +67,10 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
       achievements.fetch()
     }
 
-    sandbox.subscribe( "todos.add", onTodoAdd )
-    sandbox.subscribe( "todos.remove", onTodoRemove )
-    sandbox.subscribe( "todos.modelChange", onModelChange )
-    sandbox.subscribe( "admin.reset", onReset )
+    sandbox.subscribe( "todos::add", onTodoAdd )
+    sandbox.subscribe( "todos::remove", onTodoRemove )
+    sandbox.subscribe( "todos::modelChange", onModelChange )
+    sandbox.subscribe( "admin::reset", onReset )
 
     moduleView = new AchievementsView({
       collection: achievements
@@ -84,10 +84,7 @@ function( sandbox, Achievement ,Achievements, AchievementsView ){
 
   function destruct( done ) {
     
-    sandbox.unsubscribe( "todos.add", onTodoAdd )
-    sandbox.unsubscribe( "todos.remove", onTodoRemove )
-    sandbox.unsubscribe( "todos.modelChange", onModelChange )
-    sandbox.unsubscribe( "admin.reset", onReset )
+    sandbox.unsubscribe( "todos" )
 
     moduleView.hide(function() {
 
