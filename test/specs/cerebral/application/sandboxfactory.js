@@ -1,7 +1,8 @@
 
  require([
+  "cerebral/application/Module",
   "cerebral/application/sandboxfactory"
-], function( sandboxfactory ) {
+], function( Module, sandboxfactory ) {
 
   var originalPrototype = sandboxfactory.sandboxprototype
 
@@ -33,6 +34,42 @@
         expect( sb.foo ).to.equal( 'lol' )
         expect( sb.lorem() ).to.equal( 'ipsum' )
         
+      })
+
+    })
+
+
+    describe("pub-sub permissions", function() {
+
+      it("should restrict subscriptions based on the sandboxfactory.permissions hash.", function() {
+
+        sandboxfactory.permissions.extend({
+          "admin": {
+            "user": true
+          },
+          "user": {
+            "admin": false
+          }
+        })
+        
+        var adminSB = sandboxfactory.create({
+          module: new Module({ root: '/', name: 'admin' })
+        })
+
+        var userSB = sandboxfactory.create({
+          module: new Module({ root: '/', name: 'user' })
+        })
+
+        userSB.subscribe("admin", function() { 
+          throw new Error( "should not be able to subscribe to admin" ) 
+        })
+        userSB.subscribe("admin::sudoOperation", function() { 
+          throw new Error( "should not be able to subscribe to this admin::sudoOperation" ) 
+        })
+        
+        userSB.publish( "admin" )
+        userSB.publish( "admin::sudoOperation" )
+
       })
 
     })
