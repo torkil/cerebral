@@ -119,6 +119,15 @@ function( _, $, Module, sandboxfactory ){
   }
 
   /**
+    @public
+    @type Function
+    @see core.namespaceMatch
+  */
+  core.api.public.namespaceMatch = function() {
+    return core.namespaceMatch.apply( core, arguments )
+  }
+
+  /**
     Binds a callback to be called when published to the channel given.
     @public
     @type Function
@@ -484,11 +493,7 @@ function( _, $, Module, sandboxfactory ){
     Delegate the core.api.public to the sandboxprototype
     @augments sandboxfactory.sandboxprototype
   */
-  sandboxfactory.delegatePubSubApi({
-    subscribe: core.subscribe,
-    unsubscribe: core.unsubscribe,
-    publish: core.publish
-  })
+  sandboxfactory.delegateCoreApi( core.api.public )
 
   return core
 })
