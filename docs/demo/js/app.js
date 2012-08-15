@@ -3,17 +3,26 @@ require([
   "cerebral/application/core",
   "backbone",
   "backboneLocalStorage",
-  "jquery"
+  "jquery",
+  "cerebral/application/sandboxfactory"
 ],
-function( core, Backbone, BackboneLocalStorage, $ ) {
+function( core, Backbone, BackboneLocalStorage, $, sandboxfactory ) {
   
-
+  window.core = core
   BackboneLocalStorage( Backbone )
 
   core.configure({
     moduleRoot: 'app/modules/'
   })
 
+  sandboxfactory.permissions.extend({
+    "todos": {
+      "admin": false
+    },
+    "achievements": {
+      "admin": false
+    }
+  })
 
   /* Start modules */
   core.start("todos", {
@@ -39,7 +48,7 @@ function( core, Backbone, BackboneLocalStorage, $ ) {
 
   
   /* Subscripe to admin events */
-  core.subscribe("admin.starttodos", function() { 
+  core.subscribe("admin::starttodos", function() { 
 
     core.start("todos", {
       onDomReady: true,
@@ -50,11 +59,11 @@ function( core, Backbone, BackboneLocalStorage, $ ) {
 
   })
 
-  core.subscribe("admin.stoptodos", function() { 
+  core.subscribe("admin::stoptodos", function() { 
     core.stop( "todos" ) 
   })
 
-  core.subscribe("admin.startachievements", function() { 
+  core.subscribe("admin::startachievements", function() { 
     
     core.start("achievements", {
       onDomReady: true,
@@ -65,7 +74,7 @@ function( core, Backbone, BackboneLocalStorage, $ ) {
     
   })
 
-  core.subscribe("admin.stopachievements", function() { 
+  core.subscribe("admin::stopachievements", function() { 
     core.stop( "achievements" ) 
   })
 
