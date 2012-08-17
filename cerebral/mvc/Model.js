@@ -54,24 +54,26 @@ function( _, Backbone ) {
     @augments Backbone.Model.prototype.set
   */
   Model.prototype.set = function( key, value, options ) {
-    var attrs, attr, setter
+    var attributes, attr, setter
 
     if( _.isObject(key) ) {
-      attrs = key
+      attributes = key
       options = value
     } else {
-      attrs = {}
-      attrs[ key ] = value
+      attributes = {}
+      attributes[ key ] = value
     }
 
-    for( attr in attrs ) {
+    options = options ? _.clone(options) : {};
+
+    for( attr in attributes ) {
       setter = this[ 'set_' + attr ] || 0
       if( setter ) {
-        attrs[ attr ] = setter.call( this, attrs[attr] )
+        attributes[ attr ] = setter.call( this, attributes[attr] )
       }
     }
-    
-    Backbone.Model.prototype.set.call( this, attrs, options )
+
+    return Backbone.Model.prototype.set.apply( this, [attributes, options] )
   }
 
   return Model
