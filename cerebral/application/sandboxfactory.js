@@ -66,7 +66,6 @@ function( underscore, $ ){
         return false
       }
       for( permission in permissions ) {
-        console.log(permission);
         if( coreApi.namespaceMatch( channel, permission ) ) {
           return permissions[ permission ]
         }
