@@ -60,13 +60,14 @@ function( underscore, $ ){
 
     function validatePermission( module, channel ) {
       var moduleName, permissions, permission
-      
+
       permissions = this.permissions.perms[ module.name ] 
       if( !permissions ) {
         return false
       }
       for( permission in permissions ) {
-        if( coreApi.namespaceMatch( permission, channel ) ) {
+        console.log(permission);
+        if( coreApi.namespaceMatch( channel, permission ) ) {
           return permissions[ permission ]
         }
       }
