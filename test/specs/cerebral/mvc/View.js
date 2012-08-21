@@ -65,6 +65,55 @@ function( _, Backbone, View, ViewCollection) {
 
     })
 
+    // describe("View.extend", function() {
+
+    //   it("should set properties from the mixin on the view", function() {
+
+    //     var fired = {
+    //       'parent clickHandler': 0,
+    //       'parent keyupHandler': 0,
+    //       'parent keydownHandler': 0,
+    //       'child hoverHandler': 0,
+    //       'child keydownHandler': 0
+    //     }
+
+    //     var Parent = View.extend({
+    //       events: {
+    //         'click': 'clickHandler',
+    //         'keyup': 'keyupHandler',
+    //         'keydown': 'keydownHandler'
+    //       },
+    //       clickHandler : function() { fired['parent clickHandler']++ },
+    //       keyupHandler : function() { fired['parent keyupHandler']++ },
+    //       keydownHandler: function() { fired['parent keydownHandler']++ }
+    //     })
+
+    //     var Child = Parent.extend({
+    //       events: _.extend(Parent.prototype.events, {
+    //         'keyup': 'keyupHandler'
+    //       }),
+    //       keyupHandler : function() { return fired['child keyupHandler']++ },
+    //       keydownHandler: function() { return fired['child keydownHandler']++ }
+    //     })
+
+    //     var parent = new Parent()
+    //     var child = new Child()
+
+    //     parent.$el.trigger( 'click' )
+    //     parent.$el.trigger( 'keyup' )
+    //     parent.$el.trigger( 'keydown' )
+
+    //     expect( fired['parent clickHandler'] ).to.equal( 1 )
+    //     expect( fired['parent keyupHandler'] ).to.equal( 1 )
+    //     expect( fired['parent keydownHandler'] ).to.equal( 1 )
+
+    //     child.$el.trigger( 'click' )
+    //     expect( fired['parent clickHandler'] ).to.equal( 2 )
+
+    //   })
+
+    // })
+
     describe("View.prototype.dispose", function() {
 
       it("should emit a dispose event, passing the view itself as parameter", function() {
