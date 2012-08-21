@@ -60,6 +60,17 @@ function( _,Backbone, ViewCollection ) {
     delete this.el
     return this
   }
+
+  View.extend = function( properties, statics ) {
+    if( properties.events && this.prototype.events ) {
+      var events = {}
+      _.extend( events, this.prototype.events )
+      _.extend( events, properties.events )
+      properties = _.clone( properties )
+      properties.events = events
+    }
+    return Backbone.View.extend.apply( this, [properties, statics] )
+  }
   
   return View
 })
