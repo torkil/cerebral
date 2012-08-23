@@ -57,9 +57,8 @@ function( underscore, $ ){
   */
   sandboxfactory.delegateCoreApi = function( coreApi ) {
     
-
     function validatePermission( module, channel ) {
-      var moduleName, permissions, permission
+      var permissions, permission
 
       if( coreApi.namespaceMatch(channel, module.name )) {
         return true
@@ -83,9 +82,11 @@ function( underscore, $ ){
         coreApi.subscribe( channel, callback, context, this.module )
       }
     }
+
     sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
       coreApi.unsubscribe( channel, callback, this.module )
     }
+    
     sandboxfactory.sandboxprototype.publish = function( channel ) {
       if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
         coreApi.publish.apply( coreApi, arguments )
