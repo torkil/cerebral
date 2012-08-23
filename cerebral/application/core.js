@@ -160,7 +160,14 @@ function( _, $, Module, sandboxfactory ){
     return core
   }
 
-
+  /**
+    Removes a callback where the given arguments mathes the listener properties
+    @public
+    @type Function
+    @param {String} channel The name of the channel to bind the callback to
+    @param {Function} callback The callback to fire
+    @param {Object} listener The listener, should be a Module.
+  */
   function removeSubscriptionsByChannel( channel, callback, listener ){
     var subscriptions, subscribingChannel, index, subscription
 
@@ -202,8 +209,17 @@ function( _, $, Module, sandboxfactory ){
     }
   }
 
+  /**
+    Removes all callbacks for a given listener
+    @public
+    @type Function
+    @param {String} channel The name of the channel to bind the callback to
+    @param {Function} callback The callback to fire
+    @param {Object} listener The listener, should be a Module.
+  */
   function removeSubscriptionsByListener( listener ){
     var subscriptions, subscribingChannel, index, subscription
+
     for( subscribingChannel in channels ) { 
       subscriptions = channels[ subscribingChannel ]
 
@@ -219,6 +235,7 @@ function( _, $, Module, sandboxfactory ){
         delete channels[ subscribingChannel ]
       }
     }
+    
   }
 
   /**
@@ -230,7 +247,6 @@ function( _, $, Module, sandboxfactory ){
     @returns {cerebral/core} core
   */
   core.unsubscribe = function( channel, callback, listener ) {
-    var subscriptions, subscribingChannel, index, subscription
 
     if( channel ) {
       removeSubscriptionsByChannel( channel, callback, listener )
