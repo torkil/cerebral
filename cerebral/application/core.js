@@ -94,8 +94,6 @@ function( _, $, Module, sandboxfactory ){
     @see core.publish
   */
   core.api.public.publish = function() {
-    core.publish.apply( core, arguments )
-    return core.api.public
     return core.publish.apply( core, arguments )
   }
 
@@ -105,8 +103,6 @@ function( _, $, Module, sandboxfactory ){
     @see core.subscribe
   */
   core.api.public.subscribe = function() {
-    core.subscribe.apply( core, arguments )
-    return core.api.public
     return core.subscribe.apply( core, arguments )
   }
 
@@ -116,8 +112,6 @@ function( _, $, Module, sandboxfactory ){
     @see core.unsubscribe
   */
   core.api.public.unsubscribe = function() {
-    core.unsubscribe.apply( core, arguments )
-    return core.api.public
   }
 
   /**
