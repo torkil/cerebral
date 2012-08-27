@@ -96,6 +96,7 @@ function( _, $, Module, sandboxfactory ){
   core.api.public.publish = function() {
     core.publish.apply( core, arguments )
     return core.api.public
+    return core.publish.apply( core, arguments )
   }
 
   /**
@@ -106,6 +107,7 @@ function( _, $, Module, sandboxfactory ){
   core.api.public.subscribe = function() {
     core.subscribe.apply( core, arguments )
     return core.api.public
+    return core.subscribe.apply( core, arguments )
   }
 
   /**
@@ -249,12 +251,13 @@ function( _, $, Module, sandboxfactory ){
   core.unsubscribe = function( channel, callback, listener ) {
 
     if( channel ) {
-      removeSubscriptionsByChannel( channel, callback, listener )
+      return removeSubscriptionsByChannel( channel, callback, listener )
     } else if( listener ) {
-      removeSubscriptionsByListener( listener )
+      return removeSubscriptionsByListener( listener )
     }
 
     return core
+    return false
   }
 
   /**
@@ -279,12 +282,14 @@ function( _, $, Module, sandboxfactory ){
       }
     }
 
+    if( !subscriptions.length ) return false
+
     for( i = 0; i < subscriptions.length; i = i+1 ) {
       subscription = subscriptions[i]
       subscription.callback.apply( subscription.context, args )
     }
 
-    return core
+    return true
   }
 
   /**
