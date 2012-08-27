@@ -5,11 +5,12 @@
   @requires [underscore, jquery]
 */
 define(
-"cerebral/application/sandboxfactory",[
+"cerebral/application/sandboxfactory", [
   "underscore",
-  "jquery"
+  "jquery",
+  "cerebral/application/sandboxprototype"
 ], 
-function( underscore, $ ){
+function( underscore, $, sandboxprototype ){
   
   var sandboxfactory, properties
 
@@ -17,26 +18,11 @@ function( underscore, $ ){
   sandboxfactory = {}
 
   /**
-    The object to be used as the prototype of created sansboxes
+    The object to be used as the prototype of created sandboxes
     @public
     @type Object
   */
-  sandboxfactory.sandboxprototype = {
-    /*
-      Scoped DOM manipulation function, proxy for jquery/zepto/ender/etc.. Only has acces to elements within
-      its own element
-      @type Function
-    */
-    $: function( selector ) {
-      return $( selector, this.element )
-    },
-    /*
-      The element the sandbox has access to.
-      @type Function|jQueryObject
-      @default "#sandbox"
-    */
-    element: '#sandbox'
-  }
+  sandboxfactory.sandboxprototype = sandboxprototype
 
   sandboxfactory.permissions = {
     perms: {}
