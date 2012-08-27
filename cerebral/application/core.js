@@ -112,6 +112,25 @@ function( _, $, Module, sandboxfactory ){
     @see core.unsubscribe
   */
   core.api.public.unsubscribe = function() {
+    return core.unsubscribe.apply( core, arguments )
+  }
+
+  /**
+    @public
+    @type Function
+    @see core.unsubscribe
+  */
+  core.api.public.request = function() {
+    return core.request.apply( core, arguments )
+  }
+
+  /**
+    @public
+    @type Function
+    @see core.unsubscribe
+  */
+  core.api.public.respondTo = function() {
+    return core.respondTo.apply( core, arguments )
   }
 
   /**
@@ -121,6 +140,31 @@ function( _, $, Module, sandboxfactory ){
   */
   core.api.public.namespaceMatch = function() {
     return core.namespaceMatch.apply( core, arguments )
+  }
+
+  function createNamespaceForService( servicename ) {
+    return 'services::' + servicename
+  }
+
+  core.respondTo = function( service, serviceHandler ) {
+    this.subscribe( createNamespaceForService(service), function( callback ) {
+      callback( null, serviceHandler() )
+    }, this)
+  }
+
+  core.request = function( service, callback ) {
+    var responderExists
+
+    responderExists = this.publish( createNamespaceForService(service), callback )
+
+    if(! responderExists ) {
+
+      callback({
+        code: 400,
+        message: 'not found'        
+      })
+
+    }
   }
 
   /**
@@ -153,7 +197,6 @@ function( _, $, Module, sandboxfactory ){
       listener: listener
     })
 
-    return core
   }
 
   /**
@@ -231,7 +274,7 @@ function( _, $, Module, sandboxfactory ){
         delete channels[ subscribingChannel ]
       }
     }
-    
+
   }
 
   /**
@@ -250,7 +293,6 @@ function( _, $, Module, sandboxfactory ){
       return removeSubscriptionsByListener( listener )
     }
 
-    return core
     return false
   }
 
