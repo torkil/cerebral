@@ -79,17 +79,17 @@ function( underscore, $ ){
 
     sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
       if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
-        coreApi.subscribe( channel, callback, context, this.module )
+        return coreApi.subscribe( channel, callback, context, this.module )
       }
     }
 
     sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
-      coreApi.unsubscribe( channel, callback, this.module )
+      return coreApi.unsubscribe( channel, callback, this.module )
     }
-    
+
     sandboxfactory.sandboxprototype.publish = function( channel ) {
       if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
-        coreApi.publish.apply( coreApi, arguments )
+        return coreApi.publish.apply( coreApi, arguments )
       }
     }
 
