@@ -502,12 +502,6 @@ function( core, sandboxfactory ) {
             }
           }
 
-          sandboxfactory.permissions.extend({
-            'calculatordisplay': {
-              'accesstest': true
-            }
-          })
-
           core.start('calculatordisplay', {
             sandbox: {
               element: '#calculatordisplay'
