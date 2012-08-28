@@ -118,24 +118,6 @@ function( _, $, Module, sandboxfactory ){
   /**
     @public
     @type Function
-    @see core.unsubscribe
-  */
-  core.api.public.request = function() {
-    return core.request.apply( core, arguments )
-  }
-
-  /**
-    @public
-    @type Function
-    @see core.unsubscribe
-  */
-  core.api.public.respondTo = function() {
-    return core.respondTo.apply( core, arguments )
-  }
-
-  /**
-    @public
-    @type Function
     @see core.namespaceMatch
   */
   core.api.public.namespaceMatch = function() {
