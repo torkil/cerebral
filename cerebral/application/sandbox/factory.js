@@ -24,14 +24,7 @@ function( underscore, $, sandboxprototype, mediator ){
   */
   sandboxfactory.sandboxprototype = sandboxprototype
 
-  sandboxfactory.permissions = {
-    perms: {}
-  }
-
-  sandboxfactory.permissions.extend = function( attrs ) {
-    _.extend( this.perms, attrs )
-    return this
-  }
+  
   
   sandboxfactory.sandboxprototype.validatePermission = function( module, channel ) {
     var permissions, permission
@@ -57,9 +50,7 @@ function( underscore, $, sandboxprototype, mediator ){
   }
 
   sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
-    if( this.validatePermission(this.module, channel) ) {
-      return mediator.subscribe( channel, callback, context, this.module )
-    }
+    return mediator.subscribe( channel, callback, context, this.module )
   }
 
   sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
@@ -67,9 +58,7 @@ function( underscore, $, sandboxprototype, mediator ){
   }
 
   sandboxfactory.sandboxprototype.publish = function( channel ) {
-    if( this.validatePermission(this.module, channel) ) {
-      return mediator.publish.apply( mediator, arguments )
-    }
+    return mediator.publish.apply( mediator, arguments )
   }
 
 
