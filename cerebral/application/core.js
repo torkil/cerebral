@@ -229,10 +229,10 @@ function( _, $, Module, sandboxfactory ){
           module.main()
         }
 
-      } catch( e ) { 
-        console.log( "module: " + modulename + " main method threw expection: " )
+      } catch( exception ) { 
         module.running = false
-        throw e
+        console.log( "module: " + modulename + " main method threw expection: " )
+        throw module.running = false
       }
     })  
   
