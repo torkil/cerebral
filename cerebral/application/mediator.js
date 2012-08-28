@@ -1,9 +1,10 @@
 define(
 "cerebral/application/mediator",[
+  "cerebral/application/classes/Interface"
 ], 
-function(){
+function( Interface ){
   
-  var mediator, channels
+  var mediator, channels, interfaces
 
   mediator = {}
 
@@ -24,6 +25,22 @@ function(){
     return channels
   }
 
+  /**
+    Holds the interfaces
+    @private
+    @type Object
+  */
+  interfaces = {}
+
+  /**
+    Get the the interfaces. Meant for testing and debugging only.
+    @public
+    @type Function
+    @returns {Object} channels
+  */
+  mediator.__getInterfaces = function() {
+    return interfaces
+  }
 
   /**
     The configuration of the mediator.
@@ -219,6 +236,45 @@ function(){
 
     return matches
   }
+
+  function getInterfaceByNameSpace( nameSpace  ) {
+    return interfaces[ nameSpace ] || null
+  }
+
+  mediator.registerInterface = function( nameSpace, implementation ) {
+    var interface
+
+    if( implementation instanceof Interface ) {
+      interface = implementation
+    } else {
+      interface = new Interface( implementation )
+    }
+    
+    interfaces[ nameSpace ] = interface
+  }
+
+  mediator.dropInterface = function( nameSpace ) {
+    delete interfaces[ namespace ]
+  }
+
+  mediator.requestInterface = function( nameSpace, callback ) {
+    var interface, error
+
+    interface = getInterfaceByNameSpace( nameSpace )
+
+    if( !interface ) {
+
+      error = new Error( 'interface: ' + nameSpace + '  -> was not found' )
+      error.code = 400
+
+      return callback( error )
+    }
+
+    callback( null, interface )
+
+    return true
+  }
+
 
   return mediator
 })
