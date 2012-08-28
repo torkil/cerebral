@@ -1,8 +1,9 @@
 
- require([
+require([
   "cerebral/application/classes/Module",
   "cerebral/application/sandbox/factory"
-], function( Module, sandboxfactory ) {
+], 
+function( Module, sandboxfactory ) {
 
   var originalPrototype = sandboxfactory.sandboxprototype
 
