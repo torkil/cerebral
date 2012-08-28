@@ -16,7 +16,11 @@ function( $, _ ){
     @public
     @constructor
   */
-  function Interface() {}
+  function Interface( implementation ) {
+    this.connected = true
+
+    _.extend( this, implementation)
+  }
 
   return Interface
 })
