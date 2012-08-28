@@ -8,9 +8,10 @@ define(
 "cerebral/application/sandbox/factory", [
   "underscore",
   "jquery",
-  "cerebral/application/sandbox/prototype"
+  "cerebral/application/sandbox/prototype",
+  "cerebral/application/mediator"
 ], 
-function( underscore, $, sandboxprototype ){
+function( underscore, $, sandboxprototype, mediator ){
   
   var sandboxfactory  
 
@@ -32,53 +33,45 @@ function( underscore, $, sandboxprototype ){
     return this
   }
   
+  sandboxfactory.sandboxprototype.validatePermission = function( module, channel ) {
+    var permissions, permission
 
-  /**
-    Delegate the core public api to the factory so we can facade core methods for publishing and subscribing as sandbox properties.
-    @public
-    @type Function
-    @param {cerebral/application/core.api} coreapi The application core api
-    @returns {cerebral/application/sandboxfactory} self
-  */
-  sandboxfactory.delegateCoreApi = function( coreApi ) {
-    
-    function validatePermission( module, channel ) {
-      var permissions, permission
+    if( mediator.namespaceMatch(channel, module.name )) {
+      return true
+    }
 
-      if( coreApi.namespaceMatch(channel, module.name )) {
-        return true
-      }
+    permissions = sandboxfactory.permissions.perms[ module.name ] 
 
-      permissions = this.permissions.perms[ module.name ] 
-      if( !permissions ) {
-        return false
-      }
-      for( permission in permissions ) {
-        if( coreApi.namespaceMatch(channel, permission) ) {
-          return permissions[ permission ]
-        }
-      }
-
+    if( !permissions ) {
+      console.error( 'module ' + module.name + ' was denied access to channel ' + channel )
       return false
     }
-
-    sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
-      if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
-        return coreApi.subscribe( channel, callback, context, this.module )
+    for( permission in permissions ) {
+      if( mediator.namespaceMatch(channel, permission) ) {
+        return permissions[ permission ]
       }
     }
 
-    sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
-      return coreApi.unsubscribe( channel, callback, this.module )
-    }
-
-    sandboxfactory.sandboxprototype.publish = function( channel ) {
-      if( validatePermission.apply(sandboxfactory,  [this.module, channel]) ) {
-        return coreApi.publish.apply( coreApi, arguments )
-      }
-    }
-
+    console.error( 'module ' + module.name + ' was denied access to channel ' + channel )
+    return false
   }
+
+  sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
+    if( this.validatePermission(this.module, channel) ) {
+      return mediator.subscribe( channel, callback, context, this.module )
+    }
+  }
+
+  sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
+    return mediator.unsubscribe( channel, callback, this.module )
+  }
+
+  sandboxfactory.sandboxprototype.publish = function( channel ) {
+    if( this.validatePermission(this.module, channel) ) {
+      return mediator.publish.apply( mediator, arguments )
+    }
+  }
+
 
   /**
     Check if an object is a sandbox, checks if the prototype of the test is the same as sandbox.sandboxprototype
