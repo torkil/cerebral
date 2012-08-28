@@ -8,10 +8,9 @@ define(
 "cerebral/application/sandbox/factory", [
   "underscore",
   "jquery",
-  "cerebral/application/sandbox/prototype",
-  "cerebral/application/mediator"
+  "cerebral/application/sandbox/prototype"
 ], 
-function( underscore, $, sandboxprototype, mediator ){
+function( underscore, $, sandboxprototype ){
   
   var sandboxfactory  
 
@@ -23,44 +22,6 @@ function( underscore, $, sandboxprototype, mediator ){
     @type Object
   */
   sandboxfactory.sandboxprototype = sandboxprototype
-
-  
-  
-  sandboxfactory.sandboxprototype.validatePermission = function( module, channel ) {
-    var permissions, permission
-
-    if( mediator.namespaceMatch(channel, module.name )) {
-      return true
-    }
-
-    permissions = sandboxfactory.permissions.perms[ module.name ] 
-
-    if( !permissions ) {
-      console.error( 'module ' + module.name + ' was denied access to channel ' + channel )
-      return false
-    }
-    for( permission in permissions ) {
-      if( mediator.namespaceMatch(channel, permission) ) {
-        return permissions[ permission ]
-      }
-    }
-
-    console.error( 'module ' + module.name + ' was denied access to channel ' + channel )
-    return false
-  }
-
-  sandboxfactory.sandboxprototype.subscribe = function( channel, callback, context ) {
-    return mediator.subscribe( channel, callback, context, this.module )
-  }
-
-  sandboxfactory.sandboxprototype.unsubscribe = function( channel, callback ) {
-    return mediator.unsubscribe( channel, callback, this.module )
-  }
-
-  sandboxfactory.sandboxprototype.publish = function( channel ) {
-    return mediator.publish.apply( mediator, arguments )
-  }
-
 
   /**
     Check if an object is a sandbox, checks if the prototype of the test is the same as sandbox.sandboxprototype
