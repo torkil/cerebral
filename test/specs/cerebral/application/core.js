@@ -1,7 +1,7 @@
 
  require([
   "cerebral/application/core",
-  "cerebral/application/sandboxfactory"
+  "cerebral/application/sandbox/factory"
 ], function( core, sandboxfactory ) {
   
   window._core = core

@@ -10,8 +10,8 @@ define(
 "cerebral/application/core",[
   "underscore",
   "jquery",
-  "cerebral/application/Module",
-  "cerebral/application/sandboxfactory"
+  "cerebral/application/classes/Module",
+  "cerebral/application/sandbox/factory"
 ], 
 function( _, $, Module, sandboxfactory ){
   
@@ -142,30 +142,6 @@ function( _, $, Module, sandboxfactory ){
     return core.namespaceMatch.apply( core, arguments )
   }
 
-  function createNamespaceForService( servicename ) {
-    return 'services::' + servicename
-  }
-
-  core.respondTo = function( service, serviceHandler ) {
-    this.subscribe( createNamespaceForService(service), function( callback ) {
-      callback( null, serviceHandler() )
-    }, this)
-  }
-
-  core.request = function( service, callback ) {
-    var responderExists
-
-    responderExists = this.publish( createNamespaceForService(service), callback )
-
-    if(! responderExists ) {
-
-      callback({
-        code: 400,
-        message: 'not found'        
-      })
-
-    }
-  }
 
   /**
     Binds a callback to be called when published to the channel given.

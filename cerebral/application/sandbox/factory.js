@@ -5,15 +5,14 @@
   @requires [underscore, jquery]
 */
 define(
-"cerebral/application/sandboxfactory", [
+"cerebral/application/sandbox/factory", [
   "underscore",
   "jquery",
-  "cerebral/application/sandboxprototype"
+  "cerebral/application/sandbox/prototype"
 ], 
 function( underscore, $, sandboxprototype ){
   
-  var sandboxfactory, properties
-
+  var sandboxfactory  
 
   sandboxfactory = {}
 

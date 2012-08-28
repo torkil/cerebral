@@ -5,7 +5,7 @@
   @requires [jquery, underscore]
 */
 define(
-"cerebral/application/Module", [
+"cerebral/application/classes/Module", [
   "jquery",
   "underscore"
 ], 

@@ -1,10 +1,10 @@
 
 require([
-  "cerebral/application/Module"
+  "cerebral/application/classes/Module"
 ],
 function( Module ) {
 
-  describe("Module", function() {
+  describe("cerebral/application/classes/Module", function() {
 
     describe("Module.prototype.loadDefinition", function() {
 

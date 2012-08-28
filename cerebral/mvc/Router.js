@@ -6,7 +6,7 @@
   @exports Router
 */
 define(
-"cerebral/application/Router", [
+"cerebral/mvc/Router", [
   "cerebral/lib/Backbone",
   "cerebral/mvc/ViewCollection"
 ], 

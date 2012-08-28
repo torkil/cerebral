@@ -1,6 +1,6 @@
 require([
   "backbone",
-  "cerebral/application/Router",
+  "cerebral/mvc/Router",
   "cerebral/mvc/View"
 ], function(Backbone, Router, View) {
   
@@ -34,7 +34,7 @@ require([
   /*
    * TESTS
   */
-  describe("cerebral/Router", function() {
+  describe("cerebral/mvc/Router", function() {
 
     describe("constructor", function() {
 
