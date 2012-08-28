@@ -24,9 +24,33 @@ function( Interface ){
     return $( selector, this.element )
   }
 
-  function generateInterfaceNamespace( name ) {
-    return name
+  /*
+    Facade for mediator subscribe
+    @public
+    @see cerebral/application/mediator subscribe
+  */
+  sandboxprototype.subscribe = function( channel, callback, context ) {
+    return mediator.subscribe( channel, callback, context, this.module )
   }
+
+  /*
+    Facade for mediator unsubscribe
+    @public
+    @see cerebral/application/mediator unsubscribe
+  */
+  sandboxprototype.unsubscribe = function( channel, callback ) {
+    return mediator.unsubscribe( channel, callback, this.module )
+  }
+
+  /*
+    Facade for mediator publish
+    @public
+    @see cerebral/application/mediator publish
+  */
+  sandboxprototype.publish = function( channel ) {
+    return mediator.publish.apply( mediator, arguments )
+  }
+
 
   sandboxprototype.defineInterface = function( nameSpace, definition ) {
     var interface
@@ -44,6 +68,7 @@ function( Interface ){
     return interface.subscribe( nameSpace )
   }
 
+  
   sandboxprototype.requestInterface = function( nameSpace, callback ) {
     var error
 
