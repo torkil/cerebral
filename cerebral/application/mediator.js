@@ -237,19 +237,21 @@ function( Interface ){
     return matches
   }
 
-  function getInterfaceByNameSpace( nameSpace  ) {
-    return interfaces[ nameSpace ] || null
+  function getInterfaceByNameSpace( nameSpace ) {
+    if( interfaces.hasOwnProperty(nameSpace) ) {
+      return interfaces[ nameSpace ]
+    }
+    return null
   }
 
-  mediator.registerInterface = function( nameSpace, implementation ) {
-    var interface
-
-    if( implementation instanceof Interface ) {
-      interface = implementation
-    } else {
-      interface = new Interface( implementation )
+  mediator.registerInterface = function( nameSpace, interface ) {
+    if( typeof nameSpace !== 'string' ) {
+      throw new TypeError( "expected type String, got " + typeof nameSpace )
     }
-    
+    if( typeof interface === undefined ) {
+      throw new TypeError( "interface cannot be undefined" )
+    }
+
     interfaces[ nameSpace ] = interface
   }
 
@@ -261,18 +263,22 @@ function( Interface ){
     var interface, error
 
     interface = getInterfaceByNameSpace( nameSpace )
+    error = null
 
     if( !interface ) {
 
-      error = new Error( 'interface: ' + nameSpace + '  -> was not found' )
+      error = new Error( 'interface; ' + nameSpace + '  -> was not found' )
       error.code = 400
 
-      return callback( error )
     }
 
-    callback( null, interface )
+    if( typeof callback === 'function' ) {
+      return callback( error, interface)
+    } else if( error ) {
+      return error
+    }
 
-    return true
+    return interface
   }
 
 

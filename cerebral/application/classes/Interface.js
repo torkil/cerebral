@@ -7,19 +7,40 @@
 define(
 "cerebral/application/classes/Interface", [
   "jquery",
-  "underscore"
+  "underscore",
+  "cerebral/lib/Backbone"
 ], 
-function( $, _ ){
+function( $, _, Backbone ){
   
+  function Request() {}
+
+  function Response( options ) {
+    _.extend( this, options ||{})
+  }
+
+  Response.prototype.send = function() {
+    var args = [].slice.call( arguments )
+
+  }
+
+  Response.prototype.end = function() {
+    var args = [].slice.call( arguments )
+  }
+
   /**
     Creates a new Interface
     @public
     @constructor
   */
   function Interface( implementation ) {
-    this.connected = true
+    this.implementation = implementation
+  }
 
-    _.extend( this, implementation)
+  _.extend( Interface.prototype, Backbone.Events )
+
+  Interface.prototype.request = function( handler ) {
+    if( typeof this.implementation === 'object' ) {}
+    if( typeof this.implementation === 'function' ) {}
   }
 
   return Interface

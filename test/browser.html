@@ -52,7 +52,11 @@
       
       $(function(){
         var runner = mocha
-                      .run()
+                      .run(function() {
+                        if (typeof window.__$coverObject !== 'undefined') {
+                            var reporter = new JSCovReporter({ coverObject: window.__$coverObject });
+                        }
+                      })
                       .globals(['TESTSTATS', 'TESTDATA', '_core'])
 
 
@@ -83,6 +87,10 @@
 </head>
 <body>
   <div id="mocha"></div>
+
+  <div id="coverage"></div>
+  <div id="menu"></div>
+
   <div id="app_test">
 
   </div>

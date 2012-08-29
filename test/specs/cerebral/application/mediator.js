@@ -283,13 +283,49 @@ function( mediator, Interface ) {
 
     })
     
-    describe("mediator.registerInterface", function() { })
+    describe("mediator.registerInterface", function() { 
+
+    })
 
     describe("mediator.requestInterface", function() { 
 
+      it("should return the interface if it is found and there is no callback", function() {
+
+        mediator.registerInterface("lol::cat", "hascheez")
+        mediator.registerInterface("lol::obj", {
+          cat: 'sylvester',
+          cheese: 'jarlsberger'
+        })
+
+        expect( mediator.requestInterface("lol::cat") ).to.equal( "hascheez" )
+        expect( mediator.requestInterface("lol::obj") ).to.eql({
+          cat: 'sylvester',
+          cheese: 'jarlsberger'
+        })
+
+      })
+
+      it("should return what is returned from the callback if there is a callback", function() {
+
+        mediator.registerInterface("does::exist", { foo: function() { return 'foo' } })
+
+        var foo = mediator.requestInterface("does::exist", function( err, interface ) {
+          return interface.foo
+        })
+
+        var lorem = mediator.requestInterface("doesnt::exist", function( err, interface ) {
+          expect( err ).to.be.an( Error )
+          return "lorem"
+        })
+
+        expect( foo() ).to.equal( 'foo' )
+        expect( lorem ).to.equal( 'lorem' )
+
+      })
+
       it("should receive an error with code 400 if the interface does not exist", function( done ) {
 
-        mediator.requestInterface("doesntexist", function( err ) {
+        mediator.requestInterface("doesnt::exist", function( err, interface ) {
           try {
             expect( err ).to.be.an( Error )
             expect( err.code ).to.equal( 400 )
@@ -301,23 +337,12 @@ function( mediator, Interface ) {
 
       })
 
-      it("should receive the interface implementation as second parameter if it exists", function( done ) {
+      it("should return the error if it wasnt found and there is no callback", function() {
 
-        mediator.registerInterface("api", {
-          foo: 'bar',
-          getFoo: function() { return this.foo }
-        })
+        var err = mediator.requestInterface( "doesnt::exist" )
 
-        mediator.requestInterface("api", function( err, interface ) {
-          try {
-            expect( interface ).to.be.an( Object )
-            expect( interface.foo ).to.equal( 'bar' )
-            expect( interface.getFoo() ).to.equal( 'bar' )
-          } catch( error ) {
-            done( error )
-          }
-          done()
-        })
+        expect( err ).to.be.an( Error )
+        expect( err.code ).to.equal( 400 )
 
       })
 
