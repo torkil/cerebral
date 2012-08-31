@@ -285,6 +285,8 @@ function( mediator, Interface ) {
     
     describe("mediator.registerInterface", function() { 
 
+      
+
     })
 
     describe("mediator.requestInterface", function() { 

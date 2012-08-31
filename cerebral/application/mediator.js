@@ -1,8 +1,7 @@
 define(
-"cerebral/application/mediator",[
-  "cerebral/application/classes/Interface"
+"cerebral/application/mediator",[ 
 ], 
-function( Interface ){
+function( ){
   
   var mediator, channels, interfaces
 
