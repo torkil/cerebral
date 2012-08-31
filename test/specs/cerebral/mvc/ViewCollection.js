@@ -26,6 +26,7 @@ function(Backbone, View, ViewCollection) {
 
     })
 
+    
     describe("ViewCollection.prototype.attach", function() {
 
       it("should increment the instances length attribute", function() {
