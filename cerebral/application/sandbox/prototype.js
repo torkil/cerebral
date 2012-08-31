@@ -1,7 +1,6 @@
 define(
 "cerebral/application/sandbox/prototype", [
-  "cerebral/application/mediator",
-  "cerebral/application/classes/Interface"
+  "cerebral/application/mediator"
 ], 
 function( mediator, Interface ){
   

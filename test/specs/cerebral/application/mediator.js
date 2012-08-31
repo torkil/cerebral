@@ -1,7 +1,6 @@
 
 require([
-  "cerebral/application/mediator",
-  "cerebral/application/classes/Interface"
+  "cerebral/application/mediator"
 ], 
 function( mediator, Interface ) {
   
