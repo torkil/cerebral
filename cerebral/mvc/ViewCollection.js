@@ -66,10 +66,10 @@ function( _, Backbone ) {
       throw new Error( 'subview with that name allready attached' )
 
     this.views[ name ] = subview
+    this.length++
+    
     subview.on( "dispose", this.subviewOnDispose, this )
     this.trigger( 'attach', name, subview )
-
-    this.length++
   }
 
   /**
@@ -175,10 +175,13 @@ function( _, Backbone ) {
     }
 
     if( detachedView ) {
+
       options = _.extend({
-        dispose: true
+        dispose: false
       }, opts)
+
       this.length--
+
       if( detachedView.instance.subviews && detachedView.instance.subviews.length > 0 )
         detachedView.instance.subviews.detachAll( options )
       if( options.dispose )
